@@ -1,8 +1,0 @@
-setwd('~/_/Work/Research/Current/steady state ior/pyTrkr/pyTrkr.py')
-setwd('~/_/Work/Research/Current/steady state ior/pyTrkr')
-plot(a)
-plot(a,type='l')
-abline(h=.25)
-abline(h=.5)
-a = scan('temp.txt')
-plot(abs(a),type='l')

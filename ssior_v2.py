@@ -16,14 +16,9 @@ if __name__ == '__main__':
 	jackWindowSize = (200,200)
 	jackWindowPosition = (500,0)
 
-	doPyTracker = False
-	doPyLink = False
-
-	camIndex = 0
-	camRes = [1920,1080]
-	monitorResize = 2
-	fidSizeInmm = 6
-	calibrationDotSizeInDegrees = .5
+	doEyelink = False
+	saccadeSoundFile = '_Stimuli/stop.wav'
+	blinkSoundFile = '_Stimuli/stop.wav'
 
 	responseModality = 'trigger' # 'key' or 'trigger'
 	triggerLeftAxis = 2
@@ -70,6 +65,7 @@ if __name__ == '__main__':
 	########
 	import sdl2 #for input and display
 	import sdl2.ext #for input and display
+	import sdl2.sdlmixer #for sound
 	import numpy #for image and display manipulation
 	import scipy.misc #for resizing numpy images via scipy.misc.imresize
 	from PIL import Image #for image manipulation
@@ -84,7 +80,6 @@ if __name__ == '__main__':
 	import billiard #for parallel processes
 	import shutil #for copying files
 	import hashlib #for encrypting
-	import pyTracker
 	import pyStamper
 	import pyWriter
 	import pyJack
@@ -95,8 +90,27 @@ if __name__ == '__main__':
 		pass#print('Can\'t nice')
 	import appnope
 	appnope.nope()
-	# if doPyLink:
-	# 	import pylink
+	if doEyelink:
+		import pylink
+
+	########
+	# initialize sound
+	########
+	sdl2.SDL_Init(sdl2.SDL_INIT_AUDIO)
+	sdl2.sdlmixer.Mix_OpenAudio(44100, sdl2.sdlmixer.MIX_DEFAULT_FORMAT, 2, 1024)
+	class Sound:
+		def __init__(self, fileName):
+			self.sample = sdl2.sdlmixer.Mix_LoadWAV(sdl2.ext.compat.byteify(fileName, "utf-8"))
+		def play(self):
+			self.channel = sdl2.sdlmixer.Mix_PlayChannel(-1, self.sample, 0)
+		def stillPlaying(self):
+			if sdl2.sdlmixer.Mix_Playing(self.channel):
+				return True
+			else:
+				return False
+
+	saccadeSound = Sound(saccadeSoundFile)
+	blinkSound = Sound(blinkSoundFile)
 
 
 	########
@@ -112,7 +126,7 @@ if __name__ == '__main__':
 	# Initialize the timer and random seed
 	########
 	sdl2.SDL_Init(sdl2.SDL_INIT_TIMER)
-	seed = getTime() #grab the time of the timer initialization to use as a seed and to sync with pyTracker
+	seed = getTime() #grab the time of the timer initialization to use as a seed
 	random.seed(seed) #use the time to set the random seed
 
 
@@ -165,14 +179,17 @@ if __name__ == '__main__':
 	########
 	# initialize the pylink
 	########
-
-
-	########
-	# initialize the pyTracker
-	########
-	if doPyTracker:
-		tracker = pyTracker.trackerClass()
-		tracker.start(camIndex,camRes,monitorResize,fidSizeInmm)
+	if doEyelink:
+		eyelink = pylink.EyeLink('100.1.1.1')
+		eyelink.sendCommand('select_parser_configuration 0')# 0--> standard (cognitive); 1--> sensitive (psychophysical)
+		eyelink.sendCommand('sample_rate 2000')
+		eyelink.setLinkEventFilter("SACCADE,BLINK")
+		eyelink.openDataFile('ssior.edf')
+		eyelink.sendCommand("screen_pixel_coords =  0 0 %d %d" %(stimDisplayRes[0],stimDisplayRes[1]))
+		eyelink.sendMessage("DISPLAY_COORDS  0 0 %d %d" %(stimDisplayRes[0],stimDisplayRes[1]))
+		eyelink.sendCommand("saccade_velocity_threshold = 35")
+		eyelink.sendCommand("saccade_acceleration_threshold = 9500")
+		eyelink.doTrackerSetup()
 
 
 	########
@@ -183,7 +200,6 @@ if __name__ == '__main__':
 
 	instructionSize = int(instructionSizeInDegrees*PPD)
 	feedbackSize = int(feedbackSizeInDegrees*PPD)
-	calibrationDotSize = int(calibrationDotSizeInDegrees*PPD)
 	fixationSize = int(fixationSizeInDegrees*PPD)
 	offsetSize = int(offsetSizeInDegrees*PPD)
 	targetSize = int(targetSizeInDegrees*PPD)
@@ -450,8 +466,18 @@ if __name__ == '__main__':
 
 	#define a function that will kill everything safely
 	def exitSafely():
-		if doPyTracker:
-			tracker.quit()
+		if doEyelink:
+			try:
+				eyelink.stopRecording()
+			except:
+				pass
+			try:
+				eyelink.setOfflineMode()
+				time.sleep(.1)
+				try:
+					eyelink.closeDataFile()
+					eyelink.receiveDataFile('ssior.edf', 'ssior.edf')
+				eyelink.close()				
 		stamper.quit()
 		writer.quit()
 		jack.quit()
@@ -482,11 +508,11 @@ if __name__ == '__main__':
 
 	def refreshWindows():
 		sdl2.SDL_GL_SwapWindow(stimDisplay.window)
-	# 		if dualDisplay:
-	# 			image = stimDisplayArray[:,:,0:3]
-	# 			image = scipy.misc.imresize(image, (stimDisplayRes[0]/2,stimDisplayRes[1]/2), interp='nearest')
-	# 			mirrorDisplayArray[:,:,0:3] = image
-	# 			mirrorDisplay.refresh()
+		# if dualDisplay:
+		# 	image = stimDisplayArray[:,:,0:3]
+		# 	image = scipy.misc.imresize(image, (stimDisplayRes[0]/2,stimDisplayRes[1]/2), interp='nearest')
+		# 	mirrorDisplayArray[:,:,0:3] = image
+		# 	mirrorDisplay.refresh()
 		return None
 
 
@@ -609,15 +635,12 @@ if __name__ == '__main__':
 			else:
 				lastRightTrigger = triggerData[1][-1][-1]
 		responseMade = False
-		pauseRequested = False
 		rts = [[],[]]
 		while not stamper.qFrom.empty():
 			event = stamper.qFrom.get()
 			if event['type'] == 'key' :
 				if event['value']=='escape':
 					exitSafely()
-				elif event['value']=='p':
-					pauseRequested = True
 				else:
 					responseMade = True
 					rts[0].append(event['time'])
@@ -635,7 +658,7 @@ if __name__ == '__main__':
 						if lastRightTrigger<triggerCriterionValue:
 							responseMade = True
 							rts[1].append(event['time'])
-		return [responseMade,rts,triggerData,pauseRequested]
+		return [responseMade,rts,triggerData]
 
 
 	#define a function that runs a block of trials
@@ -644,8 +667,6 @@ if __name__ == '__main__':
 		while (time.time()-start)<1:
 			checkInput()
 		
-		if doPyTracker:
-			tracker.qTo.put(['doSounds',True])
 		print 'block started'
 
 		#get trials
@@ -653,32 +674,39 @@ if __name__ == '__main__':
 
 		#run the trials
 		trialNum = 0
-		trialsForThisBlock = trialsPerBlock
-		while trialNum<trialsForThisBlock:
-			if doPyTracker:
-				tracker.qTo.put(['queueData',True])
+		while trialNum<trialsPerBlock:
+			if doEyelink:
+				try:
+					error = eyelink.doDriftCorrect(stimDisplayRes[0]/2, stimDisplayRes[1]/2, 1, 1)
+					if error!=0:
+						eyelink.doTrackerSetup()
+				except:
+					eyelink.doTrackerSetup()
 
-			printList = []
+			if doEyelink:
+				eyelink.startRecording(1,1,1,1) #this retuns immediately takes 10-30ms to actually kick in on the tracker
+
+			# printList = []
+
 			#bump the trial number
 			trialNum = trialNum + 1
 		
 			#get the trial info
 			trialInfo = random.choice(trialList)
-		
+
 			#parse the trial info
 			brightSide,fastSide,cueSide,targetSide,targetIdentity = trialInfo
 			
 			#generate fixation duration
 			fixationDuration = int(random.uniform(fixationDurationMin,fixationDurationMax))
 
-			#prep the buffers
+			#prep and show the buffers
 			drawBoxes(brightSide)
 			drawDot(fixationSize)
 			refreshWindows()
-			start = getTime()
 			drawBoxes(brightSide)
 			drawDot(fixationSize)
-			refreshWindows()
+			refreshWindows() #this one should block until it's actually displayed
 
 			#get the trial start time 
 			trialStartTime = getTime()
@@ -712,6 +740,19 @@ if __name__ == '__main__':
 			cuebackOffMessageSent = False
 			targetOnMessageSent = False
 			setPhotoTriggerOn = False
+
+			#initialize variables to write
+			saccadeStartTimes = []
+			saccadeStartTimes2 = []
+			saccadeEndTimes = []
+			saccadeEndTimes2 = []
+			blinkStartTimes = []
+			blinkStartTimes2 = []
+			blinkEndTimes = []
+			blinkEndTimes2 = []
+			saccadeLocations = []
+			blinkMade = False
+			sacadeMade = False
 
 			blink = False
 			saccadeMade = False
@@ -832,6 +873,8 @@ if __name__ == '__main__':
 					slowOffMessageSent = True
 					slowOnMessageSent = False
 				if sendCueOnMessage:
+					if doEyelink:
+						eyelink.sendMessage('CUE ON')
 					#queueFromExpToEEG.put([frameTime,'cue on'])
 					sendCueOnMessage = False
 					cueOnMessageSent = True
@@ -848,17 +891,43 @@ if __name__ == '__main__':
 					sendCuebackOffMessage = False
 					cuebackOffMessageSent = True
 				if sendTargetOnMessage:
+					if doEyelink:
+						eyelink.sendMessage('TARGET ON')
 					#queueFromExpToEEG.put([frameTime,'target on'])
 					sendTargetOnMessage = False
 					targetOnMessageSent = True
 					targetOnTime = frameTime
 				#check for eye tracking data here
-				#
+				if doEyelink:
+			 		eyeData = eyelink.getNextData()
+					if (eyeData==3) or (eyeData==5):
+						eyeEvent = eyelink.getFloatData()
+						if isinstance(eyeEvent,pylink.StartSaccadeEvent):
+							saccadeMade = True
+							saccadeStartTimes2.append(getTime())				
+							saccadeStartTimes.append(eyeEvent.getTime())
+							if not saccadeSound.stillPlaying():
+								saccadeSound.play()
+						elif isinstance(eyeEvent,pylink.StartBlinkEvent):
+							blinkMade = True
+							blinkStartTimes2.append(getTime())
+							blinkStartTimes.append(eyeEvent.getTime())
+							if not blinkSound.stillPlaying():
+								blinkSound.play()
+					elif (eyeData==4) or (eyeData==6):
+						eyeEvent = eyelink.getFloatData()
+						if isinstance(eyeEvent,pylink.EndSaccadeEvent):
+							saccadeEndTimes2.append(getTime())
+							saccadeEndTimes.append(eyeEvent.getTime())
+							saccadeLocations.append(eyeEvent.getEndGaze())
+						elif isinstance(eyeEvent,pylink.EndBlinkEvent):
+							blinkEndTimes2.append(getTime())		
+							blinkEndTimes.append(eyeEvent.getTime())		
 				# print getTime()-start #check the total loop time 
 			#trial done
 			#print printList
 			#check for responses here
-			responseMade,rts,triggerData,pauseRequested1 = checkInput()
+			responseMade,rts,triggerData = checkInput()
 			#compute feedback
 			if targetIdentity=='square':
 				if not responseMade:
@@ -900,16 +969,29 @@ if __name__ == '__main__':
 			drawText( feedbackText , feedbackFont , stimDisplayRes[0] , xLoc=stimDisplayRes[0]/2 , yLoc=stimDisplayRes[1]/2 , fg=feedbackColor )
 			refreshWindows()
 			trialDoneTime = getTime()
+			if doEyelink:
+				eyelink.sendMessage('FEEDBACK ON')
 			trialDone = False
 			while getTime()<(trialDoneTime+feedbackDuration):
-				#check for eye tracking data here
-				#
-				pass
+				#check for eye tracking data here (but don't do anything about it because Ss are allowed to move/blink during feedback)
+		 		eyeData = eyelink.getNextData()
 			#check for responses here
-			responseMade2,rts2,triggerData,pauseRequested2 = checkInput(triggerData)
+			responseMade2,rts2,triggerData = checkInput(triggerData)
 			if responseMade2:
 				feedbackResponse = 'TRUE'
 				print 'feedback response made'
+			if doEyelink:
+				eyelink.sendMessage('TRIAL OK')
+				eyelink.stopRecording()
+				# dataFile.write('\t'.join(['\t'.join(map(str,i)) for i in saccadeLocations])+'\n')
+				# dataFile.write('\t'.join(map(str,saccadeStartTimes))+'\n')
+				# dataFile.write('\t'.join(map(str,saccadeEndTimes))+'\n')
+				# dataFile.write('\t'.join(map(str,blinkStartTimes))+'\n')
+				# dataFile.write('\t'.join(map(str,blinkEndTimes))+'\n')
+				# dataFile.write('\t'.join(map(str,saccadeStartTimes2))+'\n')
+				# dataFile.write('\t'.join(map(str,saccadeEndTimes2))+'\n')
+				# dataFile.write('\t'.join(map(str,blinkStartTimes2))+'\n')
+				# dataFile.write('\t'.join(map(str,blinkEndTimes2))+'\n')
 			#write out trial info
 			triggerData = [[[i[0]-targetOnTime,i[1]] for i in side] for side in triggerData]#fix times to be relative to target on time
 			triggerTrialInfo = '\t'.join(map(str,[subInfo[0],block,trialNum]))
@@ -917,24 +999,10 @@ if __name__ == '__main__':
 			triggerDataToWriteRight = '\n'.join([triggerTrialInfo + '\t' + '\t'.join(map(str,i)) for i in triggerData[1]])
 			writer.qTo.put(['write','trigger',triggerDataToWriteLeft])
 			writer.qTo.put(['write','trigger',triggerDataToWriteRight])
-			dataToWrite = '\t'.join(map(str,[ subInfoForFile , messageViewingTime , block , trialNum , brightSide , fastSide , cueSide , targetSide , targetIdentity , rt , feedbackResponse , (pauseRequested1 | pauseRequested2) ]))
+			dataToWrite = '\t'.join(map(str,[ subInfoForFile , messageViewingTime , block , trialNum , brightSide , fastSide , cueSide , targetSide , targetIdentity , rt , feedbackResponse ]))
 			writer.qTo.put(['write','data',dataToWrite])
-			if doPyTracker:
-				tracker.qTo.put(['queueData',False])
-				while not tracker.qFrom.empty():
-					message = tracker.qFrom.get()
-					trackerDataToWrite = triggerTrialInfo + '\t' + '\t'.join(map(str,message)) 
-			if pauseRequested1 or pauseRequested2:
-				if doPyTracker:
-					tracker.qTo.put(['doSounds',False])
-				showMessage('Eye tracking has been lost. Please wait a moment while the person conducting the experiment re-starts the camera.')
-				showMessage('Eye tracking has been re-started. When you are ready to resume the experiment, press any trigger.')
-				trialsForThisBlock = trialsForThisBlock + 1
-				if doPyTracker:
-					tracker.qTo.put(['doSounds',True])
-		#done the block	
-		if doPyTracker:
-			tracker.qTo.put(['doSounds',False])
+			if doEyelink:
+				eyelink.sendMessage(dataToWrite)
 		print 'on break'
 
 
