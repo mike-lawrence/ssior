@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "ssior_v2.py", line 1072, in <module>
+    runBlock()
+  File "ssior_v2.py", line 929, in runBlock
+    if not saccadeSound.stillPlaying():
+  File "ssior_v2.py", line 109, in stillPlaying
+    if sdl2.sdlmixer.Mix_Playing(self.channel):
+AttributeError: Sound instance has no attribute 'channel'
