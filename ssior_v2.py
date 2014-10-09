@@ -16,7 +16,7 @@ if __name__ == '__main__':
 	jackWindowSize = (200,200)
 	jackWindowPosition = (500,0)
 
-	doEyelink = True
+	doEyelink = False
 	saccadeSoundFile = '_Stimuli/stop.wav'
 	blinkSoundFile = '_Stimuli/stop.wav'
 
@@ -182,7 +182,7 @@ if __name__ == '__main__':
 	########
 	# Initialize the stimDisplay
 	########
-
+	time.sleep(5)
 	sdl2.SDL_Init(sdl2.SDL_INIT_VIDEO)
 	stimDisplay = sdl2.ext.Window("Experiment", size=stimDisplayRes,position=(stimDisplayPositionX,0),flags=sdl2.SDL_WINDOW_OPENGL|sdl2.SDL_WINDOW_SHOWN| sdl2.SDL_WINDOW_FULLSCREEN_DESKTOP |sdl2.SDL_RENDERER_ACCELERATED | sdl2.SDL_RENDERER_PRESENTVSYNC)
 	glContext = sdl2.SDL_GL_CreateContext(stimDisplay.window)
