@@ -1,0 +1,1714 @@
+<PyCorder xmlns:py="http://codespeak.net/lxml/objectify/pytype" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0.4">
+  <modules>
+    <AMP_ActiChamp instance="0" version="1" module="amplifier">
+      <samplerate py:pytype="float">1000.0</samplerate>
+      <channels>
+        <channel version="2">
+          <input py:pytype="int">1</input>
+          <enable py:pytype="bool">false</enable>
+          <name py:pytype="str">Ch1</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">2</input>
+          <enable py:pytype="bool">false</enable>
+          <name py:pytype="str">Ch2</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">3</input>
+          <enable py:pytype="bool">false</enable>
+          <name py:pytype="str">Ch3</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">4</input>
+          <enable py:pytype="bool">false</enable>
+          <name py:pytype="str">Ch4</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">5</input>
+          <enable py:pytype="bool">false</enable>
+          <name py:pytype="str">Ch5</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">6</input>
+          <enable py:pytype="bool">false</enable>
+          <name py:pytype="str">Ch6</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">7</input>
+          <enable py:pytype="bool">false</enable>
+          <name py:pytype="str">Ch7</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">8</input>
+          <enable py:pytype="bool">false</enable>
+          <name py:pytype="str">Ch8</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">9</input>
+          <enable py:pytype="bool">false</enable>
+          <name py:pytype="str">Ch9</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">10</input>
+          <enable py:pytype="bool">false</enable>
+          <name py:pytype="str">Ch10</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">11</input>
+          <enable py:pytype="bool">false</enable>
+          <name py:pytype="str">Ch11</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">12</input>
+          <enable py:pytype="bool">false</enable>
+          <name py:pytype="str">Ch12</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">13</input>
+          <enable py:pytype="bool">false</enable>
+          <name py:pytype="str">Ch13</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">14</input>
+          <enable py:pytype="bool">false</enable>
+          <name py:pytype="str">Ch14</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">15</input>
+          <enable py:pytype="bool">false</enable>
+          <name py:pytype="str">Ch15</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">16</input>
+          <enable py:pytype="bool">false</enable>
+          <name py:pytype="str">Ch16</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">17</input>
+          <enable py:pytype="bool">false</enable>
+          <name py:pytype="str">Ch17</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">18</input>
+          <enable py:pytype="bool">false</enable>
+          <name py:pytype="str">Ch18</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">19</input>
+          <enable py:pytype="bool">false</enable>
+          <name py:pytype="str">Ch19</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">20</input>
+          <enable py:pytype="bool">false</enable>
+          <name py:pytype="str">Ch20</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">21</input>
+          <enable py:pytype="bool">false</enable>
+          <name py:pytype="str">Ch21</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">22</input>
+          <enable py:pytype="bool">false</enable>
+          <name py:pytype="str">Ch22</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">23</input>
+          <enable py:pytype="bool">false</enable>
+          <name py:pytype="str">Ch23</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">24</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch24</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">25</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch25</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">26</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch26</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">27</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch27</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">28</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch28</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">29</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch29</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">30</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch30</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">31</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch31</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">32</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch32</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">33</input>
+          <enable py:pytype="bool">false</enable>
+          <name py:pytype="str">Ch33</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">34</input>
+          <enable py:pytype="bool">false</enable>
+          <name py:pytype="str">Ch34</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">35</input>
+          <enable py:pytype="bool">false</enable>
+          <name py:pytype="str">Ch35</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">36</input>
+          <enable py:pytype="bool">false</enable>
+          <name py:pytype="str">Ch36</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">37</input>
+          <enable py:pytype="bool">false</enable>
+          <name py:pytype="str">Ch37</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">38</input>
+          <enable py:pytype="bool">false</enable>
+          <name py:pytype="str">Ch38</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">39</input>
+          <enable py:pytype="bool">false</enable>
+          <name py:pytype="str">Ch39</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">40</input>
+          <enable py:pytype="bool">false</enable>
+          <name py:pytype="str">Ch40</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">41</input>
+          <enable py:pytype="bool">false</enable>
+          <name py:pytype="str">Ch41</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">42</input>
+          <enable py:pytype="bool">false</enable>
+          <name py:pytype="str">Ch42</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">43</input>
+          <enable py:pytype="bool">false</enable>
+          <name py:pytype="str">Ch43</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">44</input>
+          <enable py:pytype="bool">false</enable>
+          <name py:pytype="str">Ch44</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">45</input>
+          <enable py:pytype="bool">false</enable>
+          <name py:pytype="str">Ch45</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">46</input>
+          <enable py:pytype="bool">false</enable>
+          <name py:pytype="str">Ch46</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">47</input>
+          <enable py:pytype="bool">false</enable>
+          <name py:pytype="str">Ch47</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">48</input>
+          <enable py:pytype="bool">false</enable>
+          <name py:pytype="str">Ch48</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">49</input>
+          <enable py:pytype="bool">false</enable>
+          <name py:pytype="str">Ch49</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">50</input>
+          <enable py:pytype="bool">false</enable>
+          <name py:pytype="str">Ch50</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">51</input>
+          <enable py:pytype="bool">false</enable>
+          <name py:pytype="str">Ch51</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">52</input>
+          <enable py:pytype="bool">false</enable>
+          <name py:pytype="str">Ch52</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">true</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">53</input>
+          <enable py:pytype="bool">false</enable>
+          <name py:pytype="str">Ch53</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">true</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">54</input>
+          <enable py:pytype="bool">false</enable>
+          <name py:pytype="str">Ch54</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">55</input>
+          <enable py:pytype="bool">false</enable>
+          <name py:pytype="str">Ch55</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">56</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch56</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">57</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch57</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">58</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch58</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">59</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch59</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">60</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch60</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">61</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch61</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">62</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch62</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">63</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch63</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">64</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch64</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">65</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch65</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">66</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch66</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">67</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch67</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">68</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch68</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">69</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch69</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">70</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch70</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">71</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch71</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">72</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch72</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">73</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch73</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">74</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch74</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">75</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch75</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">76</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch76</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">77</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch77</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">78</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch78</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">79</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch79</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">80</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch80</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">81</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch81</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">82</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch82</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">83</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch83</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">84</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch84</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">85</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch85</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">86</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch86</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">87</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch87</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">88</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch88</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">89</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch89</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">90</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch90</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">91</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch91</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">92</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch92</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">93</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch93</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">94</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch94</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">95</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch95</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">96</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch96</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">97</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch97</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">98</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch98</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">99</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch99</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">100</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch100</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">101</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch101</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">102</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch102</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">103</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch103</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">104</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch104</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">105</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch105</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">106</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch106</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">107</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch107</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">108</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch108</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">109</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch109</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">110</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch110</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">111</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch111</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">112</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch112</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">113</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch113</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">114</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch114</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">115</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch115</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">116</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch116</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">117</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch117</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">118</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch118</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">119</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch119</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">120</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch120</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">121</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch121</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">122</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch122</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">123</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch123</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">124</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch124</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">125</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch125</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">126</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch126</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">127</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch127</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">128</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch128</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">129</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch129</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">130</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch130</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">131</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch131</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">132</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch132</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">133</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch133</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">134</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch134</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">135</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch135</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">136</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch136</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">137</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch137</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">138</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch138</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">139</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch139</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">140</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch140</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">141</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch141</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">142</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch142</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">143</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch143</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">144</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch144</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">145</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch145</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">146</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch146</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">147</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch147</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">148</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch148</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">149</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch149</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">150</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch150</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">151</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch151</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">152</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch152</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">153</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch153</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">154</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch154</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">155</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch155</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">156</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch156</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">157</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch157</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">158</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch158</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">159</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch159</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">160</input>
+          <enable py:pytype="bool">true</enable>
+          <name py:pytype="str">Ch160</name>
+          <group py:pytype="int">0</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">1</input>
+          <enable py:pytype="bool">false</enable>
+          <name py:pytype="str">Aux1</name>
+          <group py:pytype="int">1</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">2</input>
+          <enable py:pytype="bool">false</enable>
+          <name py:pytype="str">Aux2</name>
+          <group py:pytype="int">1</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">3</input>
+          <enable py:pytype="bool">false</enable>
+          <name py:pytype="str">Aux3</name>
+          <group py:pytype="int">1</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">4</input>
+          <enable py:pytype="bool">false</enable>
+          <name py:pytype="str">Aux4</name>
+          <group py:pytype="int">1</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">5</input>
+          <enable py:pytype="bool">false</enable>
+          <name py:pytype="str">Aux5</name>
+          <group py:pytype="int">1</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">6</input>
+          <enable py:pytype="bool">false</enable>
+          <name py:pytype="str">Aux6</name>
+          <group py:pytype="int">1</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">7</input>
+          <enable py:pytype="bool">false</enable>
+          <name py:pytype="str">Aux7</name>
+          <group py:pytype="int">1</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+        <channel version="2">
+          <input py:pytype="int">8</input>
+          <enable py:pytype="bool">false</enable>
+          <name py:pytype="str">Aux8</name>
+          <group py:pytype="int">1</group>
+          <lowpass py:pytype="float">0.0</lowpass>
+          <highpass py:pytype="float">0.0</highpass>
+          <notchfilter py:pytype="bool">false</notchfilter>
+          <reference py:pytype="bool">false</reference>
+        </channel>
+      </channels>
+    </AMP_ActiChamp>
+    <StorageVision instance="0" version="2" module="storage">
+      <d_path py:pytype="str">Z:/Experiments/ssior/_Data</d_path>
+      <d_autoname py:pytype="bool">true</d_autoname>
+      <d_prefix py:pytype="str">ssior_v2_</d_prefix>
+      <d_numbersize py:pytype="int">2</d_numbersize>
+      <mindiskspace py:pytype="float">1.0</mindiskspace>
+    </StorageVision>
+    <EegFilter instance="0" version="2" module="filter">
+      <notch_frequency py:pytype="float">50.0</notch_frequency>
+      <lp_global py:pytype="float">0.0</lp_global>
+      <hp_global py:pytype="float">0.0</hp_global>
+      <notch_global py:pytype="bool">false</notch_global>
+      <channels/>
+    </EegFilter>
+    <IMP_Display instance="0" version="1" module="impedance">
+      <range_max py:pytype="int">50</range_max>
+      <show_values py:pytype="bool">true</show_values>
+    </IMP_Display>
+    <DISP_Scope instance="0" version="5" module="display">
+      <timebase py:pytype="float">10.0</timebase>
+      <eegscale py:pytype="float">100.0</eegscale>
+      <auxscale py:pytype="float">1000.0</auxscale>
+      <groupsize py:pytype="float">16.0</groupsize>
+      <baseline py:pytype="bool">true</baseline>
+    </DISP_Scope>
+  </modules>
+</PyCorder>
