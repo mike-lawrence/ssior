@@ -16,7 +16,7 @@ if __name__ == '__main__':
 	jackWindowSize = (200,200)
 	jackWindowPosition = (500,0)
 
-	doEyelink = True
+	doEyelink = False
 	saccadeSoundFile = '_Stimuli/stop.wav'
 	blinkSoundFile = '_Stimuli/stop.wav'
 
@@ -1048,7 +1048,7 @@ if __name__ == '__main__':
 
 	shutil.copy(sys.argv[0], '_Data/'+filebase+'/'+filebase+'_code.py')
 
-	#jack.qTo.put(['write','_Data/'+filebase+'/'+filebase+'_jack.txt'])
+	jack.qTo.put(['write','_Data/'+filebase+'/'+filebase+'_jack.txt'])
 
 
 	writer.qTo.put(['newFile','data','_Data/'+filebase+'/'+filebase+'_data.txt'])
