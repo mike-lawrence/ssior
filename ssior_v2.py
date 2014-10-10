@@ -467,6 +467,23 @@ if __name__ == '__main__':
 		gl.glVertex2f( stimDisplayRes[0]/2 + stimDisplayRes[0]/30 , stimDisplayRes[1] - stimDisplayRes[1]/20 )
 		gl.glVertex2f( stimDisplayRes[0]/2 - stimDisplayRes[0]/30 , stimDisplayRes[1] )
 		gl.glEnd()
+		gl.glColor3f(0,0,0)
+		# gl.glBegin(gl.GL_QUAD_STRIP)
+		# gl.glVertex2f( stimDisplayRes[0]/2 - stimDisplayRes[0]/10 , stimDisplayRes[1] )
+		# gl.glVertex2f( stimDisplayRes[0]/2 + stimDisplayRes[0]/10 , stimDisplayRes[1] )
+		# gl.glVertex2f( stimDisplayRes[0]/2 - stimDisplayRes[0]/10 , stimDisplayRes[1] - stimDisplayRes[1]/10 )
+		# gl.glVertex2f( stimDisplayRes[0]/2 + stimDisplayRes[0]/10 , stimDisplayRes[1] - stimDisplayRes[1]/10 )
+		# gl.glVertex2f( stimDisplayRes[0]/2 - stimDisplayRes[0]/10 , stimDisplayRes[1] )
+		# gl.glEnd()
+		# if on:
+		# 	gl.glColor3f(1,1,1)
+		# 	gl.glBegin(gl.GL_QUAD_STRIP)
+		# 	gl.glVertex2f( stimDisplayRes[0]/2 - stimDisplayRes[0]/10 , stimDisplayRes[1] )
+		# 	gl.glVertex2f( stimDisplayRes[0]/2 + stimDisplayRes[0]/10 , stimDisplayRes[1] )
+		# 	gl.glVertex2f( stimDisplayRes[0]/2 - stimDisplayRes[0]/10 , stimDisplayRes[1] - stimDisplayRes[1]/10 )
+		# 	gl.glVertex2f( stimDisplayRes[0]/2 + stimDisplayRes[0]/10 , stimDisplayRes[1] - stimDisplayRes[1]/10 )
+		# 	gl.glVertex2f( stimDisplayRes[0]/2 - stimDisplayRes[0]/10 , stimDisplayRes[1] )
+		# 	gl.glEnd()
 
 
 	########
@@ -499,8 +516,8 @@ if __name__ == '__main__':
 			except:
 				pass
 		stamper.quit()
-		writer.quit()
 		jack.quit()
+		writer.quit()
 		sdl2.ext.quit()
 		time.sleep(5)
 		sys.exit()
@@ -723,9 +740,11 @@ if __name__ == '__main__':
 			#prep and show the buffers
 			drawBoxes(brightSide)
 			drawDot(fixationSize)
+			setPhotoTrigger()
 			refreshWindows()
 			drawBoxes(brightSide)
 			drawDot(fixationSize)
+			setPhotoTrigger()
 			refreshWindows() #this one should block until it's actually displayed
 
 			#get the trial start time 
@@ -987,6 +1006,7 @@ if __name__ == '__main__':
 			gl.glClearColor(.5,.5,.5,1)
 			gl.glClear(gl.GL_COLOR_BUFFER_BIT)
 			drawText( feedbackText , feedbackFont , stimDisplayRes[0] , xLoc=stimDisplayRes[0]/2 , yLoc=stimDisplayRes[1]/2 , fg=feedbackColor )
+			setPhotoTrigger()	
 			refreshWindows()
 			trialDoneTime = getTime()
 			if doEyelink:

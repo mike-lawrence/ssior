@@ -51,17 +51,21 @@ def jackLoop(qToWriter,Resolution,ScanFrequency,windowSize,windowPosition,qTo,qF
 	window.refresh()
 	writing = False
 	for content in d.streamData():
-		if checkForZeroTime:
+		if writing and checkForZeroTime:
 			if time.time()>=nextZeroTime:
+				# print 'turning trigger off'
 				d.getFeedback(u3.BitStateWrite(IONumber=11,State=0))
+				checkForZeroTime = False
 		if content is not None:
 			data = content['AIN0']
 			times = [last + t*interScanInterval for t in range(len(data))]
 			last = times[-1] + interScanInterval
-			if writing:
-				if np.any(np.array(data)>.5):#light exceeds criterion
+			if writing and not checkForZeroTime:
+				if np.any(np.array(data)>1):#light exceeds criterion
+					# print 'sending trigger'
 					d.getFeedback(u3.BitStateWrite(IONumber=11,State=1)) #11@1=s15, 11@0=s11; 9&10@0=r9, 9@0&10@1=r11, 9@1&10@0=r13, 9&10@1=15 
 					nextZeroTime = time.time()+1
+					checkForZeroTime = True
 					# message = {}
 					# message['type'] = 'labjack'
 					# message['value'] = times[np.where(data>.5)[0]]
@@ -75,7 +79,7 @@ def jackLoop(qToWriter,Resolution,ScanFrequency,windowSize,windowPosition,qTo,qF
 				d.close()
 				del d
 				time.sleep(1)
-				sys.exit()		
+				sys.exit()
 			elif message[0]=='write':
 				qToWriter.put(['newFile','labjack',message[1]])
 				writing = True
