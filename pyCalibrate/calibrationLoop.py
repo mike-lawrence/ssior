@@ -83,7 +83,7 @@ def loop(qTo,qFrom,timestampMethod,viewingDistance,stimDisplayWidth,stimDisplayR
 	calibrationLocations['SE'] = numpy.array([int(0+stimDisplayRes[0]/2.0-calibrationDotSize),int(0+stimDisplayRes[1]/2.0-calibrationDotSize)])
 	calibrationLocations['NW'] = numpy.array([int(0-stimDisplayRes[0]/2.0+calibrationDotSize),int(0-stimDisplayRes[1]/2.0+calibrationDotSize)])
 	calibrationLocations['SW'] = numpy.array([int(0-stimDisplayRes[0]/2.0+calibrationDotSize),int(0+stimDisplayRes[1]/2.0-calibrationDotSize)])
-	calibrationKey = {'q':'NW','w':'N','e':'NE','a':'E','s':'CENTER','d':'W','z':'SW','x':'S','c':'SE'}
+	calibrationKey = {'keypad 7':'NW','keypad 8':'N','keypad 9':'NE','keypad 4':'E','keypad 5':'CENTER','keypad 6':'W','keypad 1':'SW','keypad 2':'S','keypad 3':'SE'}
 	# calibrationLocations['N2'] = numpy.array([0,int((0-stimDisplayRes[1]/2.0+calibrationDotSize)/2.0)])
 	# calibrationLocations['S2'] = numpy.array([0,int((0+stimDisplayRes[1]/2.0-calibrationDotSize)/2.0)])
 	# calibrationLocations['W2'] = numpy.array([int((0-stimDisplayRes[0]/2.0+calibrationDotSize)/2.0),0])
@@ -220,7 +220,7 @@ def loop(qTo,qFrom,timestampMethod,viewingDistance,stimDisplayWidth,stimDisplayR
 		return [response,messageViewingTime]
 	
 
-	displayCoords = calibrationLocations[calibrationKey['s']]
+	displayCoords = calibrationLocations[calibrationKey['keypad 5']]
 	clearScreen(black)
 	drawDot(displayCoords)
 	refreshWindows()
@@ -229,7 +229,6 @@ def loop(qTo,qFrom,timestampMethod,viewingDistance,stimDisplayWidth,stimDisplayR
 	while not done:
 		dotLocation = waitForResponse()
 		if dotLocation in calibrationKey:
-			print dotLocation
 			displayCoords = calibrationLocations[calibrationKey[dotLocation]]
 			clearScreen(black)
 			drawDot(displayCoords)
