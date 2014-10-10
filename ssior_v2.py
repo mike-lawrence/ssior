@@ -16,7 +16,7 @@ if __name__ == '__main__':
 	jackWindowSize = (200,200)
 	jackWindowPosition = (500,0)
 
-	doEyelink = False
+	doEyelink = True
 	saccadeSoundFile = '_Stimuli/stop.wav'
 	blinkSoundFile = '_Stimuli/stop.wav'
 
@@ -695,13 +695,13 @@ if __name__ == '__main__':
 		#run the trials
 		trialNum = 0
 		while trialNum<trialsPerBlock:
-			if doEyelink:
-				try:
-					error = eyelink.doDriftCorrect(stimDisplayRes[0]/2, stimDisplayRes[1]/2, 1, 1)
-					if error!=0:
-						eyelink.doTrackerSetup()
-				except:
-					eyelink.doTrackerSetup()
+			# if doEyelink:
+			# 	try:
+			# 		error = eyelink.doDriftCorrect(stimDisplayRes[0]/2, stimDisplayRes[1]/2, 1, 1)
+			# 		if error!=0:
+			# 			eyelink.doTrackerSetup()
+			# 	except:
+			# 		eyelink.doTrackerSetup()
 
 			if doEyelink:
 				eyelink.startRecording(1,1,1,1) #this retuns immediately takes 10-30ms to actually kick in on the tracker
