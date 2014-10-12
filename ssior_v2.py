@@ -9,16 +9,29 @@ if __name__ == '__main__':
 	stimDisplayPositionX = 2560
 	dualDisplay = True
 
-	stamperWindowSize = (200,200)
-	stamperWindowPosition = (0,0)
 	writerWindowSize = (200,200)
 	writerWindowPosition = (300,0)
-	jackWindowSize = (200,200)
-	jackWindowPosition = (500,0)
+
+	stamperWindowSize = (200,200)
+	stamperWindowPosition = (0,0)
+	stamperWindowColor = [255,255,255]
+	stamperDoBorder = True
+
+	doLabjack = True
+	labjackWindowSize = (200,200)
+	labjackWindowPosition = (500,0)
+	labjackResolution = 0 #0 is highest precision
+	labjackScanFrequency = 2500 #Hz
 
 	doEyelink = False
+	eyelinkWindowSize = (200,200)
+	eyelinkWindowPosition = (700,0)
+	eyelinkIP = '100.1.1.1'
 	saccadeSoundFile = '_Stimuli/stop.wav'
 	blinkSoundFile = '_Stimuli/stop.wav'
+	calibrationDotSizeInDegrees = 1
+	calibrationMirrorDisplayPosition = [0,0]
+	calibrationMirrorDownsize = 2
 
 	responseModality = 'trigger' # 'key' or 'trigger'
 	triggerLeftAxis = 2
@@ -65,7 +78,6 @@ if __name__ == '__main__':
 	########
 	import sdl2 #for input and display
 	import sdl2.ext #for input and display
-	import sdl2.sdlmixer #for sound
 	import numpy #for image and display manipulation
 	import scipy.misc #for resizing numpy images via scipy.misc.imresize
 	from PIL import Image #for image manipulation
@@ -77,42 +89,19 @@ if __name__ == '__main__':
 	import os
 	import random #for shuffling and random sampling
 	import time #for timing
-	import billiard #for parallel processes
 	import shutil #for copying files
 	import hashlib #for encrypting
-	import pyStamper
-	import pyWriter
-	import pyJack
 	import OpenGL.GL as gl
 	try:
 		os.nice(-20)
 	except:
 		pass#print('Can\'t nice')
-	import appnope
-	appnope.nope()
-	if doEyelink:
-		import pylink
-		import pyCalibrate
-
-
-	########
-	# initialize sound
-	########
-	sdl2.SDL_Init(sdl2.SDL_INIT_AUDIO)
-	sdl2.sdlmixer.Mix_OpenAudio(44100, sdl2.sdlmixer.MIX_DEFAULT_FORMAT, 2, 1024)
-	class Sound:
-		def __init__(self, fileName):
-			self.sample = sdl2.sdlmixer.Mix_LoadWAV(sdl2.ext.compat.byteify(fileName, "utf-8"))
-		def play(self):
-			self.channel = sdl2.sdlmixer.Mix_PlayChannel(-1, self.sample, 0)
-		def stillPlaying(self):
-			if sdl2.sdlmixer.Mix_Playing(self.channel):
-				return True
-			else:
-				return False
-
-	saccadeSound = Sound(saccadeSoundFile)
-	blinkSound = Sound(blinkSoundFile)
+	try:
+		import appnope
+		appnope.nope()
+	except:
+		pass
+	import pyProcess
 
 
 	########
@@ -133,87 +122,12 @@ if __name__ == '__main__':
 
 
 	########
-	# Initialize the writer
-	########
-	writer = pyWriter.writerClass()
-	writer.start(windowSize=writerWindowSize,windowPosition=writerWindowPosition)
-
-	########
-	# start the event pyStamper
-	########
-	stamper = pyStamper.stamperClass()
-	stamper.start(windowSize=stamperWindowSize,windowPosition=stamperWindowPosition)
-
-	########
-	# start the event pyStamper
-	########
-	jack = pyJack.jackClass()
-	jack.start(qToWriter=writer.qTo,windowSize=jackWindowSize,windowPosition=jackWindowPosition)
-
-	########
-	# initialize the pylink
-	########
-	if doEyelink:
-		eyelink = pylink.EyeLink('100.1.1.1')
-		eyelink.sendCommand('select_parser_configuration 0')# 0--> standard (cognitive); 1--> sensitive (psychophysical)
-		eyelink.sendCommand('sample_rate 2000')
-		eyelink.setLinkEventFilter("SACCADE,BLINK")
-		eyelink.openDataFile('ssior.edf')
-		eyelink.sendCommand("screen_pixel_coords =  0 0 %d %d" %(stimDisplayRes[0],stimDisplayRes[1]))
-		eyelink.sendMessage("DISPLAY_COORDS  0 0 %d %d" %(stimDisplayRes[0],stimDisplayRes[1]))
-		eyelink.sendCommand("saccade_velocity_threshold = 35")
-		eyelink.sendCommand("saccade_acceleration_threshold = 9500")
-		calibrator = pyCalibrate.calibrationClass()
-		calibrator.timestampMethod = 0
-		calibrator.viewingDistance = 53.0
-		calibrator.stimDisplayWidth = 59.5
-		calibrator.stimDisplayRes = stimDisplayRes
-		calibrator.stimDisplayPosition = [stimDisplayPositionX,0]
-		calibrator.mirrorDisplayPosition = [0,0]
-		calibrator.mirrorDownSize = 2
-		calibrator.manualCalibrationOrder = True
-		calibrator.calibrationDotSizeInDegrees = 1
-		time.sleep(5)
-		calibrator.start()
-		# eyelink.doTrackerSetup()
-		while calibrator.process.is_alive():
-			pass
-
-	########
-	# Initialize the stimDisplay
-	########
-	time.sleep(5)
-	sdl2.SDL_Init(sdl2.SDL_INIT_VIDEO)
-	stimDisplay = sdl2.ext.Window("Experiment", size=stimDisplayRes,position=(stimDisplayPositionX,0),flags=sdl2.SDL_WINDOW_OPENGL|sdl2.SDL_WINDOW_SHOWN| sdl2.SDL_WINDOW_FULLSCREEN_DESKTOP |sdl2.SDL_RENDERER_ACCELERATED | sdl2.SDL_RENDERER_PRESENTVSYNC)
-	glContext = sdl2.SDL_GL_CreateContext(stimDisplay.window)
-	gl.glMatrixMode(gl.GL_PROJECTION)
-	gl.glLoadIdentity()
-	gl.glOrtho(0, stimDisplayRes[0],stimDisplayRes[1], 0, 0, 1)
-	gl.glMatrixMode(gl.GL_MODELVIEW)
-	gl.glDisable(gl.GL_DEPTH_TEST)
-
-	if not dualDisplay:
-		sdl2.mouse.SDL_ShowCursor(0)
-
-	# 	if dualDisplay:
-	# 		mirrorDisplay = sdl2.ext.Window("Preview", size=(stimDisplayRes[0]/2,stimDisplayRes[1]/2),position=(0,0),flags=sdl2.SDL_WINDOW_SHOWN)
-	# 		mirrorDisplaySurf = sdl2.SDL_GetWindowSurface(mirrorDisplay.window)
-	# 		mirrorDisplayArray = sdl2.ext.pixels3d(mirrorDisplaySurf.contents)
-
-	sdl2.SDL_PumpEvents() #to show the windows
-	sdl2.SDL_PumpEvents() #to show the windows
-	sdl2.SDL_PumpEvents() #to show the windows
-	sdl2.SDL_PumpEvents() #to show the windows
-	sdl2.SDL_PumpEvents() #to show the windows
-	sdl2.SDL_PumpEvents() #to show the windows
-
-
-	########
 	#Perform some calculations to convert stimulus measurements in degrees to pixels
 	########
 	stimDisplayWidthInDegrees = math.degrees(math.atan((stimDisplayWidth/2.0)/viewingDistance)*2)
 	PPD = stimDisplayRes[0]/stimDisplayWidthInDegrees #compute the pixels per degree (PPD)
 
+	calibrationDotSize = int(calibrationDotSizeInDegrees*PPD)
 	instructionSize = int(instructionSizeInDegrees*PPD)
 	feedbackSize = int(feedbackSizeInDegrees*PPD)
 	fixationSize = int(fixationSizeInDegrees*PPD)
@@ -247,6 +161,87 @@ if __name__ == '__main__':
 
 	instructionFontSize = instructionFontSize - 1
 	instructionFont = ImageFont.truetype ("_Stimuli/DejaVuSans.ttf", instructionFontSize)
+
+
+	########
+	# Initialize the writer
+	########
+	writerProcess = pyProcess.processClass(fileToRun='writerProcess.py')
+	writerProcess.initVars['windowSize'] = writerWindowSize
+	writerProcess.initVars['windowPosition'] = writerWindowPosition
+	writerProcess.start()
+
+	########
+	# start the event timestamper
+	########
+	stamperProcess = pyProcess.processClass(fileToRun='stamperProcess.py')
+	stamperProcess.initVars['windowSize'] = stamperWindowSize
+	stamperProcess.initVars['windowPosition'] = stamperWindowPosition
+	stamperProcess.initVars['windowColor'] = stamperWindowColor
+	stamperProcess.initVars['doBorder'] = stamperDoBorder
+	stamperProcess.start()
+
+	########
+	# start the labjack
+	########
+	if doLabjack:
+		labjackProcess = pyProcess.processClass(fileToRun='labjackProcess.py')
+		labjackProcess.initVars['windowSize'] = labjackWindowSize
+		labjackProcess.initVars['windowPosition'] = labjackWindowPosition
+		labjackProcess.initVars['Resolution'] = labjackResolution
+		labjackProcess.initVars['ScanFrequency'] = labjackScanFrequency
+		labjackProcess.initVars['qToWriter'] = writerProcess.qTo
+		labjackProcess.start()
+
+	########
+	# initialize the eyelink
+	########
+	if doEyelink:
+		eyelinkProcess = pyProcess.processClass(fileToRun='eyelinkProcess.py')
+		eyelinkProcess.initVars['windowSize'] = eyelinkWindowSize
+		eyelinkProcess.initVars['windowPosition'] = eyelinkWindowPosition
+		eyelinkProcess.initVars['stimDisplayRes'] = stimDisplayRes
+		eyelinkProcess.initVars['eyelinkIP'] = eyelinkIP
+		eyelinkProcess.initVars['edfFileName'] = edfFileName
+		eyelinkProcess.initVars['edfPath'] = edfPath
+		eyelinkProcess.initVars['saccadeSoundFile'] = saccadeSoundFile
+		eyelinkProcess.initVars['blinkSoundFile'] = blinkSoundFile
+		eyelinkProcess.start()
+		calibrationProcess = pyProcess.processClass(fileToRun='calibrationProcess.py')
+		calibrationProcess.initVars['calibrationDotSize'] = calibrationDotSize
+		calibrationProcess.initVars['fontSize'] = instructionFontSize
+		calibrationProcess.initVars['stimDisplayRes'] = stimDisplayRes
+		calibrationProcess.initVars['stimDisplayPosition'] = stimDisplayPosition
+		calibrationProcess.initVars['mirrorDisplayPosition'] = calibrationMirrorDisplayPosition
+		calibrationProcess.initVars['mirrorDownSize'] = calibrationMirrorDownsize
+		calibrationProcess.start()
+		while calibrationProcess.isAlive():
+			pass
+
+	########
+	# Initialize the stimDisplay
+	########
+	time.sleep(5)
+	sdl2.SDL_Init(sdl2.SDL_INIT_VIDEO)
+	stimDisplay = sdl2.ext.Window("Experiment", size=stimDisplayRes,position=(stimDisplayPositionX,0),flags=sdl2.SDL_WINDOW_OPENGL|sdl2.SDL_WINDOW_SHOWN| sdl2.SDL_WINDOW_FULLSCREEN_DESKTOP |sdl2.SDL_RENDERER_ACCELERATED | sdl2.SDL_RENDERER_PRESENTVSYNC)
+	glContext = sdl2.SDL_GL_CreateContext(stimDisplay.window)
+	gl.glMatrixMode(gl.GL_PROJECTION)
+	gl.glLoadIdentity()
+	gl.glOrtho(0, stimDisplayRes[0],stimDisplayRes[1], 0, 0, 1)
+	gl.glMatrixMode(gl.GL_MODELVIEW)
+	gl.glDisable(gl.GL_DEPTH_TEST)
+
+	if not dualDisplay:
+		sdl2.mouse.SDL_ShowCursor(0)
+
+	# 	if dualDisplay:
+	# 		mirrorDisplay = sdl2.ext.Window("Preview", size=(stimDisplayRes[0]/2,stimDisplayRes[1]/2),position=(0,0),flags=sdl2.SDL_WINDOW_SHOWN)
+	# 		mirrorDisplaySurf = sdl2.SDL_GetWindowSurface(mirrorDisplay.window)
+	# 		mirrorDisplayArray = sdl2.ext.pixels3d(mirrorDisplaySurf.contents)
+
+	for i in range(10):
+		sdl2.SDL_PumpEvents() #to show the windows
+
 
 	########
 	# Drawing functions
@@ -500,28 +495,13 @@ if __name__ == '__main__':
 	#define a function that will kill everything safely
 	def exitSafely():
 		if doEyelink:
-			try:
-				eyelink.stopRecording()
-			except:
-				pass
-			try:
-				eyelink.setOfflineMode()
-				time.sleep(.1)
-				try:
-					eyelink.closeDataFile()
-					eyelink.receiveDataFile('ssior.edf', 'ssior.edf')
-				except:
-					pass
-				eyelink.close()				
-			except:
-				pass
-		stamper.quit()
-		jack.quit()
-		writer.quit()
+			eyelinkProcess.stop(killAfter=60)
+		stamper.stop(killAfter=60)
+		jack.stop(killAfter=60)
+		writer.stop(killAfter=60)
 		sdl2.ext.quit()
 		time.sleep(5)
 		sys.exit()
-		# gpg -r "Michael Lawrence <mike.lwrnc@gmail.com>" -e mac.txt
 
 
 	#define a function that waits for a response
@@ -1069,7 +1049,7 @@ if __name__ == '__main__':
 	shutil.copy(sys.argv[0], '_Data/'+filebase+'/'+filebase+'_code.py')
 
 	jack.qTo.put(['write','_Data/'+filebase+'/'+filebase+'_jack.txt'])
-
+	eyelinkProcess.put(['edfPath','_Data/'+filebase+'/'+filebase+'_eyelink.edf'])
 
 	writer.qTo.put(['newFile','data','_Data/'+filebase+'/'+filebase+'_data.txt'])
 	writer.qTo.put(['write','data',password])
