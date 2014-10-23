@@ -496,9 +496,9 @@ if __name__ == '__main__':
 	def exitSafely():
 		if doEyelink:
 			eyelinkProcess.stop(killAfter=60)
-		stamper.stop(killAfter=60)
-		jack.stop(killAfter=60)
-		writer.stop(killAfter=60)
+		stamperProcess.stop(killAfter=60)
+		labjackProcess.stop(killAfter=60)
+		writerProcess.stop(killAfter=60)
 		sdl2.ext.quit()
 		time.sleep(5)
 		sys.exit()
@@ -508,8 +508,8 @@ if __name__ == '__main__':
 	def waitForResponse():
 		done = False
 		while not done:
-			if not stamper.qFrom.empty():
-				event = stamper.qFrom.get()
+			if not stamperProcess.qFrom.empty():
+				event = stamperProcess.qFrom.get()
 				if event['type']=='key':
 					response = event['value']
 					if response=='escape':
@@ -572,8 +572,8 @@ if __name__ == '__main__':
 		gl.glClear(gl.GL_COLOR_BUFFER_BIT)
 		done = False
 		while not done:
-			if not stamper.qFrom.empty():
-				event = stamper.qFrom.get()
+			if not stamperProcess.qFrom.empty():
+				event = stamperProcess.qFrom.get()
 				if event['type'] == 'key' :
 					response = event['value']
 					if response=='escape':
@@ -653,8 +653,8 @@ if __name__ == '__main__':
 				lastRightTrigger = triggerData[1][-1][-1]
 		responseMade = False
 		rts = [[],[]]
-		while not stamper.qFrom.empty():
-			event = stamper.qFrom.get()
+		while not stamperProcess.qFrom.empty():
+			event = stamperProcess.qFrom.get()
 			if event['type'] == 'key' :
 				if event['value']=='escape':
 					exitSafely()
@@ -1018,10 +1018,10 @@ if __name__ == '__main__':
 			triggerTrialInfo = '\t'.join(map(str,[subInfo[0],block,trialNum]))
 			triggerDataToWriteLeft = '\n'.join([triggerTrialInfo + '\t' + '\t'.join(map(str,i)) for i in triggerData[0]])
 			triggerDataToWriteRight = '\n'.join([triggerTrialInfo + '\t' + '\t'.join(map(str,i)) for i in triggerData[1]])
-			writer.qTo.put(['write','trigger',triggerDataToWriteLeft])
-			writer.qTo.put(['write','trigger',triggerDataToWriteRight])
+			writerProcess.qTo.put(['write','trigger',triggerDataToWriteLeft])
+			writerProcess.qTo.put(['write','trigger',triggerDataToWriteRight])
 			dataToWrite = '\t'.join(map(str,[ subInfoForFile , messageViewingTime , block , trialNum , brightSide , fastSide , cueSide , targetSide , targetIdentity , rt , feedbackResponse ]))
-			writer.qTo.put(['write','data',dataToWrite])
+			writerProcess.qTo.put(['write','data',dataToWrite])
 			if doEyelink:
 				eyelink.sendMessage(dataToWrite)
 		print 'on break'
@@ -1048,17 +1048,17 @@ if __name__ == '__main__':
 
 	shutil.copy(sys.argv[0], '_Data/'+filebase+'/'+filebase+'_code.py')
 
-	jack.qTo.put(['write','_Data/'+filebase+'/'+filebase+'_jack.txt'])
+	labjackProcess.qTo.put(['write','_Data/'+filebase+'/'+filebase+'_jack.txt'])
 	eyelinkProcess.put(['edfPath','_Data/'+filebase+'/'+filebase+'_eyelink.edf'])
 
-	writer.qTo.put(['newFile','data','_Data/'+filebase+'/'+filebase+'_data.txt'])
-	writer.qTo.put(['write','data',password])
+	writerProcess.qTo.put(['newFile','data','_Data/'+filebase+'/'+filebase+'_data.txt'])
+	writerProcess.qTo.put(['write','data',password])
 	header ='\t'.join(['id' , 'year' , 'month' , 'day' , 'hour' , 'minute' , 'sex' , 'age'  , 'handedness' , 'wait' , 'block' , 'trial' , 'fastSide' , 'cue' , 'targetSide', 'rt' , 'response' , 'error' , 'preTargetResponse' , 'feedbackResponse'])
-	writer.qTo.put(['write','data',header])
+	writerProcess.qTo.put(['write','data',header])
 
-	writer.qTo.put(['newFile','trigger','_Data/'+filebase+'/'+filebase+'_trigger.txt'])
+	writerProcess.qTo.put(['newFile','trigger','_Data/'+filebase+'/'+filebase+'_trigger.txt'])
 	header ='\t'.join(['id' , 'block' , 'trial' , 'trigger' , 'time' , 'value' ])
-	writer.qTo.put(['write','trigger',header])
+	writerProcess.qTo.put(['write','trigger',header])
 
 	subInfoForFile = '\t'.join(map(str,subInfo))
 
