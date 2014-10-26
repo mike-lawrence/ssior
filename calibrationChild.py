@@ -9,6 +9,7 @@
 # qTo = dummyQTo()
 # qFrom = dummyQFrom()
 
+# timestampMethod = 0
 # calibrationDotSize = 10
 # fontSize = 10
 # stimDisplayRes = [1920,1080]
@@ -21,6 +22,26 @@ import scipy.misc #for image and display manipulation
 import sys #for quitting
 import sdl2
 import sdl2.ext
+import time
+
+#set the getTime function
+if (timestampMethod==0) or (timestampMethod==1):
+	#initialize timer
+	sdl2.SDL_Init(sdl2.SDL_INIT_TIMER)
+	if timestampMethod==0:
+		#define a function to use the high-precision timer, returning a float in seconds
+		def getTime():
+			return sdl2.SDL_GetPerformanceCounter()*1.0/sdl2.SDL_GetPerformanceFrequency()
+		
+	elif timestampMethod==1:
+		#use the SDL_GetTicks timer
+		def getTime():
+			return sdl2.SDL_GetTicks()/1000.0
+elif timestampMethod==2:
+	#use getTime()
+	getTime = time.time
+
+
 
 #initialize video
 sdl2.SDL_Init(sdl2.SDL_INIT_VIDEO)
@@ -32,7 +53,7 @@ mirrorDisplayArray = sdl2.ext.pixels3d(mirrorDisplaySurf.contents)
 for i in range(10):
 	sdl2.SDL_PumpEvents() #to show the windows
 
-time.sleep(1)
+time.sleep(1) #else the stim display doesn't display
 
 stimDisplay = sdl2.ext.Window("Calibration",size=stimDisplayRes,position=stimDisplayPosition,flags=sdl2.SDL_WINDOW_SHOWN|sdl2.SDL_WINDOW_BORDERLESS|sdl2.SDL_RENDERER_ACCELERATED | sdl2.SDL_RENDERER_PRESENTVSYNC)
 stimDisplaySurf = sdl2.SDL_GetWindowSurface(stimDisplay.window)
@@ -82,17 +103,14 @@ calibrationKey = {'keypad 7':'NW','keypad 8':'N','keypad 9':'NE','keypad 4':'E',
 
 #define a function that will kill everything safely
 def exitSafely():
+	qFrom.put(['stopQueing',getTime()])
 	sdl2.ext.quit()
 	sys.exit()
 
-def checkInput():
-	response = None
-	return None
-
 #define a function that waits for a given duration to pass
 def simpleWait(duration):
-	start = time.time()
-	while time.time() < (start + duration):
+	start = getTime()
+	while getTime() < (start + duration):
 		sdl2.SDL_PumpEvents()
 
 #define a function to draw a numpy array on  surface centered on given coordinates
@@ -186,7 +204,7 @@ def drawText(myText, myFont, textColor,textWidth=.9):
 
 #define a function that prints a message on the stimDisplay while looking for user input to continue. The function returns the total time it waited
 def showMessage(myText,lockWait=False):
-	messageViewingTimeStart = time.time()
+	messageViewingTimeStart = getTime()
 	clearScreen(black)
 	refreshWindows()
 	clearScreen(black)
@@ -203,7 +221,7 @@ def showMessage(myText,lockWait=False):
 	refreshWindows()
 	clearScreen(black)
 	simpleWait(0.500)
-	messageViewingTime = time.time() - messageViewingTimeStart
+	messageViewingTime = getTime() - messageViewingTimeStart
 	return [response,messageViewingTime]
 
 
