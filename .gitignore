@@ -1,6 +1,5 @@
 fileForker
 pytracker
-
 *.edf
 _Data/
 # Byte-compiled / optimized / DLL files
@@ -57,5 +56,3 @@ docs/_build/
 
 # PyBuilder
 target/
-./fileForker
-./pytracker
