@@ -101,7 +101,7 @@ if __name__ == '__main__':
 		appnope.nope()
 	except:
 		pass
-	import pyProcess
+	import fileForker
 
 
 	########
@@ -166,56 +166,56 @@ if __name__ == '__main__':
 	########
 	# Initialize the writer
 	########
-	writerProcess = pyProcess.processClass(fileToRun='writerProcess.py')
-	writerProcess.initVars['windowSize'] = writerWindowSize
-	writerProcess.initVars['windowPosition'] = writerWindowPosition
-	writerProcess.start()
+	writerChild = fileForker.childClass(childFile='writerChild.py')
+	writerChild.initDict['windowSize'] = writerWindowSize
+	writerChild.initDict['windowPosition'] = writerWindowPosition
+	writerChild.start()
 
 	########
 	# start the event timestamper
 	########
-	stamperProcess = pyProcess.processClass(fileToRun='stamperProcess.py')
-	stamperProcess.initVars['windowSize'] = stamperWindowSize
-	stamperProcess.initVars['windowPosition'] = stamperWindowPosition
-	stamperProcess.initVars['windowColor'] = stamperWindowColor
-	stamperProcess.initVars['doBorder'] = stamperDoBorder
-	stamperProcess.start()
+	stamperChild = fileForker.childClass(childFile='stamperChild.py')
+	stamperChild.initDict['windowSize'] = stamperWindowSize
+	stamperChild.initDict['windowPosition'] = stamperWindowPosition
+	stamperChild.initDict['windowColor'] = stamperWindowColor
+	stamperChild.initDict['doBorder'] = stamperDoBorder
+	stamperChild.start()
 
 	########
 	# start the labjack
 	########
 	if doLabjack:
-		labjackProcess = pyProcess.processClass(fileToRun='labjackProcess.py')
-		labjackProcess.initVars['windowSize'] = labjackWindowSize
-		labjackProcess.initVars['windowPosition'] = labjackWindowPosition
-		labjackProcess.initVars['Resolution'] = labjackResolution
-		labjackProcess.initVars['ScanFrequency'] = labjackScanFrequency
-		labjackProcess.initVars['qToWriter'] = writerProcess.qTo
-		labjackProcess.start()
+		labjackChild = fileForker.childClass(childFile='labjackChild.py')
+		labjackChild.initDict['windowSize'] = labjackWindowSize
+		labjackChild.initDict['windowPosition'] = labjackWindowPosition
+		labjackChild.initDict['Resolution'] = labjackResolution
+		labjackChild.initDict['ScanFrequency'] = labjackScanFrequency
+		labjackChild.initDict['qToWriter'] = writerChild.qTo
+		labjackChild.start()
 
 	########
 	# initialize the eyelink
 	########
 	if doEyelink:
-		eyelinkProcess = pyProcess.processClass(fileToRun='eyelinkProcess.py')
-		eyelinkProcess.initVars['windowSize'] = eyelinkWindowSize
-		eyelinkProcess.initVars['windowPosition'] = eyelinkWindowPosition
-		eyelinkProcess.initVars['stimDisplayRes'] = stimDisplayRes
-		eyelinkProcess.initVars['eyelinkIP'] = eyelinkIP
-		eyelinkProcess.initVars['edfFileName'] = edfFileName
-		eyelinkProcess.initVars['edfPath'] = edfPath
-		eyelinkProcess.initVars['saccadeSoundFile'] = saccadeSoundFile
-		eyelinkProcess.initVars['blinkSoundFile'] = blinkSoundFile
-		eyelinkProcess.start()
-		calibrationProcess = pyProcess.processClass(fileToRun='calibrationProcess.py')
-		calibrationProcess.initVars['calibrationDotSize'] = calibrationDotSize
-		calibrationProcess.initVars['fontSize'] = instructionFontSize
-		calibrationProcess.initVars['stimDisplayRes'] = stimDisplayRes
-		calibrationProcess.initVars['stimDisplayPosition'] = stimDisplayPosition
-		calibrationProcess.initVars['mirrorDisplayPosition'] = calibrationMirrorDisplayPosition
-		calibrationProcess.initVars['mirrorDownSize'] = calibrationMirrorDownsize
-		calibrationProcess.start()
-		while calibrationProcess.isAlive():
+		eyelinkChild = fileForker.childClass(childFile='eyelinkChild.py')
+		eyelinkChild.initDict['windowSize'] = eyelinkWindowSize
+		eyelinkChild.initDict['windowPosition'] = eyelinkWindowPosition
+		eyelinkChild.initDict['stimDisplayRes'] = stimDisplayRes
+		eyelinkChild.initDict['eyelinkIP'] = eyelinkIP
+		eyelinkChild.initDict['edfFileName'] = edfFileName
+		eyelinkChild.initDict['edfPath'] = edfPath
+		eyelinkChild.initDict['saccadeSoundFile'] = saccadeSoundFile
+		eyelinkChild.initDict['blinkSoundFile'] = blinkSoundFile
+		eyelinkChild.start()
+		calibrationChild = fileForker.childClass(childFile='calibrationChild.py')
+		calibrationChild.initDict['calibrationDotSize'] = calibrationDotSize
+		calibrationChild.initDict['fontSize'] = instructionFontSize
+		calibrationChild.initDict['stimDisplayRes'] = stimDisplayRes
+		calibrationChild.initDict['stimDisplayPosition'] = stimDisplayPosition
+		calibrationChild.initDict['mirrorDisplayPosition'] = calibrationMirrorDisplayPosition
+		calibrationChild.initDict['mirrorDownSize'] = calibrationMirrorDownsize
+		calibrationChild.start()
+		while calibrationChild.isAlive():
 			pass
 
 	########
@@ -495,10 +495,10 @@ if __name__ == '__main__':
 	#define a function that will kill everything safely
 	def exitSafely():
 		if doEyelink:
-			eyelinkProcess.stop(killAfter=60)
-		stamperProcess.stop(killAfter=60)
-		labjackProcess.stop(killAfter=60)
-		writerProcess.stop(killAfter=60)
+			eyelinkChild.stop(killAfter=60)
+		stamperChild.stop(killAfter=60)
+		labjackChild.stop(killAfter=60)
+		writerChild.stop(killAfter=60)
 		sdl2.ext.quit()
 		time.sleep(5)
 		sys.exit()
@@ -508,8 +508,8 @@ if __name__ == '__main__':
 	def waitForResponse():
 		done = False
 		while not done:
-			if not stamperProcess.qFrom.empty():
-				event = stamperProcess.qFrom.get()
+			if not stamperChild.qFrom.empty():
+				event = stamperChild.qFrom.get()
 				if event['type']=='key':
 					response = event['value']
 					if response=='escape':
@@ -572,8 +572,8 @@ if __name__ == '__main__':
 		gl.glClear(gl.GL_COLOR_BUFFER_BIT)
 		done = False
 		while not done:
-			if not stamperProcess.qFrom.empty():
-				event = stamperProcess.qFrom.get()
+			if not stamperChild.qFrom.empty():
+				event = stamperChild.qFrom.get()
 				if event['type'] == 'key' :
 					response = event['value']
 					if response=='escape':
@@ -653,8 +653,8 @@ if __name__ == '__main__':
 				lastRightTrigger = triggerData[1][-1][-1]
 		responseMade = False
 		rts = [[],[]]
-		while not stamperProcess.qFrom.empty():
-			event = stamperProcess.qFrom.get()
+		while not stamperChild.qFrom.empty():
+			event = stamperChild.qFrom.get()
 			if event['type'] == 'key' :
 				if event['value']=='escape':
 					exitSafely()
@@ -1018,10 +1018,10 @@ if __name__ == '__main__':
 			triggerTrialInfo = '\t'.join(map(str,[subInfo[0],block,trialNum]))
 			triggerDataToWriteLeft = '\n'.join([triggerTrialInfo + '\t' + '\t'.join(map(str,i)) for i in triggerData[0]])
 			triggerDataToWriteRight = '\n'.join([triggerTrialInfo + '\t' + '\t'.join(map(str,i)) for i in triggerData[1]])
-			writerProcess.qTo.put(['write','trigger',triggerDataToWriteLeft])
-			writerProcess.qTo.put(['write','trigger',triggerDataToWriteRight])
+			writerChild.qTo.put(['write','trigger',triggerDataToWriteLeft])
+			writerChild.qTo.put(['write','trigger',triggerDataToWriteRight])
 			dataToWrite = '\t'.join(map(str,[ subInfoForFile , messageViewingTime , block , trialNum , brightSide , fastSide , cueSide , targetSide , targetIdentity , rt , feedbackResponse ]))
-			writerProcess.qTo.put(['write','data',dataToWrite])
+			writerChild.qTo.put(['write','data',dataToWrite])
 			if doEyelink:
 				eyelink.sendMessage(dataToWrite)
 		print 'on break'
@@ -1048,17 +1048,17 @@ if __name__ == '__main__':
 
 	shutil.copy(sys.argv[0], '_Data/'+filebase+'/'+filebase+'_code.py')
 
-	labjackProcess.qTo.put(['write','_Data/'+filebase+'/'+filebase+'_jack.txt'])
-	eyelinkProcess.put(['edfPath','_Data/'+filebase+'/'+filebase+'_eyelink.edf'])
+	labjackChild.qTo.put(['write','_Data/'+filebase+'/'+filebase+'_jack.txt'])
+	eyelinkChild.put(['edfPath','_Data/'+filebase+'/'+filebase+'_eyelink.edf'])
 
-	writerProcess.qTo.put(['newFile','data','_Data/'+filebase+'/'+filebase+'_data.txt'])
-	writerProcess.qTo.put(['write','data',password])
+	writerChild.qTo.put(['newFile','data','_Data/'+filebase+'/'+filebase+'_data.txt'])
+	writerChild.qTo.put(['write','data',password])
 	header ='\t'.join(['id' , 'year' , 'month' , 'day' , 'hour' , 'minute' , 'sex' , 'age'  , 'handedness' , 'wait' , 'block' , 'trial' , 'fastSide' , 'cue' , 'targetSide', 'rt' , 'response' , 'error' , 'preTargetResponse' , 'feedbackResponse'])
-	writerProcess.qTo.put(['write','data',header])
+	writerChild.qTo.put(['write','data',header])
 
-	writerProcess.qTo.put(['newFile','trigger','_Data/'+filebase+'/'+filebase+'_trigger.txt'])
+	writerChild.qTo.put(['newFile','trigger','_Data/'+filebase+'/'+filebase+'_trigger.txt'])
 	header ='\t'.join(['id' , 'block' , 'trial' , 'trigger' , 'time' , 'value' ])
-	writerProcess.qTo.put(['write','trigger',header])
+	writerChild.qTo.put(['write','trigger',header])
 
 	subInfoForFile = '\t'.join(map(str,subInfo))
 
