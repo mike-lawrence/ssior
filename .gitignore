@@ -1,3 +1,6 @@
+fileForker
+pytracker
+
 *.edf
 _Data/
 # Byte-compiled / optimized / DLL files
