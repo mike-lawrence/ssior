@@ -1049,7 +1049,8 @@ if __name__ == '__main__':
 	shutil.copy(sys.argv[0], '_Data/'+filebase+'/'+filebase+'_code.py')
 
 	labjackChild.qTo.put(['write','_Data/'+filebase+'/'+filebase+'_jack.txt'])
-	eyelinkChild.put(['edfPath','_Data/'+filebase+'/'+filebase+'_eyelink.edf'])
+	if doEyelink:
+		eyelinkChild.put(['edfPath','_Data/'+filebase+'/'+filebase+'_eyelink.edf'])
 
 	writerChild.qTo.put(['newFile','data','_Data/'+filebase+'/'+filebase+'_data.txt'])
 	writerChild.qTo.put(['write','data',password])
