@@ -920,33 +920,6 @@ if __name__ == '__main__':
 					sendTargetOnMessage = False
 					targetOnMessageSent = True
 					targetOnTime = frameTime
-				#check for eye tracking data here
-				# if doEyelink:
-				# 	eyeData = eyelink.getNextData()
-				# 	if (eyeData==3) or (eyeData==5):
-				# 		eyeEvent = eyelink.getFloatData()
-				# 		if isinstance(eyeEvent,pylink.StartSaccadeEvent):
-				# 			saccadeMade = True
-				# 			saccadeStartTimes2.append(getTime())				
-				# 			saccadeStartTimes.append(eyeEvent.getTime())
-				# 			if not saccadeSound.stillPlaying():
-				# 				saccadeSound.play()
-				# 		elif isinstance(eyeEvent,pylink.StartBlinkEvent):
-				# 			blinkMade = True
-				# 			blinkStartTimes2.append(getTime())
-				# 			blinkStartTimes.append(eyeEvent.getTime())
-				# 			if not blinkSound.stillPlaying():
-				# 				blinkSound.play()
-				# 	elif (eyeData==4) or (eyeData==6):
-				# 		eyeEvent = eyelink.getFloatData()
-				# 		if isinstance(eyeEvent,pylink.EndSaccadeEvent):
-				# 			saccadeEndTimes2.append(getTime())
-				# 			saccadeEndTimes.append(eyeEvent.getTime())
-				# 			saccadeLocations.append(eyeEvent.getEndGaze())
-				# 		elif isinstance(eyeEvent,pylink.EndBlinkEvent):
-				# 			blinkEndTimes2.append(getTime())		
-				# 			blinkEndTimes.append(eyeEvent.getTime())		
-				# print getTime()-start #check the total loop time 
 			#trial done
 			#check for responses here
 			responseMade,rts,triggerData = checkInput()
