@@ -165,13 +165,13 @@
         </channel>
         <channel version="2">
           <input py:pytype="int">17</input>
-          <enable py:pytype="bool">false</enable>
+          <enable py:pytype="bool">true</enable>
           <name py:pytype="str">Ch17</name>
           <group py:pytype="int">0</group>
           <lowpass py:pytype="float">0.0</lowpass>
           <highpass py:pytype="float">0.0</highpass>
           <notchfilter py:pytype="bool">false</notchfilter>
-          <reference py:pytype="bool">false</reference>
+          <reference py:pytype="bool">true</reference>
         </channel>
         <channel version="2">
           <input py:pytype="int">18</input>
@@ -215,13 +215,13 @@
         </channel>
         <channel version="2">
           <input py:pytype="int">22</input>
-          <enable py:pytype="bool">false</enable>
+          <enable py:pytype="bool">true</enable>
           <name py:pytype="str">Ch22</name>
           <group py:pytype="int">0</group>
           <lowpass py:pytype="float">0.0</lowpass>
           <highpass py:pytype="float">0.0</highpass>
           <notchfilter py:pytype="bool">false</notchfilter>
-          <reference py:pytype="bool">false</reference>
+          <reference py:pytype="bool">true</reference>
         </channel>
         <channel version="2">
           <input py:pytype="int">23</input>
@@ -235,7 +235,7 @@
         </channel>
         <channel version="2">
           <input py:pytype="int">24</input>
-          <enable py:pytype="bool">true</enable>
+          <enable py:pytype="bool">false</enable>
           <name py:pytype="str">Ch24</name>
           <group py:pytype="int">0</group>
           <lowpass py:pytype="float">0.0</lowpass>
@@ -245,7 +245,7 @@
         </channel>
         <channel version="2">
           <input py:pytype="int">25</input>
-          <enable py:pytype="bool">true</enable>
+          <enable py:pytype="bool">false</enable>
           <name py:pytype="str">Ch25</name>
           <group py:pytype="int">0</group>
           <lowpass py:pytype="float">0.0</lowpass>
@@ -265,7 +265,7 @@
         </channel>
         <channel version="2">
           <input py:pytype="int">27</input>
-          <enable py:pytype="bool">true</enable>
+          <enable py:pytype="bool">false</enable>
           <name py:pytype="str">Ch27</name>
           <group py:pytype="int">0</group>
           <lowpass py:pytype="float">0.0</lowpass>
@@ -275,7 +275,7 @@
         </channel>
         <channel version="2">
           <input py:pytype="int">28</input>
-          <enable py:pytype="bool">true</enable>
+          <enable py:pytype="bool">false</enable>
           <name py:pytype="str">Ch28</name>
           <group py:pytype="int">0</group>
           <lowpass py:pytype="float">0.0</lowpass>
@@ -305,7 +305,7 @@
         </channel>
         <channel version="2">
           <input py:pytype="int">31</input>
-          <enable py:pytype="bool">true</enable>
+          <enable py:pytype="bool">false</enable>
           <name py:pytype="str">Ch31</name>
           <group py:pytype="int">0</group>
           <lowpass py:pytype="float">0.0</lowpass>
@@ -315,7 +315,7 @@
         </channel>
         <channel version="2">
           <input py:pytype="int">32</input>
-          <enable py:pytype="bool">true</enable>
+          <enable py:pytype="bool">false</enable>
           <name py:pytype="str">Ch32</name>
           <group py:pytype="int">0</group>
           <lowpass py:pytype="float">0.0</lowpass>
@@ -521,7 +521,7 @@
           <lowpass py:pytype="float">0.0</lowpass>
           <highpass py:pytype="float">0.0</highpass>
           <notchfilter py:pytype="bool">false</notchfilter>
-          <reference py:pytype="bool">true</reference>
+          <reference py:pytype="bool">false</reference>
         </channel>
         <channel version="2">
           <input py:pytype="int">53</input>
@@ -531,7 +531,7 @@
           <lowpass py:pytype="float">0.0</lowpass>
           <highpass py:pytype="float">0.0</highpass>
           <notchfilter py:pytype="bool">false</notchfilter>
-          <reference py:pytype="bool">true</reference>
+          <reference py:pytype="bool">false</reference>
         </channel>
         <channel version="2">
           <input py:pytype="int">54</input>
@@ -555,7 +555,7 @@
         </channel>
         <channel version="2">
           <input py:pytype="int">56</input>
-          <enable py:pytype="bool">true</enable>
+          <enable py:pytype="bool">false</enable>
           <name py:pytype="str">Ch56</name>
           <group py:pytype="int">0</group>
           <lowpass py:pytype="float">0.0</lowpass>
@@ -585,7 +585,7 @@
         </channel>
         <channel version="2">
           <input py:pytype="int">59</input>
-          <enable py:pytype="bool">true</enable>
+          <enable py:pytype="bool">false</enable>
           <name py:pytype="str">Ch59</name>
           <group py:pytype="int">0</group>
           <lowpass py:pytype="float">0.0</lowpass>
@@ -595,7 +595,7 @@
         </channel>
         <channel version="2">
           <input py:pytype="int">60</input>
-          <enable py:pytype="bool">true</enable>
+          <enable py:pytype="bool">false</enable>
           <name py:pytype="str">Ch60</name>
           <group py:pytype="int">0</group>
           <lowpass py:pytype="float">0.0</lowpass>
@@ -635,7 +635,7 @@
         </channel>
         <channel version="2">
           <input py:pytype="int">64</input>
-          <enable py:pytype="bool">true</enable>
+          <enable py:pytype="bool">false</enable>
           <name py:pytype="str">Ch64</name>
           <group py:pytype="int">0</group>
           <lowpass py:pytype="float">0.0</lowpass>
@@ -1705,7 +1705,7 @@
     </IMP_Display>
     <DISP_Scope instance="0" version="5" module="display">
       <timebase py:pytype="float">10.0</timebase>
-      <eegscale py:pytype="float">100.0</eegscale>
+      <eegscale py:pytype="float">1000.0</eegscale>
       <auxscale py:pytype="float">1000.0</auxscale>
       <groupsize py:pytype="float">16.0</groupsize>
       <baseline py:pytype="bool">true</baseline>

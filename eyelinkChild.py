@@ -27,7 +27,7 @@ qTo
 , windowPosition = [0,0]
 , stimDisplayRes = [1920,1080]
 , eyelinkIP = '100.1.1.1'
-, edfFileName = 'ssior.edf'
+, edfFileName = 'temp.edf'
 , edfPath = './_Data/'
 , saccadeSoundFile = '_Stimuli/stop.wav'
 , blinkSoundFile = '_Stimuli/stop.wav'
@@ -38,6 +38,7 @@ qTo
 	import pylink
 	import sys
 	import shutil
+	import time
 	try:
 		import appnope
 		appnope.nope()
@@ -79,18 +80,24 @@ qTo
 	def exitSafely():
 		try:
 			eyelink.stopRecording()
+			print 'eyelink stopped'
 		except:
 			pass
 		try:
 			eyelink.setOfflineMode()
+			print 'eyelink offline'
 			time.sleep(.1)
 			try:
 				eyelink.closeDataFile()
+				print 'eyelink file closed'
 				eyelink.receiveDataFile('temp.edf','temp.edf')
+				print 'eyelink file received'
 				shutil.move('temp.edf', edfPath)
+				print 'eyelink file moved'
 			except:
 				pass
-			eyelink.close()				
+			eyelink.close()
+			print 'eyelink closed'
 		except:
 			pass
 		sys.exit()
@@ -109,6 +116,7 @@ qTo
 	eyelink.doTrackerSetup()
 	eyelink.startRecording(1,1,1,1) #this retuns immediately takes 10-30ms to actually kick in on the tracker
 
+	doSounds = False
 	while True:
 		sdl2.SDL_PumpEvents()
 		for event in sdl2.ext.get_events():
@@ -121,16 +129,21 @@ qTo
 				exitSafely()
 			elif message[0]=='edfPath':
 				edfPath = edfPath
+			elif message[0]=='doSounds':
+				doSounds = message[1]
+			elif message[0]=='sendMessage':
+				eyelink.sendMessage(message[1])				
 		eyeData = eyelink.getNextData()
-		if (eyeData==pylink.STARTSACC) or (eyeData==pylink.STARTBLINK):
-			eyeEvent = eyelink.getFloatData()
-			if isinstance(eyeEvent,pylink.StartSaccadeEvent):
-				# print 'Saccade started'
-				if (not saccadeSound.stillPlaying()) and (not blinkSound.stillPlaying()):
-					saccadeSound.play()
-			elif isinstance(eyeEvent,pylink.StartBlinkEvent):
-				# print 'Blink started'
-				if (not saccadeSound.stillPlaying()) and (not blinkSound.stillPlaying()):
-					blinkSound.play()
+		if doSounds:
+			if (eyeData==pylink.STARTSACC) or (eyeData==pylink.STARTBLINK):
+				eyeEvent = eyelink.getFloatData()
+				if isinstance(eyeEvent,pylink.StartSaccadeEvent):
+					# print 'Saccade started'
+					if (not saccadeSound.stillPlaying()) and (not blinkSound.stillPlaying()):
+						saccadeSound.play()
+				elif isinstance(eyeEvent,pylink.StartBlinkEvent):
+					# print 'Blink started'
+					if (not saccadeSound.stillPlaying()) and (not blinkSound.stillPlaying()):
+						blinkSound.play()
 
 eyelinkChildFunction(qTo,qFrom,**initDict)

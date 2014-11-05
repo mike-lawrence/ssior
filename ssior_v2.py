@@ -23,10 +23,12 @@ if __name__ == '__main__':
 	labjackResolution = 0 #0 is highest precision
 	labjackScanFrequency = 2500 #Hz
 
-	doEyelink = False
+	doEyelink = True
 	eyelinkWindowSize = (200,200)
 	eyelinkWindowPosition = (700,0)
 	eyelinkIP = '100.1.1.1'
+	edfFileName = 'temp.edf'
+	edfPath = './'
 	saccadeSoundFile = '_Stimuli/stop.wav'
 	blinkSoundFile = '_Stimuli/stop.wav'
 	calibrationDotSizeInDegrees = 1
@@ -207,11 +209,12 @@ if __name__ == '__main__':
 		eyelinkChild.initDict['saccadeSoundFile'] = saccadeSoundFile
 		eyelinkChild.initDict['blinkSoundFile'] = blinkSoundFile
 		eyelinkChild.start()
+		print 'ok!'
 		calibrationChild = fileForker.childClass(childFile='calibrationChild.py')
 		calibrationChild.initDict['calibrationDotSize'] = calibrationDotSize
 		calibrationChild.initDict['fontSize'] = instructionFontSize
 		calibrationChild.initDict['stimDisplayRes'] = stimDisplayRes
-		calibrationChild.initDict['stimDisplayPosition'] = stimDisplayPosition
+		calibrationChild.initDict['stimDisplayPosition'] = (stimDisplayPositionX,0)
 		calibrationChild.initDict['mirrorDisplayPosition'] = calibrationMirrorDisplayPosition
 		calibrationChild.initDict['mirrorDownSize'] = calibrationMirrorDownsize
 		calibrationChild.start()
@@ -496,8 +499,9 @@ if __name__ == '__main__':
 	def exitSafely():
 		if doEyelink:
 			eyelinkChild.stop(killAfter=60)
+		if doLabjack:
+			labjackChild.stop(killAfter=60)
 		stamperChild.stop(killAfter=60)
-		labjackChild.stop(killAfter=60)
 		writerChild.stop(killAfter=60)
 		sdl2.ext.quit()
 		time.sleep(5)
@@ -701,7 +705,9 @@ if __name__ == '__main__':
 			# 		eyelink.doTrackerSetup()
 
 			if doEyelink:
-				eyelink.startRecording(1,1,1,1) #this retuns immediately takes 10-30ms to actually kick in on the tracker
+				eyelinkChild.qTo.put(['doSounds',True])
+				# eyelink.startRecording(1,1,1,1) #this retuns immediately takes 10-30ms to actually kick in on the tracker
+
 
 			# printList = []
 
@@ -893,7 +899,7 @@ if __name__ == '__main__':
 					slowOnMessageSent = False
 				if sendCueOnMessage:
 					if doEyelink:
-						eyelink.sendMessage('CUE ON')
+						eyelinkChild.qTo.put(['sendMessage','CUE ON'])
 					#queueFromExpToEEG.put([frameTime,'cue on'])
 					sendCueOnMessage = False
 					cueOnMessageSent = True
@@ -911,37 +917,37 @@ if __name__ == '__main__':
 					cuebackOffMessageSent = True
 				if sendTargetOnMessage:
 					if doEyelink:
-						eyelink.sendMessage('TARGET ON')
+						eyelinkChild.qTo.put(['sendMessage','TARGET ON'])
 					#queueFromExpToEEG.put([frameTime,'target on'])
 					sendTargetOnMessage = False
 					targetOnMessageSent = True
 					targetOnTime = frameTime
 				#check for eye tracking data here
-				if doEyelink:
-			 		eyeData = eyelink.getNextData()
-					if (eyeData==3) or (eyeData==5):
-						eyeEvent = eyelink.getFloatData()
-						if isinstance(eyeEvent,pylink.StartSaccadeEvent):
-							saccadeMade = True
-							saccadeStartTimes2.append(getTime())				
-							saccadeStartTimes.append(eyeEvent.getTime())
-							if not saccadeSound.stillPlaying():
-								saccadeSound.play()
-						elif isinstance(eyeEvent,pylink.StartBlinkEvent):
-							blinkMade = True
-							blinkStartTimes2.append(getTime())
-							blinkStartTimes.append(eyeEvent.getTime())
-							if not blinkSound.stillPlaying():
-								blinkSound.play()
-					elif (eyeData==4) or (eyeData==6):
-						eyeEvent = eyelink.getFloatData()
-						if isinstance(eyeEvent,pylink.EndSaccadeEvent):
-							saccadeEndTimes2.append(getTime())
-							saccadeEndTimes.append(eyeEvent.getTime())
-							saccadeLocations.append(eyeEvent.getEndGaze())
-						elif isinstance(eyeEvent,pylink.EndBlinkEvent):
-							blinkEndTimes2.append(getTime())		
-							blinkEndTimes.append(eyeEvent.getTime())		
+				# if doEyelink:
+				# 	eyeData = eyelink.getNextData()
+				# 	if (eyeData==3) or (eyeData==5):
+				# 		eyeEvent = eyelink.getFloatData()
+				# 		if isinstance(eyeEvent,pylink.StartSaccadeEvent):
+				# 			saccadeMade = True
+				# 			saccadeStartTimes2.append(getTime())				
+				# 			saccadeStartTimes.append(eyeEvent.getTime())
+				# 			if not saccadeSound.stillPlaying():
+				# 				saccadeSound.play()
+				# 		elif isinstance(eyeEvent,pylink.StartBlinkEvent):
+				# 			blinkMade = True
+				# 			blinkStartTimes2.append(getTime())
+				# 			blinkStartTimes.append(eyeEvent.getTime())
+				# 			if not blinkSound.stillPlaying():
+				# 				blinkSound.play()
+				# 	elif (eyeData==4) or (eyeData==6):
+				# 		eyeEvent = eyelink.getFloatData()
+				# 		if isinstance(eyeEvent,pylink.EndSaccadeEvent):
+				# 			saccadeEndTimes2.append(getTime())
+				# 			saccadeEndTimes.append(eyeEvent.getTime())
+				# 			saccadeLocations.append(eyeEvent.getEndGaze())
+				# 		elif isinstance(eyeEvent,pylink.EndBlinkEvent):
+				# 			blinkEndTimes2.append(getTime())		
+				# 			blinkEndTimes.append(eyeEvent.getTime())		
 				# print getTime()-start #check the total loop time 
 			#trial done
 			#print printList
@@ -990,29 +996,31 @@ if __name__ == '__main__':
 			refreshWindows()
 			trialDoneTime = getTime()
 			if doEyelink:
-				eyelink.sendMessage('FEEDBACK ON')
+				eyelinkChild.qTo.put(['sendMessage','FEEDBACK ON'])
+				eyelinkChild.qTo.put(['doSounds',False])
 			trialDone = False
 			while getTime()<(trialDoneTime+feedbackDuration):
 				#check for eye tracking data here (but don't do anything about it because Ss are allowed to move/blink during feedback)
-				if doEyelink:
-			 		eyeData = eyelink.getNextData()
+				# if doEyelink:
+				# 	eyeData = eyelink.getNextData()
+				pass
 			#check for responses here
 			responseMade2,rts2,triggerData = checkInput(triggerData)
 			if responseMade2:
 				feedbackResponse = 'TRUE'
 				print 'feedback response made'
-			if doEyelink:
-				eyelink.sendMessage('TRIAL OK')
-				eyelink.stopRecording()
-				# dataFile.write('\t'.join(['\t'.join(map(str,i)) for i in saccadeLocations])+'\n')
-				# dataFile.write('\t'.join(map(str,saccadeStartTimes))+'\n')
-				# dataFile.write('\t'.join(map(str,saccadeEndTimes))+'\n')
-				# dataFile.write('\t'.join(map(str,blinkStartTimes))+'\n')
-				# dataFile.write('\t'.join(map(str,blinkEndTimes))+'\n')
-				# dataFile.write('\t'.join(map(str,saccadeStartTimes2))+'\n')
-				# dataFile.write('\t'.join(map(str,saccadeEndTimes2))+'\n')
-				# dataFile.write('\t'.join(map(str,blinkStartTimes2))+'\n')
-				# dataFile.write('\t'.join(map(str,blinkEndTimes2))+'\n')
+			# if doEyelink:
+			# 	eyelinkChild.qTo.put(['sendMessage','TRIAL OK'])
+			# 	eyelink.stopRecording()
+			# 	# dataFile.write('\t'.join(['\t'.join(map(str,i)) for i in saccadeLocations])+'\n')
+			# 	# dataFile.write('\t'.join(map(str,saccadeStartTimes))+'\n')
+			# 	# dataFile.write('\t'.join(map(str,saccadeEndTimes))+'\n')
+			# 	# dataFile.write('\t'.join(map(str,blinkStartTimes))+'\n')
+			# 	# dataFile.write('\t'.join(map(str,blinkEndTimes))+'\n')
+			# 	# dataFile.write('\t'.join(map(str,saccadeStartTimes2))+'\n')
+			# 	# dataFile.write('\t'.join(map(str,saccadeEndTimes2))+'\n')
+			# 	# dataFile.write('\t'.join(map(str,blinkStartTimes2))+'\n')
+			# 	# dataFile.write('\t'.join(map(str,blinkEndTimes2))+'\n')
 			#write out trial info
 			triggerData = [[[i[0]-targetOnTime,i[1]] for i in side] for side in triggerData]#fix times to be relative to target on time
 			triggerTrialInfo = '\t'.join(map(str,[subInfo[0],block,trialNum]))
@@ -1023,7 +1031,7 @@ if __name__ == '__main__':
 			dataToWrite = '\t'.join(map(str,[ subInfoForFile , messageViewingTime , block , trialNum , brightSide , fastSide , cueSide , targetSide , targetIdentity , rt , feedbackResponse ]))
 			writerChild.qTo.put(['write','data',dataToWrite])
 			if doEyelink:
-				eyelink.sendMessage(dataToWrite)
+				eyelinkChild.qTo.put(['sendMessage',dataToWrite])
 		print 'on break'
 
 
@@ -1048,9 +1056,10 @@ if __name__ == '__main__':
 
 	shutil.copy(sys.argv[0], '_Data/'+filebase+'/'+filebase+'_code.py')
 
-	labjackChild.qTo.put(['write','_Data/'+filebase+'/'+filebase+'_jack.txt'])
+	if doLabjack:
+		labjackChild.qTo.put(['write','_Data/'+filebase+'/'+filebase+'_jack.txt'])
 	if doEyelink:
-		eyelinkChild.put(['edfPath','_Data/'+filebase+'/'+filebase+'_eyelink.edf'])
+		eyelinkChild.qTo.put(['edfPath','_Data/'+filebase+'/'+filebase+'_eyelink.edf'])
 
 	writerChild.qTo.put(['newFile','data','_Data/'+filebase+'/'+filebase+'_data.txt'])
 	writerChild.qTo.put(['write','data',password])
