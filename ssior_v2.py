@@ -47,15 +47,15 @@ if __name__ == '__main__':
 	targetIdentityList = ['square','diamond']
 
 	#times are specified in frames @ 60Hz
-	fixationDurationMin = 60 #1s
-	fixationDurationMax = 120 #2s
+	fixationDurationMin = 120 #2s
+	fixationDurationMax = 240 #4s
 	cueDuration = 6 #100ms
 	cueCuebackSOA = 30 #500ms
 	cuebackDuration = 6 #100ms
 	cuebackTargetSOA = 60 #1s
 	responseTimeout = 60 #1s
 
-	feedbackDuration = 1.000 #specified in seconds
+	feedbackDuration = 2.000 #specified in seconds
 
 	slowCycleHalfFrames = 3 #half the cycle length
 	fastCycleHalfFrames = 2 #half the cycle length
@@ -209,7 +209,6 @@ if __name__ == '__main__':
 		eyelinkChild.initDict['saccadeSoundFile'] = saccadeSoundFile
 		eyelinkChild.initDict['blinkSoundFile'] = blinkSoundFile
 		eyelinkChild.start()
-		print 'ok!'
 		calibrationChild = fileForker.childClass(childFile='calibrationChild.py')
 		calibrationChild.initDict['calibrationDotSize'] = calibrationDotSize
 		calibrationChild.initDict['fontSize'] = instructionFontSize
@@ -343,7 +342,6 @@ if __name__ == '__main__':
 						#at end of paragraph, check whether a inter-paragraph space should be added
 						if (thisParagraph!=paragraphs[len(paragraphs)-1]):
 							renderList.append(' ')
-		# print renderList
 		numLines = len(renderList)
 		for thisLineNum in range(numLines):
 			if renderList[thisLineNum]==' ':
@@ -706,10 +704,10 @@ if __name__ == '__main__':
 
 			if doEyelink:
 				eyelinkChild.qTo.put(['doSounds',True])
+				eyelinkChild.qTo.put(['sendMessage','TRIAL START'])
 				# eyelink.startRecording(1,1,1,1) #this retuns immediately takes 10-30ms to actually kick in on the tracker
 
 
-			# printList = []
 
 			#bump the trial number
 			trialNum = trialNum + 1
@@ -950,7 +948,6 @@ if __name__ == '__main__':
 				# 			blinkEndTimes.append(eyeEvent.getTime())		
 				# print getTime()-start #check the total loop time 
 			#trial done
-			#print printList
 			#check for responses here
 			responseMade,rts,triggerData = checkInput()
 			#compute feedback
@@ -1009,18 +1006,6 @@ if __name__ == '__main__':
 			if responseMade2:
 				feedbackResponse = 'TRUE'
 				print 'feedback response made'
-			# if doEyelink:
-			# 	eyelinkChild.qTo.put(['sendMessage','TRIAL OK'])
-			# 	eyelink.stopRecording()
-			# 	# dataFile.write('\t'.join(['\t'.join(map(str,i)) for i in saccadeLocations])+'\n')
-			# 	# dataFile.write('\t'.join(map(str,saccadeStartTimes))+'\n')
-			# 	# dataFile.write('\t'.join(map(str,saccadeEndTimes))+'\n')
-			# 	# dataFile.write('\t'.join(map(str,blinkStartTimes))+'\n')
-			# 	# dataFile.write('\t'.join(map(str,blinkEndTimes))+'\n')
-			# 	# dataFile.write('\t'.join(map(str,saccadeStartTimes2))+'\n')
-			# 	# dataFile.write('\t'.join(map(str,saccadeEndTimes2))+'\n')
-			# 	# dataFile.write('\t'.join(map(str,blinkStartTimes2))+'\n')
-			# 	# dataFile.write('\t'.join(map(str,blinkEndTimes2))+'\n')
 			#write out trial info
 			triggerData = [[[i[0]-targetOnTime,i[1]] for i in side] for side in triggerData]#fix times to be relative to target on time
 			triggerTrialInfo = '\t'.join(map(str,[subInfo[0],block,trialNum]))
