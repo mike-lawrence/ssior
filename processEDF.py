@@ -1,7 +1,7 @@
-#need to tag trials data with blinks & saccades
+#need to tag trials data with blinks & saccades (if between start and feedback on)
 #need to append trials data to samples for pupil analysis
 
-file = open('temp.asc','r')
+dataFile = open('temp.asc','r')
 lastStart=0
 samples = []
 messages = []
@@ -11,7 +11,7 @@ saccades = []
 done = False
 dataStarted = False
 while not done:
-	line = file.readline()
+	line = dataFile.readline()
 	if not dataStarted:
 		if line[0].isdigit():
 			dataStarted = True
@@ -37,9 +37,9 @@ while not done:
 		elif line[0:4] in ['SFIX','EFIX','SSAC','SBLI']:
 			pass
 		else:
-			print line
+			print line #unaccounted-for line
 
-file.close()
+dataFile.close()
 
 samplesFile = open('samples.txt','w')
 samplesFile.write('\n'.join(['\t'.join(thisSample) for thisSample in samples]))
@@ -49,17 +49,15 @@ messagesFile = open('messages.txt','w')
 messagesFile.write('\n'.join(['\t'.join(thisMessage) for thisMessage in messages]))
 messagesFile.close()
 
-trialsile = open('trials.txt','w')
-trialsile.write('\n'.join(['\t'.join(thisTrial) for thisTrial in trials]))
-trialsile.close()
+trialsFile = open('trials.txt','w')
+trialsFile.write('\n'.join(['\t'.join(thisTrial) for thisTrial in trials]))
+trialsFile.close()
 
-file = open('blinks.txt','w')
-file.write('\n'.join(['\t'.join(thisBlink) for thisBlink in blinks]))
-file.close()
+blinksFile = open('blinks.txt','w')
+blinksFile.write('\n'.join(['\t'.join(thisBlink) for thisBlink in blinks]))
+blinksFile.close()
 
-file = open('saccades.txt','w')
-file.write('\n'.join(['\t'.join(thisSaccade) for thisSaccade in saccades]))
-file.close()
+saccadesFile = open('saccades.txt','w')
+saccadesFile.write('\n'.join(['\t'.join(thisSaccade) for thisSaccade in saccades]))
+saccadesFile.close()
 
-for line in file.readlines():
-	if line[0:3]==
