@@ -192,7 +192,7 @@ if __name__ == '__main__':
 		labjackChild.initDict['windowPosition'] = labjackWindowPosition
 		labjackChild.initDict['Resolution'] = labjackResolution
 		labjackChild.initDict['ScanFrequency'] = labjackScanFrequency
-		labjackChild.initDict['qToWriter'] = writerChild.qTo
+		# labjackChild.initDict['qToWriter'] = writerChild.qTo
 		labjackChild.start()
 
 	########
@@ -694,20 +694,16 @@ if __name__ == '__main__':
 		#run the trials
 		trialNum = 0
 		while trialNum<trialsPerBlock:
-			# if doEyelink:
-			# 	try:
-			# 		error = eyelink.doDriftCorrect(stimDisplayRes[0]/2, stimDisplayRes[1]/2, 1, 1)
-			# 		if error!=0:
-			# 			eyelink.doTrackerSetup()
-			# 	except:
-			# 		eyelink.doTrackerSetup()
-
 			if doEyelink:
 				eyelinkChild.qTo.put(['doSounds',True])
 				eyelinkChild.qTo.put(['sendMessage','TRIAL START'])
+				# try:
+				# 	error = eyelink.doDriftCorrect(stimDisplayRes[0]/2, stimDisplayRes[1]/2, 1, 1)
+				# 	if error!=0:
+				# 		eyelink.doTrackerSetup()
+				# except:
+				# 	eyelink.doTrackerSetup()
 				# eyelink.startRecording(1,1,1,1) #this retuns immediately takes 10-30ms to actually kick in on the tracker
-
-
 
 			#bump the trial number
 			trialNum = trialNum + 1
@@ -1014,8 +1010,8 @@ if __name__ == '__main__':
 
 	shutil.copy(sys.argv[0], '_Data/'+filebase+'/'+filebase+'_code.py')
 
-	if doLabjack:
-		labjackChild.qTo.put(['write','_Data/'+filebase+'/'+filebase+'_jack.txt'])
+	# if doLabjack:
+	# 	labjackChild.qTo.put(['write','_Data/'+filebase+'/'+filebase+'_jack.txt'])
 	if doEyelink:
 		eyelinkChild.qTo.put(['edfPath','_Data/'+filebase+'/'+filebase+'_eyelink.edf'])
 

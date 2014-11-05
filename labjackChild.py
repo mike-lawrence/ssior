@@ -22,7 +22,6 @@ qTo
 , windowPosition = [0,0]
 , Resolution = 0
 , ScanFrequency = 2500
-, qToWriter = None
 ):
 	import sdl2
 	import sdl2.ext
@@ -67,9 +66,9 @@ qTo
 	# 	time.sleep(1)
 	# 	sys.exit()
 
-	writing = False
+	sendTriggers = False
 	for content in d.streamData():
-		if writing and checkForZeroTime:
+		if sendTriggers and checkForZeroTime:
 			if time.time()>=nextZeroTime:
 				d.getFeedback(u3.BitStateWrite(IONumber=11,State=0))
 				checkForZeroTime = False
@@ -77,12 +76,12 @@ qTo
 			data = content['AIN0']
 			times = [last + t*interScanInterval for t in range(len(data))]
 			last = times[-1] + interScanInterval
-			if writing and not checkForZeroTime:
+			if sendTriggers and not checkForZeroTime:
 				if np.any(np.array(data)>1):#light exceeds criterion
 					d.getFeedback(u3.BitStateWrite(IONumber=11,State=1)) #11@1=s15, 11@0=s11; 9&10@0=r9, 9@0&10@1=r11, 9@1&10@0=r13, 9&10@1=15 
 					nextZeroTime = time.time()+1
 					checkForZeroTime = True
-				qToWriter.put(['write','labjack','\n'.join([ "%0.23f"%times[i] + '\t' + "%0.28f"%data[i] for i in range(len(data)) ])])
+				# qToWriter.put(['write','labjack','\n'.join([ "%0.23f"%times[i] + '\t' + "%0.28f"%data[i] for i in range(len(data)) ])])
 		if not qTo.empty():
 			message = qTo.get()
 			if message[0]=='quit':
@@ -92,9 +91,9 @@ qTo
 				del d
 				time.sleep(1)
 				sys.exit()
-			elif message[0]=='write':
-				qToWriter.put(['newFile','labjack',message[1]])
-				writing = True
+			elif message[0]=='sendTriggers':
+				# qToWriter.put(['newFile','labjack',message[1]])
+				sendTriggers = True
 		sdl2.SDL_PumpEvents()
 		for event in sdl2.ext.get_events():
 			if event.type==sdl2.SDL_KEYDOWN:
