@@ -93,7 +93,7 @@ qTo
 				sys.exit()
 			elif message[0]=='sendTriggers':
 				# qToWriter.put(['newFile','labjack',message[1]])
-				sendTriggers = True
+				sendTriggers = message[1]
 		sdl2.SDL_PumpEvents()
 		for event in sdl2.ext.get_events():
 			if event.type==sdl2.SDL_KEYDOWN:
