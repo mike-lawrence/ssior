@@ -1,16 +1,3 @@
-# class dummyQTo:
-# 	def empty(self):
-# 		return True
-# 
-# class dummyQFrom:
-# 	def put(self,message):
-# 		print message
-# 
-# qTo = dummyQTo()
-# qFrom = dummyQFrom()
-
-# windowSize = [200,200]
-# windowPosition = [0,0]
 def writerChildFunction(
 qTo
 ,qFrom
@@ -51,7 +38,7 @@ qTo
 	while True:
 		if not qTo.empty():
 			message = qTo.get()
-			if message[0]=='quit':
+			if message=='quit':
 				exitSafely()
 			elif message[0]=='newFile':
 				files[message[1]] = open(message[2],'w')
@@ -61,10 +48,8 @@ qTo
 			time.sleep(1)
 		sdl2.SDL_PumpEvents()
 		for event in sdl2.ext.get_events():
-			if event.type==sdl2.SDL_KEYDOWN:
-				if sdl2.SDL_GetKeyName(event.key.keysym.sym).lower()=='escape':
-					exitSafely()	
-
-
+			if event.type==sdl2.SDL_WINDOWEVENT:
+				if (event.window.event==sdl2.SDL_WINDOWEVENT_CLOSE):
+					exitSafely()
 
 writerChildFunction(qTo,qFrom,**initDict)

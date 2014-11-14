@@ -53,12 +53,14 @@ qTo
 		sdl2.SDL_PumpEvents()
 		if not qTo.empty():
 			message = qTo.get()
-			if message[0]=='quit':
+			if message=='quit':
 				sys.exit()
 		for event in sdl2.ext.get_events():
 			if event.type==sdl2.SDL_WINDOWEVENT:
 				if event.window.windowID == windowID:
-					if event.window.event==sdl2.SDL_WINDOWEVENT_FOCUS_LOST:
+					if (event.window.event==sdl2.SDL_WINDOWEVENT_CLOSE):
+						exitSafely()
+					elif event.window.event==sdl2.SDL_WINDOWEVENT_FOCUS_LOST:
 						lostFocus = True
 					elif event.window.event==sdl2.SDL_WINDOWEVENT_FOCUS_GAINED:
 						lostFocus = False
@@ -72,9 +74,6 @@ qTo
 					message['time'] = event.key.timestamp*timeFreq
 					message['value'] = sdl2.SDL_GetKeyName(event.key.keysym.sym).lower()
 					qFrom.put(message)
-					if message['value']=='escape':
-						time.sleep(1)
-						sys.exit()
 				elif event.type == sdl2.SDL_JOYAXISMOTION:
 					message['type'] = 'axis'
 					message['axis'] = event.jaxis.axis

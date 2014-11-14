@@ -1,34 +1,14 @@
-	# class dummyQTo:
-	# 	def empty(self):
-	# 		return True
-
-
-	# class dummyQFrom:
-	# 	def put(self,message):
-	# 		print message
-
-
-	# qTo = dummyQTo()
-	# qFrom = dummyQFrom()
-
-	# windowSize = [200,200]
-	# windowPosition = [0,0]
-	# stimDisplayRes = [1920,1080]
-	# eyelinkIP = '100.1.1.1'
-	# edfFileName = 'ssior.edf'
-	# edfPath = './_Data/'
-	# saccadeSoundFile = '_Stimuli/stop.wav'
-	# blinkSoundFile = '_Stimuli/stop.wav'
-
 def eyelinkChildFunction(
 qTo
 , qFrom
 , windowSize = [200,200]
 , windowPosition = [0,0]
 , stimDisplayRes = [1920,1080]
+, calibrationDisplayRes = [800,600]
+, calibrationDisplayPosition = []
 , eyelinkIP = '100.1.1.1'
 , edfFileName = 'temp.edf'
-, edfPath = './_Data/'
+, edfPath = './_Data/temp.edf'
 , saccadeSoundFile = '_Stimuli/stop.wav'
 , blinkSoundFile = '_Stimuli/stop.wav'
 ):
@@ -38,6 +18,7 @@ qTo
 	import pylink
 	import sys
 	import shutil
+	import subprocess
 	import time
 	try:
 		import appnope
@@ -94,6 +75,8 @@ qTo
 				print 'eyelink file received'
 				shutil.move('temp.edf', edfPath)
 				print 'eyelink file moved'
+				subprocess.call('./edf2asc '+edfPath)
+				print 'eyelink file converted'
 			except:
 				pass
 			eyelink.close()
@@ -103,16 +86,52 @@ qTo
 		sys.exit()
 
 
-	edfPath = './_Data/' #temporary default location, to be changed later when ID is established
+	edfPath = './_Data/temp.edf' #temporary default location, to be changed later when ID is established
 	eyelink = pylink.EyeLink(eyelinkIP)
 	eyelink.sendCommand('select_parser_configuration 0')# 0--> standard (cognitive); 1--> sensitive (psychophysical)
-	eyelink.sendCommand('sample_rate 2000')
+	eyelink.sendCommand('sample_rate 250')
 	eyelink.setLinkEventFilter("SACCADE,BLINK")
 	eyelink.openDataFile(edfFileName)
 	eyelink.sendCommand("screen_pixel_coords =  0 0 %d %d" %(stimDisplayRes[0],stimDisplayRes[1]))
 	eyelink.sendMessage("DISPLAY_COORDS  0 0 %d %d" %(stimDisplayRes[0],stimDisplayRes[1]))
 	eyelink.sendCommand("saccade_velocity_threshold = 60")
 	eyelink.sendCommand("saccade_acceleration_threshold = 19500")
+
+	class EyeLinkCoreGraphicsPySDL2(pylink.EyeLinkCustomDisplay):
+		def __init__(self,targetSize,windowSize,windowPosition):
+			self.targetSize = targetSize
+			self.windowPosition = windowPosition
+			self.windowSize = windowSize
+		def clear_cal_display(self): 
+			sdl2.ext.fill(self.windowSurf.contents,sdl2.pixels.SDL_Color(r=0, g=0, b=0, a=255))
+			self.window.refresh()
+			sdl2.ext.fill(self.windowSurf.contents,sdl2.pixels.SDL_Color(r=0, g=0, b=0, a=255))
+			sdl2.SDL_PumpEvents()
+		def setup_cal_display(self):
+			self.window = sdl2.ext.Window("Calibration",size=self.windowSize,position=self.windowPosition,flags=sdl2.SDL_WINDOW_SHOWN|sdl2.SDL_WINDOW_BORDERLESS)
+			self.windowID = sdl2.SDL_GetWindowID(self.window.window)
+			self.windowSurf = sdl2.SDL_GetWindowSurface(self.window.window)
+			self.clear_cal_display()
+			for i in range(10):
+				sdl2.SDL_PumpEvents() #to show the windows
+		def exit_cal_display(self): 
+			SDL_DestroyWindow(self.window.window)
+			del self.window
+			del self.WindowID
+			del self.windowSurf
+		def erase_cal_target(self):
+			self.clear_cal_display()		
+		def draw_cal_target(self, x, y): 
+			radius = self.targetSize/2
+			yy, xx = numpy.ogrid[-radius: radius, -radius: radius]
+			index = numpy.logical_and( (xx**2 + yy**2) <= (radius**2) , (xx**2 + yy**2) >= ((radius/4)**2) )
+			self.stimDisplayArray[ (cy-radius):(cy+radius) , (cx-radius):(cx+radius) , ][index] = [255,255,255,255]
+			self.window.refresh()
+			sdl2.SDL_PumpEvents()
+
+	customDisplay = EyeLinkCoreGraphicsPySDL2(targetSize=calibrationDotSize,windowSize=calibrationWindowSize,windowPosition=calibrationWindowPosition)
+	pylink.openGraphicsEx(customDisplay)
+
 	eyelink.doTrackerSetup()
 	eyelink.startRecording(1,1,1,1) #this retuns immediately takes 10-30ms to actually kick in on the tracker
 
@@ -120,19 +139,22 @@ qTo
 	while True:
 		sdl2.SDL_PumpEvents()
 		for event in sdl2.ext.get_events():
-			if event.type==sdl2.SDL_KEYDOWN:
-				if sdl2.SDL_GetKeyName(event.key.keysym.sym).lower()=='escape':
+			if event.type==sdl2.SDL_WINDOWEVENT:
+				if (event.window.event==sdl2.SDL_WINDOWEVENT_CLOSE):
 					exitSafely()
 		if not qTo.empty():
 			message = qTo.get()
 			if message=='quit':
 				exitSafely()
 			elif message[0]=='edfPath':
-				edfPath = edfPath
+				edfPath = message[1]
 			elif message[0]=='doSounds':
 				doSounds = message[1]
 			elif message[0]=='sendMessage':
-				eyelink.sendMessage(message[1])				
+				eyelink.sendMessage(message[1])
+			elif message[0]=='accept_trigger':
+				eyelink.accept_trigger()
+
 		eyeData = eyelink.getNextData()
 		if doSounds:
 			if (eyeData==pylink.STARTSACC) or (eyeData==pylink.STARTBLINK):

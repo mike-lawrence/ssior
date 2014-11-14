@@ -47,8 +47,8 @@ if __name__ == '__main__':
 	targetIdentityList = ['square','diamond']
 
 	#times are specified in frames @ 60Hz
-	fixationDurationMin = 120 #2s
-	fixationDurationMax = 240 #4s
+	fixationDurationMin = 60 #1s
+	fixationDurationMax = 120 #2s
 	cueDuration = 6 #100ms
 	cueCuebackSOA = 30 #500ms
 	cuebackDuration = 6 #100ms
@@ -192,7 +192,6 @@ if __name__ == '__main__':
 		labjackChild.initDict['windowPosition'] = labjackWindowPosition
 		labjackChild.initDict['Resolution'] = labjackResolution
 		labjackChild.initDict['ScanFrequency'] = labjackScanFrequency
-		# labjackChild.initDict['qToWriter'] = writerChild.qTo
 		labjackChild.start()
 
 	########
@@ -202,7 +201,8 @@ if __name__ == '__main__':
 		eyelinkChild = fileForker.childClass(childFile='eyelinkChild.py')
 		eyelinkChild.initDict['windowSize'] = eyelinkWindowSize
 		eyelinkChild.initDict['windowPosition'] = eyelinkWindowPosition
-		eyelinkChild.initDict['stimDisplayRes'] = stimDisplayRes
+		# eyelinkChild.initDict['stimDisplayRes'] = stimDisplayRes
+		eyelinkChild.initDict['stimDisplayRes'] = [offsetSize*2,offsetSize]
 		eyelinkChild.initDict['eyelinkIP'] = eyelinkIP
 		eyelinkChild.initDict['edfFileName'] = edfFileName
 		eyelinkChild.initDict['edfPath'] = edfPath
@@ -212,8 +212,8 @@ if __name__ == '__main__':
 		calibrationChild = fileForker.childClass(childFile='calibrationChild.py')
 		calibrationChild.initDict['calibrationDotSize'] = calibrationDotSize
 		calibrationChild.initDict['fontSize'] = instructionFontSize
-		calibrationChild.initDict['stimDisplayRes'] = stimDisplayRes
-		calibrationChild.initDict['stimDisplayPosition'] = (stimDisplayPositionX,0)
+		calibrationChild.initDict['stimDisplayRes'] = [offsetSize*2,offsetSize]
+		calibrationChild.initDict['stimDisplayPosition'] = (stimDisplayPositionX+stimDisplayRes[0]/2-offsetSize,0+stimDisplayRes[1]/2-offsetSize/2)
 		calibrationChild.initDict['mirrorDisplayPosition'] = calibrationMirrorDisplayPosition
 		calibrationChild.initDict['mirrorDownSize'] = calibrationMirrorDownsize
 		calibrationChild.start()
@@ -360,6 +360,10 @@ if __name__ == '__main__':
 		return None
 
 
+	def drawFeedback(feedbackText,feedbackColor):
+		feedbackArray = text2numpy(feedbackText,myFont,fg=feedbackColor,bg=[0,0,0,0])
+		blitNumpy(feedbackArray,stimDisplayRes[0]/2,stimDisplayRes[1]/2,xCentered=True,yCentered=True)
+
 	def drawBoxes(brightSide):
 		if brightSide=='left':
 			leftColor = 1
@@ -457,11 +461,11 @@ if __name__ == '__main__':
 		else:
 			gl.glColor3f(0,0,0)
 		gl.glBegin(gl.GL_QUAD_STRIP)
-		gl.glVertex2f( stimDisplayRes[0]/2 - stimDisplayRes[0]/30 , stimDisplayRes[1] )
-		gl.glVertex2f( stimDisplayRes[0]/2 + stimDisplayRes[0]/30 , stimDisplayRes[1] )
-		gl.glVertex2f( stimDisplayRes[0]/2 - stimDisplayRes[0]/30 , stimDisplayRes[1] - stimDisplayRes[1]/20 )
-		gl.glVertex2f( stimDisplayRes[0]/2 + stimDisplayRes[0]/30 , stimDisplayRes[1] - stimDisplayRes[1]/20 )
-		gl.glVertex2f( stimDisplayRes[0]/2 - stimDisplayRes[0]/30 , stimDisplayRes[1] )
+		gl.glVertex2f( stimDisplayRes[0]/2 - stimDisplayRes[0]/40 , stimDisplayRes[1] )
+		gl.glVertex2f( stimDisplayRes[0]/2 + stimDisplayRes[0]/40 , stimDisplayRes[1] )
+		gl.glVertex2f( stimDisplayRes[0]/2 - stimDisplayRes[0]/40 , stimDisplayRes[1] - stimDisplayRes[1]/20 )
+		gl.glVertex2f( stimDisplayRes[0]/2 + stimDisplayRes[0]/40 , stimDisplayRes[1] - stimDisplayRes[1]/20 )
+		gl.glVertex2f( stimDisplayRes[0]/2 - stimDisplayRes[0]/40 , stimDisplayRes[1] )
 		gl.glEnd()
 		gl.glColor3f(0,0,0)
 		# gl.glBegin(gl.GL_QUAD_STRIP)
@@ -682,6 +686,7 @@ if __name__ == '__main__':
 
 	#define a function that runs a block of trials
 	def runBlock():
+
 		start = time.time()
 		while (time.time()-start)<1:
 			checkInput()
@@ -717,18 +722,22 @@ if __name__ == '__main__':
 			#generate fixation duration
 			fixationDuration = int(random.uniform(fixationDurationMin,fixationDurationMax))
 
+			#tell the labjack to expect a trial start stim
+			if doLabjack:
+				labjackChild.qTo.put('trialStart')
+
 			#prep and show the buffers
 			drawBoxes(brightSide)
 			drawDot(fixationSize)
-			setPhotoTrigger()
+			setPhotoTrigger(on=True)
 			refreshWindows()
 			drawBoxes(brightSide)
 			drawDot(fixationSize)
-			setPhotoTrigger()
+			setPhotoTrigger(on=True)
 			refreshWindows() #this one should block until it's actually displayed
 
 			#get the trial start time 
-			trialStartTime = getTime()
+			trialStartTime = getTime() - 1/60.0
 			lastFrameTime = trialStartTime
 			
 			#compute event times
@@ -778,6 +787,7 @@ if __name__ == '__main__':
 			# trialAppended = False
 
 			#create some variables
+			notDouble = 'FALSE'
 			preTargetResponse = 'FALSE'
 			feedbackResponse = 'FALSE'
 			response = 'NA'
@@ -927,29 +937,39 @@ if __name__ == '__main__':
 					print 'miss'
 				else:
 					if (len(rts[0])==0) or (len(rts[1])==0):
+						notDouble = 'TRUE'
 						feedbackText = 'Use both!'
 						feedbackColor = [255,0,0,255]
 						print 'only one trigger pressed'
 					else:
 						rt = (rts[0][0]+rts[1][0])/2.0-targetOnTime
-						# if rts[0][0]<rts[1][0]:
-						# 	rt = rts[1][0]-targetOnTime
-						# else:
-						# 	rt = rts[0][0]-targetOnTime
-						feedbackText = str(int(rt*1000))
-						feedbackColor = [0,255,0,255]
-						print feedbackText
+						if rt<0:
+							preTargetResponse = 'TRUE'
+							feedbackText = 'Too soon!'
+							feedbackColor = [255,0,0,255]
+							print 'anticipation'
+						else:
+							feedbackText = str(int(rt*10)) #tenths of seconds
+							feedbackColor = [0,255,0,255]
+							print feedbackText
 			else:
 				if responseMade:
-					if (len(rts[0])==0):
-						rt = rts[1][0]-targetOnTime
-					elif (len(rts[1])==0):
-						rt = rts[0][0]-targetOnTime
+					if (len(rts[0])==0) or (len(rts[1])==0):
+						notDouble = 'TRUE'
+						feedbackText = 'Use both!'
+						feedbackColor = [255,0,0,255]
+						print 'only one trigger pressed'
 					else:
 						rt = (rts[0][0]+rts[1][0])/2.0-targetOnTime
-					feedbackText = 'Oops!'
-					feedbackColor = [255,0,0,255]
-					print 'false alarm'
+						if rt<0:
+							preTargetResponse = 'TRUE'
+							feedbackText = 'Too soon!'
+							feedbackColor = [255,0,0,255]
+							print 'anticipation'
+						else:
+							feedbackText = 'Oops!'
+							feedbackColor = [255,0,0,255]
+							print 'false alarm'
 				else:
 					feedbackText = 'Good'
 					feedbackColor = [0,255,0,255]
@@ -957,10 +977,13 @@ if __name__ == '__main__':
 			#show feedback
 			gl.glClearColor(.5,.5,.5,1)
 			gl.glClear(gl.GL_COLOR_BUFFER_BIT)
-			drawText( feedbackText , feedbackFont , stimDisplayRes[0] , xLoc=stimDisplayRes[0]/2 , yLoc=stimDisplayRes[1]/2 , fg=feedbackColor )
+			drawFeedback(feedbackText,feedbackColor)
 			setPhotoTrigger()	
 			refreshWindows()
 			trialDoneTime = getTime()
+			#tell the labjack to expect a trial start stim
+			if doLabjack:
+				labjackChild.qTo.put('trialDone')
 			if doEyelink:
 				eyelinkChild.qTo.put(['sendMessage','FEEDBACK ON'])
 				eyelinkChild.qTo.put(['doSounds',False])
@@ -978,11 +1001,11 @@ if __name__ == '__main__':
 			#write out trial info
 			triggerData = [[[i[0]-targetOnTime,i[1]] for i in side] for side in triggerData]#fix times to be relative to target on time
 			triggerTrialInfo = '\t'.join(map(str,[subInfo[0],block,trialNum]))
-			triggerDataToWriteLeft = '\n'.join([triggerTrialInfo + '\t' + '\t'.join(map(str,i)) for i in triggerData[0]])
-			triggerDataToWriteRight = '\n'.join([triggerTrialInfo + '\t' + '\t'.join(map(str,i)) for i in triggerData[1]])
+			triggerDataToWriteLeft = '\n'.join([triggerTrialInfo + '\tleft\t' + '\t'.join(map(str,i)) for i in triggerData[0]])
+			triggerDataToWriteRight = '\n'.join([triggerTrialInfo + '\tright\t' + '\t'.join(map(str,i)) for i in triggerData[1]])
 			writerChild.qTo.put(['write','trigger',triggerDataToWriteLeft])
 			writerChild.qTo.put(['write','trigger',triggerDataToWriteRight])
-			dataToWrite = '\t'.join(map(str,[ subInfoForFile , messageViewingTime , block , trialNum , brightSide , fastSide , cueSide , targetSide , targetIdentity , rt , feedbackResponse ]))
+			dataToWrite = '\t'.join(map(str,[ subInfoForFile , messageViewingTime , block , trialNum , brightSide , fastSide , cueSide , targetSide , targetIdentity , rt , notDouble , preTargetResponse , feedbackResponse ]))
 			writerChild.qTo.put(['write','data',dataToWrite])
 			if doEyelink:
 				eyelinkChild.qTo.put(['sendMessage',dataToWrite])
@@ -1010,14 +1033,12 @@ if __name__ == '__main__':
 
 	shutil.copy(sys.argv[0], '_Data/'+filebase+'/'+filebase+'_code.py')
 
-	# if doLabjack:
-	# 	labjackChild.qTo.put(['write','_Data/'+filebase+'/'+filebase+'_jack.txt'])
 	if doEyelink:
 		eyelinkChild.qTo.put(['edfPath','_Data/'+filebase+'/'+filebase+'_eyelink.edf'])
 
 	writerChild.qTo.put(['newFile','data','_Data/'+filebase+'/'+filebase+'_data.txt'])
 	writerChild.qTo.put(['write','data',password])
-	header ='\t'.join(['id' , 'year' , 'month' , 'day' , 'hour' , 'minute' , 'sex' , 'age'  , 'handedness' , 'wait' , 'block' , 'trial' , 'fastSide' , 'cue' , 'targetSide', 'rt' , 'response' , 'error' , 'preTargetResponse' , 'feedbackResponse'])
+	header ='\t'.join(['id' , 'year' , 'month' , 'day' , 'hour' , 'minute' , 'sex' , 'age'  , 'handedness' , 'messageViewingTime' , 'block' , 'trialNum' , 'brightSide' , 'fastSide' , 'cueSide' , 'targetSide' , 'targetIdentity' , 'rt' , 'notDouble' , 'preTargetResponse' , 'feedbackResponse'])
 	writerChild.qTo.put(['write','data',header])
 
 	writerChild.qTo.put(['newFile','trigger','_Data/'+filebase+'/'+filebase+'_trigger.txt'])

@@ -1,14 +1,3 @@
-# class dummyQTo:
-# 	def empty(self):
-# 		return True
-# 
-# class dummyQFrom:
-# 	def put(self,message):
-# 		print message
-# 
-# qTo = dummyQTo()
-# qFrom = dummyQFrom()
-
 def calibrationChildFunction(
 qTo
 , qFrom
