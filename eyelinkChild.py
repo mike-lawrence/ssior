@@ -4,8 +4,8 @@ qTo
 , windowSize = [200,200]
 , windowPosition = [0,0]
 , stimDisplayRes = [1920,1080]
-, calibrationDisplayRes = [800,600]
-, calibrationDisplayPosition = []
+, stimDisplayPosition = [1920,0]
+, calibrationDotSize = 50
 , eyelinkIP = '100.1.1.1'
 , edfFileName = 'temp.edf'
 , edfPath = './_Data/temp.edf'
@@ -16,6 +16,7 @@ qTo
 	import sdl2.ext
 	import sdl2.sdlmixer
 	import pylink
+	import numpy
 	import sys
 	import shutil
 	import subprocess
@@ -103,33 +104,39 @@ qTo
 			self.windowPosition = windowPosition
 			self.windowSize = windowSize
 		def clear_cal_display(self): 
-			sdl2.ext.fill(self.windowSurf.contents,sdl2.pixels.SDL_Color(r=0, g=0, b=0, a=255))
+			sdl2.ext.fill(self.windowSurf.contents,sdl2.pixels.SDL_Color(r=255, g=255, b=255, a=255))
 			self.window.refresh()
-			sdl2.ext.fill(self.windowSurf.contents,sdl2.pixels.SDL_Color(r=0, g=0, b=0, a=255))
+			sdl2.ext.fill(self.windowSurf.contents,sdl2.pixels.SDL_Color(r=255, g=255, b=255, a=255))
 			sdl2.SDL_PumpEvents()
 		def setup_cal_display(self):
-			self.window = sdl2.ext.Window("Calibration",size=self.windowSize,position=self.windowPosition,flags=sdl2.SDL_WINDOW_SHOWN|sdl2.SDL_WINDOW_BORDERLESS)
+			print [self.windowSize,self.windowPosition]
+			self.window = sdl2.ext.Window("Calibration",size=self.windowSize,position=self.windowPosition,flags=sdl2.SDL_WINDOW_SHOWN)#|sdl2.SDL_WINDOW_BORDERLESS)
 			self.windowID = sdl2.SDL_GetWindowID(self.window.window)
 			self.windowSurf = sdl2.SDL_GetWindowSurface(self.window.window)
+			self.windowArray = sdl2.ext.pixels3d(self.windowSurf.contents)
 			self.clear_cal_display()
 			for i in range(10):
 				sdl2.SDL_PumpEvents() #to show the windows
 		def exit_cal_display(self): 
-			SDL_DestroyWindow(self.window.window)
-			del self.window
-			del self.WindowID
-			del self.windowSurf
+			sdl2.SDL_DestroyWindow(self.window.window)
+			# del self.window
+			# del self.WindowID
+			# del self.windowSurf
 		def erase_cal_target(self):
 			self.clear_cal_display()		
-		def draw_cal_target(self, x, y): 
+		def draw_cal_target(self, x, y):
+			print [x,y]
 			radius = self.targetSize/2
 			yy, xx = numpy.ogrid[-radius: radius, -radius: radius]
 			index = numpy.logical_and( (xx**2 + yy**2) <= (radius**2) , (xx**2 + yy**2) >= ((radius/4)**2) )
-			self.stimDisplayArray[ (cy-radius):(cy+radius) , (cx-radius):(cx+radius) , ][index] = [255,255,255,255]
+			self.windowArray[ (x-radius):(x+radius) , (y-radius):(y+radius) ,  ][index] = [0,0,0,255]
 			self.window.refresh()
 			sdl2.SDL_PumpEvents()
+		def get_input_key(self):
+			sdl2.SDL_PumpEvents()
+			return None
 
-	customDisplay = EyeLinkCoreGraphicsPySDL2(targetSize=calibrationDotSize,windowSize=calibrationWindowSize,windowPosition=calibrationWindowPosition)
+	customDisplay = EyeLinkCoreGraphicsPySDL2(targetSize=calibrationDotSize,windowSize=stimDisplayRes,windowPosition=stimDisplayPosition)
 	pylink.openGraphicsEx(customDisplay)
 
 	eyelink.doTrackerSetup()
@@ -154,7 +161,6 @@ qTo
 				eyelink.sendMessage(message[1])
 			elif message[0]=='accept_trigger':
 				eyelink.accept_trigger()
-
 		eyeData = eyelink.getNextData()
 		if doSounds:
 			if (eyeData==pylink.STARTSACC) or (eyeData==pylink.STARTBLINK):
