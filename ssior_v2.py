@@ -699,6 +699,8 @@ if __name__ == '__main__':
 		#run the trials
 		trialNum = 0
 		while trialNum<trialsPerBlock:
+			if doLabjack:
+				labjackChild.qTo.put(['sendTriggers',True])
 			if doEyelink:
 				eyelinkChild.qTo.put(['doSounds',True])
 				eyelinkChild.qTo.put(['sendMessage','TRIAL START'])
@@ -981,9 +983,14 @@ if __name__ == '__main__':
 			setPhotoTrigger()	
 			refreshWindows()
 			trialDoneTime = getTime()
+<<<<<<< HEAD
 			#tell the labjack to expect a trial start stim
 			if doLabjack:
 				labjackChild.qTo.put('trialDone')
+=======
+			if doLabjack:
+				labjackChild.qTo.put(['sendTriggers',False])
+>>>>>>> FETCH_HEAD
 			if doEyelink:
 				eyelinkChild.qTo.put(['sendMessage','FEEDBACK ON'])
 				eyelinkChild.qTo.put(['doSounds',False])
