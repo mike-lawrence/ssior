@@ -5,7 +5,7 @@ qTo
 , windowPosition = [0,0]
 , stimDisplayRes = [1920,1080]
 , stimDisplayPosition = [1920,0]
-, calibrationDotSize = 50
+, calibrationDotSize = 10
 , eyelinkIP = '100.1.1.1'
 , edfFileName = 'temp.edf'
 , edfPath = './_Data/temp.edf'
@@ -119,13 +119,9 @@ qTo
 				sdl2.SDL_PumpEvents() #to show the windows
 		def exit_cal_display(self): 
 			sdl2.SDL_DestroyWindow(self.window.window)
-			# del self.window
-			# del self.WindowID
-			# del self.windowSurf
 		def erase_cal_target(self):
 			self.clear_cal_display()		
 		def draw_cal_target(self, x, y):
-			print [x,y]
 			radius = self.targetSize/2
 			yy, xx = numpy.ogrid[-radius: radius, -radius: radius]
 			index = numpy.logical_and( (xx**2 + yy**2) <= (radius**2) , (xx**2 + yy**2) >= ((radius/4)**2) )
