@@ -73,7 +73,6 @@ qTo
 						checkForNextZeroTime = True
 		if not qTo.empty():
 			message = qTo.get()
-<<<<<<< HEAD
 			if message=='quit':
 				exitSafely()
 			elif message=='trialDone':
@@ -87,18 +86,6 @@ qTo
 				d.getFeedback(u3.BitStateWrite(IONumber=9,State=1))
 				trialNextZeroTime = time.time()+.5
 				checkForTrialNextZeroTime = True
-=======
-			if message[0]=='quit':
-				# exitSafely()
-				d.streamStop()
-				d.close()
-				del d
-				time.sleep(1)
-				sys.exit()
-			elif message[0]=='sendTriggers':
-				# qToWriter.put(['newFile','labjack',message[1]])
-				sendTriggers = message[1]
->>>>>>> FETCH_HEAD
 		sdl2.SDL_PumpEvents()
 		for event in sdl2.ext.get_events():
 			if event.type==sdl2.SDL_WINDOWEVENT:

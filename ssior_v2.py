@@ -983,14 +983,9 @@ if __name__ == '__main__':
 			setPhotoTrigger()	
 			refreshWindows()
 			trialDoneTime = getTime()
-<<<<<<< HEAD
 			#tell the labjack to expect a trial start stim
 			if doLabjack:
 				labjackChild.qTo.put('trialDone')
-=======
-			if doLabjack:
-				labjackChild.qTo.put(['sendTriggers',False])
->>>>>>> FETCH_HEAD
 			if doEyelink:
 				eyelinkChild.qTo.put(['sendMessage','FEEDBACK ON'])
 				eyelinkChild.qTo.put(['doSounds',False])
