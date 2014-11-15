@@ -209,16 +209,13 @@ if __name__ == '__main__':
 		eyelinkChild.initDict['saccadeSoundFile'] = saccadeSoundFile
 		eyelinkChild.initDict['blinkSoundFile'] = blinkSoundFile
 		eyelinkChild.start()
-		calibrationChild = fileForker.childClass(childFile='calibrationChild.py')
-		calibrationChild.initDict['calibrationDotSize'] = calibrationDotSize
-		calibrationChild.initDict['fontSize'] = instructionFontSize
-		calibrationChild.initDict['stimDisplayRes'] = [offsetSize*2,offsetSize]
-		calibrationChild.initDict['stimDisplayPosition'] = (stimDisplayPositionX+stimDisplayRes[0]/2-offsetSize,0+stimDisplayRes[1]/2-offsetSize/2)
-		calibrationChild.initDict['mirrorDisplayPosition'] = calibrationMirrorDisplayPosition
-		calibrationChild.initDict['mirrorDownSize'] = calibrationMirrorDownsize
-		calibrationChild.start()
-		while calibrationChild.isAlive():
-			pass
+		eyelinkChild.qTo.put('doCalibration')
+		done = False
+		while not done:
+			if not eyelinkChild.qFrom.empty():
+				message = eyelinkChild.qFrom.get()
+				if message=='calibrationComplete':
+					done = True
 
 	########
 	# Initialize the stimDisplay

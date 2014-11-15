@@ -135,9 +135,6 @@ qTo
 	customDisplay = EyeLinkCoreGraphicsPySDL2(targetSize=calibrationDotSize,windowSize=stimDisplayRes,windowPosition=stimDisplayPosition)
 	pylink.openGraphicsEx(customDisplay)
 
-	eyelink.doTrackerSetup()
-	eyelink.startRecording(1,1,1,1) #this retuns immediately takes 10-30ms to actually kick in on the tracker
-
 	doSounds = False
 	while True:
 		sdl2.SDL_PumpEvents()
@@ -157,17 +154,22 @@ qTo
 				eyelink.sendMessage(message[1])
 			elif message[0]=='accept_trigger':
 				eyelink.accept_trigger()
-		eyeData = eyelink.getNextData()
-		if doSounds:
-			if (eyeData==pylink.STARTSACC) or (eyeData==pylink.STARTBLINK):
-				eyeEvent = eyelink.getFloatData()
-				if isinstance(eyeEvent,pylink.StartSaccadeEvent):
-					# print 'Saccade started'
-					if (not saccadeSound.stillPlaying()) and (not blinkSound.stillPlaying()):
-						saccadeSound.play()
-				elif isinstance(eyeEvent,pylink.StartBlinkEvent):
-					# print 'Blink started'
-					if (not saccadeSound.stillPlaying()) and (not blinkSound.stillPlaying()):
-						blinkSound.play()
+			elif message=='doCalibration':
+				eyelink.doTrackerSetup()
+				qFrom.put('calibrationComplete')
+				eyelink.startRecording(1,1,1,1) #this retuns immediately takes 10-30ms to actually kick in on the tracker
+		if eyelink.isRecording():
+			eyeData = eyelink.getNextData()
+			if doSounds:
+				if (eyeData==pylink.STARTSACC) or (eyeData==pylink.STARTBLINK):
+					eyeEvent = eyelink.getFloatData()
+					if isinstance(eyeEvent,pylink.StartSaccadeEvent):
+						# print 'Saccade started'
+						if (not saccadeSound.stillPlaying()) and (not blinkSound.stillPlaying()):
+							saccadeSound.play()
+					elif isinstance(eyeEvent,pylink.StartBlinkEvent):
+						# print 'Blink started'
+						if (not saccadeSound.stillPlaying()) and (not blinkSound.stillPlaying()):
+							blinkSound.play()
 
 eyelinkChildFunction(qTo,qFrom,**initDict)
