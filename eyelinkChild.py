@@ -55,35 +55,22 @@ qTo
 				else:
 					self.started = False
 					return False
+			else:
+				return False
 
 	saccadeSound = Sound(saccadeSoundFile)
 	blinkSound = Sound(blinkSoundFile)
 
 	def exitSafely():
-		try:
-			eyelink.stopRecording()
-			print 'eyelink stopped'
-		except:
-			pass
-		try:
+		if 'eyelink'in locals():
+			if eyelink.isRecording():
+				eyelink.stopRecording()
 			eyelink.setOfflineMode()
-			print 'eyelink offline'
-			time.sleep(.1)
-			try:
-				eyelink.closeDataFile()
-				print 'eyelink file closed'
-				eyelink.receiveDataFile('temp.edf','temp.edf')
-				print 'eyelink file received'
-				shutil.move('temp.edf', edfPath)
-				print 'eyelink file moved'
-				subprocess.call('./edf2asc '+edfPath)
-				print 'eyelink file converted'
-			except:
-				pass
+			eyelink.closeDataFile()
+			eyelink.receiveDataFile('temp.edf','temp.edf')
 			eyelink.close()
-			print 'eyelink closed'
-		except:
-			pass
+			shutil.move('temp.edf', edfPath)
+			subprocess.call('./edf2asc '+edfPath)
 		sys.exit()
 
 
@@ -103,6 +90,16 @@ qTo
 			self.targetSize = targetSize
 			self.windowPosition = windowPosition
 			self.windowSize = windowSize
+			self.__target_beep__ = Sound('_Stimuli/type.wav')
+			self.__target_beep__done__ = Sound('qbeep.wav')
+			self.__target_beep__error__ = Sound('error.wav')
+		def play_beep(self,beepid):
+			if beepid == pylink.DC_TARG_BEEP or beepid == pylink.CAL_TARG_BEEP:
+				self.__target_beep__.play()
+			elif beepid == pylink.CAL_ERR_BEEP or beepid == pylink.DC_ERR_BEEP:
+				self.__target_beep__error__.play()
+			else:#	CAL_GOOD_BEEP or DC_GOOD_BEEP
+				self.__target_beep__done__.play()
 		def clear_cal_display(self): 
 			sdl2.ext.fill(self.windowSurf.contents,sdl2.pixels.SDL_Color(r=255, g=255, b=255, a=255))
 			self.window.refresh()
@@ -155,6 +152,8 @@ qTo
 			elif message[0]=='accept_trigger':
 				eyelink.accept_trigger()
 			elif message=='doCalibration':
+				if eyelink.isRecording():
+					eyelink.stopRecording()
 				eyelink.doTrackerSetup()
 				qFrom.put('calibrationComplete')
 				eyelink.startRecording(1,1,1,1) #this retuns immediately takes 10-30ms to actually kick in on the tracker
