@@ -6,8 +6,7 @@ if __name__ == '__main__':
 	viewingDistance = 57.0 #units can be anything so long as they match those used in stimDisplayWidth below
 	stimDisplayWidth = 54.5 #units can be anything so long as they match those used in viewingDistance above
 	stimDisplayRes = (1920,1080) #pixel resolution of the stimDisplay
-	stimDisplayPositionX = 2560
-	dualDisplay = True
+	stimDisplayPosition = (2560,0)
 
 	writerWindowSize = (200,200)
 	writerWindowPosition = (300,0)
@@ -221,23 +220,26 @@ if __name__ == '__main__':
 	# Initialize the stimDisplay
 	########
 	time.sleep(5)
-	sdl2.SDL_Init(sdl2.SDL_INIT_VIDEO)
-	stimDisplay = sdl2.ext.Window("Experiment", size=stimDisplayRes,position=(stimDisplayPositionX,0),flags=sdl2.SDL_WINDOW_OPENGL|sdl2.SDL_WINDOW_SHOWN| sdl2.SDL_WINDOW_FULLSCREEN_DESKTOP |sdl2.SDL_RENDERER_ACCELERATED | sdl2.SDL_RENDERER_PRESENTVSYNC)
-	glContext = sdl2.SDL_GL_CreateContext(stimDisplay.window)
-	gl.glMatrixMode(gl.GL_PROJECTION)
-	gl.glLoadIdentity()
-	gl.glOrtho(0, stimDisplayRes[0],stimDisplayRes[1], 0, 0, 1)
-	gl.glMatrixMode(gl.GL_MODELVIEW)
-	gl.glDisable(gl.GL_DEPTH_TEST)
+	class stimDisplayClass():
+		def __init__():
+			sdl2.SDL_Init(sdl2.SDL_INIT_VIDEO)
+		def show(self,stimDisplayRes,stimDisplayPosition):
+			self.Window = sdl2.ext.Window("Experiment", size=stimDisplayRes,position=stimDisplayPosition,flags=sdl2.SDL_WINDOW_OPENGL|sdl2.SDL_WINDOW_SHOWN| sdl2.SDL_WINDOW_FULLSCREEN_DESKTOP |sdl2.SDL_RENDERER_ACCELERATED | sdl2.SDL_RENDERER_PRESENTVSYNC)
+			self.glContext = sdl2.SDL_GL_CreateContext(stimDisplay.Window.window)
+			gl.glMatrixMode(gl.GL_PROJECTION)
+			gl.glLoadIdentity()
+			gl.glOrtho(0, stimDisplayRes[0],stimDisplayRes[1], 0, 0, 1)
+			gl.glMatrixMode(gl.GL_MODELVIEW)
+			gl.glDisable(gl.GL_DEPTH_TEST)
+		def refresh(self):
+			sdl2.SDL_GL_SwapWindow(self.Window.window)
+		def hide():
+			sdl2.SDL_DestroyWindow(self.Window.window)
 
-	if not dualDisplay:
-		sdl2.mouse.SDL_ShowCursor(0)
 
-	# 	if dualDisplay:
-	# 		mirrorDisplay = sdl2.ext.Window("Preview", size=(stimDisplayRes[0]/2,stimDisplayRes[1]/2),position=(0,0),flags=sdl2.SDL_WINDOW_SHOWN)
-	# 		mirrorDisplaySurf = sdl2.SDL_GetWindowSurface(mirrorDisplay.window)
-	# 		mirrorDisplayArray = sdl2.ext.pixels3d(mirrorDisplaySurf.contents)
-
+	stimDisplay = stimDisplayClass()
+	stimDisplay.show(stimDisplayRes=stimDisplayRes,stimDisplayPosition=stimDisplayPosition)
+	
 	for i in range(10):
 		sdl2.SDL_PumpEvents() #to show the windows
 
@@ -465,22 +467,6 @@ if __name__ == '__main__':
 		gl.glVertex2f( stimDisplayRes[0]/2 - stimDisplayRes[0]/40 , stimDisplayRes[1] )
 		gl.glEnd()
 		gl.glColor3f(0,0,0)
-		# gl.glBegin(gl.GL_QUAD_STRIP)
-		# gl.glVertex2f( stimDisplayRes[0]/2 - stimDisplayRes[0]/10 , stimDisplayRes[1] )
-		# gl.glVertex2f( stimDisplayRes[0]/2 + stimDisplayRes[0]/10 , stimDisplayRes[1] )
-		# gl.glVertex2f( stimDisplayRes[0]/2 - stimDisplayRes[0]/10 , stimDisplayRes[1] - stimDisplayRes[1]/10 )
-		# gl.glVertex2f( stimDisplayRes[0]/2 + stimDisplayRes[0]/10 , stimDisplayRes[1] - stimDisplayRes[1]/10 )
-		# gl.glVertex2f( stimDisplayRes[0]/2 - stimDisplayRes[0]/10 , stimDisplayRes[1] )
-		# gl.glEnd()
-		# if on:
-		# 	gl.glColor3f(1,1,1)
-		# 	gl.glBegin(gl.GL_QUAD_STRIP)
-		# 	gl.glVertex2f( stimDisplayRes[0]/2 - stimDisplayRes[0]/10 , stimDisplayRes[1] )
-		# 	gl.glVertex2f( stimDisplayRes[0]/2 + stimDisplayRes[0]/10 , stimDisplayRes[1] )
-		# 	gl.glVertex2f( stimDisplayRes[0]/2 - stimDisplayRes[0]/10 , stimDisplayRes[1] - stimDisplayRes[1]/10 )
-		# 	gl.glVertex2f( stimDisplayRes[0]/2 + stimDisplayRes[0]/10 , stimDisplayRes[1] - stimDisplayRes[1]/10 )
-		# 	gl.glVertex2f( stimDisplayRes[0]/2 - stimDisplayRes[0]/10 , stimDisplayRes[1] )
-		# 	gl.glEnd()
 
 
 	########
@@ -496,14 +482,15 @@ if __name__ == '__main__':
 
 	#define a function that will kill everything safely
 	def exitSafely():
+		writerChild.stop()
 		if doEyelink:
-			eyelinkChild.stop(killAfter=60)
+			eyelinkChild.stop()
 		if doLabjack:
 			labjackChild.stop(killAfter=60)
 		stamperChild.stop(killAfter=60)
-		writerChild.stop(killAfter=60)
+		while stamperChild.isAlive():
+			time.sleep(.1)
 		sdl2.ext.quit()
-		time.sleep(5)
 		sys.exit()
 
 
@@ -526,27 +513,17 @@ if __name__ == '__main__':
 		return response
 
 
-	def refreshWindows():
-		sdl2.SDL_GL_SwapWindow(stimDisplay.window)
-		# if dualDisplay:
-		# 	image = stimDisplayArray[:,:,0:3]
-		# 	image = scipy.misc.imresize(image, (stimDisplayRes[0]/2,stimDisplayRes[1]/2), interp='nearest')
-		# 	mirrorDisplayArray[:,:,0:3] = image
-		# 	mirrorDisplay.refresh()
-		return None
-
-
 	#define a function that prints a message on the stimDisplay while looking for user input to continue. The function returns the total time it waited
 	def showMessage(myText):
 		messageViewingTimeStart = getTime()
 		gl.glClearColor(0,0,0,1)
 		gl.glClear(gl.GL_COLOR_BUFFER_BIT)
-		refreshWindows()
+		stimDisplay.refresh()
 		gl.glClearColor(0,0,0,1)
 		gl.glClear(gl.GL_COLOR_BUFFER_BIT)
 		drawText( myText , instructionFont , stimDisplayRes[0] , xLoc=stimDisplayRes[0]/2 , yLoc=stimDisplayRes[1]/2 , fg=[200,200,200,255] )
 		simpleWait(0.500)
-		refreshWindows()
+		stimDisplay.refresh()
 		gl.glClearColor(0,0,0,1)
 		gl.glClear(gl.GL_COLOR_BUFFER_BIT)
 		waitForResponse()
@@ -564,13 +541,13 @@ if __name__ == '__main__':
 		textInput = ''
 		gl.glClearColor(0,0,0,1)
 		gl.glClear(gl.GL_COLOR_BUFFER_BIT)
-		refreshWindows()
+		stimDisplay.refresh()
 		simpleWait(0.500)
 		myText = getWhat+textInput
 		gl.glClearColor(0,0,0,1)
 		gl.glClear(gl.GL_COLOR_BUFFER_BIT)
 		drawText( myText , instructionFont , stimDisplayRes[0] , xLoc=stimDisplayRes[0]/2 , yLoc=stimDisplayRes[1]/2 , fg=[200,200,200,255] )
-		refreshWindows()
+		stimDisplay.refresh()
 		gl.glClearColor(0,0,0,1)
 		gl.glClear(gl.GL_COLOR_BUFFER_BIT)
 		done = False
@@ -588,7 +565,7 @@ if __name__ == '__main__':
 							gl.glClearColor(0,0,0,1)
 							gl.glClear(gl.GL_COLOR_BUFFER_BIT)
 							drawText( myText , instructionFont , stimDisplayRes[0] , xLoc=stimDisplayRes[0]/2 , yLoc=stimDisplayRes[1]/2 , fg=[200,200,200,255] )
-							refreshWindows()
+							stimDisplay.refresh()
 					elif response == 'return':
 						done = True
 					else:
@@ -597,10 +574,10 @@ if __name__ == '__main__':
 						gl.glClearColor(0,0,0,1)
 						gl.glClear(gl.GL_COLOR_BUFFER_BIT)
 						drawText( myText , instructionFont , stimDisplayRes[0] , xLoc=stimDisplayRes[0]/2 , yLoc=stimDisplayRes[1]/2 , fg=[200,200,200,255] )
-						refreshWindows()
+						stimDisplay.refresh()
 		gl.glClearColor(0,0,0,1)
 		gl.glClear(gl.GL_COLOR_BUFFER_BIT)
-		refreshWindows()
+		stimDisplay.refresh()
 		return textInput
 
 
@@ -729,11 +706,11 @@ if __name__ == '__main__':
 			drawBoxes(brightSide)
 			drawDot(fixationSize)
 			setPhotoTrigger(on=True)
-			refreshWindows()
+			stimDisplay.refresh()
 			drawBoxes(brightSide)
 			drawDot(fixationSize)
 			setPhotoTrigger(on=True)
-			refreshWindows() #this one should block until it's actually displayed
+			stimDisplay.refresh() #this one should block until it's actually displayed
 
 			#get the trial start time 
 			trialStartTime = getTime() - 1/60.0
@@ -877,7 +854,7 @@ if __name__ == '__main__':
 				else:
 					setPhotoTrigger()
 				#done drawing
-				refreshWindows() #show this frame (should block until shown (if we haven't missed a frame!))
+				stimDisplay.refresh() #show this frame (should block until shown (if we haven't missed a frame!))
 				frameTime = getTime() #get the time of this frame (refresh should have blocked)
 				lastFrameTime = frameTime
 				if sendFastOnMessage:
@@ -978,7 +955,7 @@ if __name__ == '__main__':
 			gl.glClear(gl.GL_COLOR_BUFFER_BIT)
 			drawFeedback(feedbackText,feedbackColor)
 			setPhotoTrigger()	
-			refreshWindows()
+			stimDisplay.refresh()
 			trialDoneTime = getTime()
 			#tell the labjack to expect a trial start stim
 			if doLabjack:
@@ -988,9 +965,6 @@ if __name__ == '__main__':
 				eyelinkChild.qTo.put(['doSounds',False])
 			trialDone = False
 			while getTime()<(trialDoneTime+feedbackDuration):
-				#check for eye tracking data here (but don't do anything about it because Ss are allowed to move/blink during feedback)
-				# if doEyelink:
-				# 	eyeData = eyelink.getNextData()
 				pass
 			#check for responses here
 			responseMade2,rts2,triggerData = checkInput(triggerData)
@@ -1008,6 +982,16 @@ if __name__ == '__main__':
 			writerChild.qTo.put(['write','data',dataToWrite])
 			if doEyelink:
 				eyelinkChild.qTo.put(['sendMessage',dataToWrite])
+				if response=='p:'
+					stimDisplay.hide()
+					eyelinkChild.qTo.put('doCalibration')
+					done = False
+					while not done:
+						if not eyelinkChild.qFrom.empty():
+							message = eyelinkChild.qFrom.get()
+							if message=='calibrationComplete':
+								done = True
+					stimDisplay.show()
 		print 'on break'
 
 
@@ -1059,7 +1043,7 @@ if __name__ == '__main__':
 	for i in range(numberOfBlocks):
 		block = str(i+1)
 		runBlock()
-		if i<(numberOfBlocks):
+		if block<(numberOfBlocks):
 			messageViewingTime = showMessage('Take a break!\nYou\'re about '+str(block)+'/'+str(numberOfBlocks)+' done.\nWhen you are ready, press any trigger to continue the experiment.')
 
 	messageViewingTime = showMessage('You\'re all done!\nPlease alert the person conducting this experiment that you have finished.')
