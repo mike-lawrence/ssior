@@ -46,18 +46,18 @@ if __name__ == '__main__':
 	targetIdentityList = ['square','diamond']
 
 	#times are specified in frames @ 60Hz
-	fixationDurationMin = 60 #1s
-	fixationDurationMax = 120 #2s
-	cueDuration = 6 #100ms
-	cueCuebackSOA = 30 #500ms
-	cuebackDuration = 6 #100ms
-	cuebackTargetSOA = 60 #1s
-	responseTimeout = 60 #1s
 
-	feedbackDuration = 2.000 #specified in seconds
+	slowCycleHalfFrames = 3 #half the cycle length; 3 frames @ 60Hz = 10Hz
+	fastCycleHalfFrames = 4 #half the cycle length; 4 frames @ 60Hz = 7.5Hz
 
-	slowCycleHalfFrames = 3 #half the cycle length
-	fastCycleHalfFrames = 2 #half the cycle length
+	fixationDurationList = [24,48,72,96,120] #multiples of 24 (400ms)
+	cueDuration = 5 #83.3ms, not a multiple of either half frame rate
+	cueCuebackSOA = 24 #400ms (nice fourier window for 7.5/10/15Hz stimuli)
+	cuebackDuration = 5 #83.3ms, not a multiple of either half frame rate
+	cuebackTargetSOA = 48 #800ms (for a total cue-target SOA of 1.2s, which makes for a nice fourier window for 7.5/10/15Hz stimuli)
+	responseTimeout = 72 #1.2s
+
+	feedbackDuration = 1.600 #specified in seconds
 
 	numberOfBlocks = 10 
 	trialsPerBlock = 32
@@ -673,11 +673,27 @@ if __name__ == '__main__':
 		#run the trials
 		trialNum = 0
 		while trialNum<trialsPerBlock:
+			#bump the trial number
+			trialNum = trialNum + 1
+			
+			#get the trial info
+			# trialInfo = random.choice(trialList) #random trial type (ensures true equiprobablilty of conditions for [on average] unbiased behaviour)
+			trialInfo = trialList.pop(0) #iterates through trial types (ensures equal cell sizes for unbiased analysis)
+
+			#parse the trial info
+			brightSide,fastSide,cueSide,targetSide,targetIdentity = trialInfo
+			
+			#generate fixation duration
+			fixationDuration = random.choice(fixationDurationList)
+
+			trialDescrptor = '\t'.join(map(str,[subInfo[0],block,trialNum]))
+
 			if doLabjack:
 				labjackChild.qTo.put(['sendTriggers',True])
+
 			if doEyelink:
 				eyelinkChild.qTo.put(['doSounds',True])
-				eyelinkChild.qTo.put(['sendMessage','TRIAL START'])
+				eyelinkChild.qTo.put(['sendMessage','trialStart\t'+trialDescrptor])
 				# try:
 				# 	error = eyelink.doDriftCorrect(stimDisplayRes[0]/2, stimDisplayRes[1]/2, 1, 1)
 				# 	if error!=0:
@@ -686,17 +702,6 @@ if __name__ == '__main__':
 				# 	eyelink.doTrackerSetup()
 				# eyelink.startRecording(1,1,1,1) #this retuns immediately takes 10-30ms to actually kick in on the tracker
 
-			#bump the trial number
-			trialNum = trialNum + 1
-		
-			#get the trial info
-			trialInfo = random.choice(trialList)
-
-			#parse the trial info
-			brightSide,fastSide,cueSide,targetSide,targetIdentity = trialInfo
-			
-			#generate fixation duration
-			fixationDuration = int(random.uniform(fixationDurationMin,fixationDurationMax))
 
 			#tell the labjack to expect a trial start stim
 			if doLabjack:
@@ -879,7 +884,7 @@ if __name__ == '__main__':
 					slowOnMessageSent = False
 				if sendCueOnMessage:
 					if doEyelink:
-						eyelinkChild.qTo.put(['sendMessage','CUE ON'])
+						eyelinkChild.qTo.put(['sendMessage','cueOn\t'+trialDescrptor])
 					#queueFromExpToEEG.put([frameTime,'cue on'])
 					sendCueOnMessage = False
 					cueOnMessageSent = True
@@ -897,7 +902,7 @@ if __name__ == '__main__':
 					cuebackOffMessageSent = True
 				if sendTargetOnMessage:
 					if doEyelink:
-						eyelinkChild.qTo.put(['sendMessage','TARGET ON'])
+						eyelinkChild.qTo.put(['sendMessage','targetOn\t'+trialDescrptor])
 					#queueFromExpToEEG.put([frameTime,'target on'])
 					sendTargetOnMessage = False
 					targetOnMessageSent = True
@@ -961,7 +966,7 @@ if __name__ == '__main__':
 			if doLabjack:
 				labjackChild.qTo.put('trialDone')
 			if doEyelink:
-				eyelinkChild.qTo.put(['sendMessage','FEEDBACK ON'])
+				eyelinkChild.qTo.put(['sendMessage','feedbackOn\t'+trialDescrptor])
 				eyelinkChild.qTo.put(['doSounds',False])
 			trialDone = False
 			while getTime()<(trialDoneTime+feedbackDuration):
@@ -973,15 +978,13 @@ if __name__ == '__main__':
 				print 'feedback response made'
 			#write out trial info
 			triggerData = [[[i[0]-targetOnTime,i[1]] for i in side] for side in triggerData]#fix times to be relative to target on time
-			triggerTrialInfo = '\t'.join(map(str,[subInfo[0],block,trialNum]))
-			triggerDataToWriteLeft = '\n'.join([triggerTrialInfo + '\tleft\t' + '\t'.join(map(str,i)) for i in triggerData[0]])
-			triggerDataToWriteRight = '\n'.join([triggerTrialInfo + '\tright\t' + '\t'.join(map(str,i)) for i in triggerData[1]])
+			triggerDataToWriteLeft = '\n'.join([trialDescrptor + '\tleft\t' + '\t'.join(map(str,i)) for i in triggerData[0]])
+			triggerDataToWriteRight = '\n'.join([trialDescrptor + '\tright\t' + '\t'.join(map(str,i)) for i in triggerData[1]])
 			writerChild.qTo.put(['write','trigger',triggerDataToWriteLeft])
 			writerChild.qTo.put(['write','trigger',triggerDataToWriteRight])
-			dataToWrite = '\t'.join(map(str,[ subInfoForFile , messageViewingTime , block , trialNum , brightSide , fastSide , cueSide , targetSide , targetIdentity , rt , notDouble , preTargetResponse , feedbackResponse ]))
+			dataToWrite = '\t'.join(map(str,[ subInfoForFile , messageViewingTime , block , trialNum , brightSide , fastSide , cueSide , targetSide , targetIdentity , fixationDuration , rt , notDouble , preTargetResponse , feedbackResponse ]))
 			writerChild.qTo.put(['write','data',dataToWrite])
 			if doEyelink:
-				eyelinkChild.qTo.put(['sendMessage',dataToWrite])
 				if response=='p:'
 					stimDisplay.hide()
 					eyelinkChild.qTo.put('doCalibration')
@@ -1021,7 +1024,7 @@ if __name__ == '__main__':
 
 	writerChild.qTo.put(['newFile','data','_Data/'+filebase+'/'+filebase+'_data.txt'])
 	writerChild.qTo.put(['write','data',password])
-	header ='\t'.join(['id' , 'year' , 'month' , 'day' , 'hour' , 'minute' , 'sex' , 'age'  , 'handedness' , 'messageViewingTime' , 'block' , 'trialNum' , 'brightSide' , 'fastSide' , 'cueSide' , 'targetSide' , 'targetIdentity' , 'rt' , 'notDouble' , 'preTargetResponse' , 'feedbackResponse'])
+	header ='\t'.join(['id' , 'year' , 'month' , 'day' , 'hour' , 'minute' , 'sex' , 'age'  , 'handedness' , 'messageViewingTime' , 'block' , 'trialNum' , 'brightSide' , 'fastSide' , 'cueSide' , 'targetSide' , 'targetIdentity' , 'fixationDuration', 'rt' , 'notDouble' , 'preTargetResponse' , 'feedbackResponse'])
 	writerChild.qTo.put(['write','data',header])
 
 	writerChild.qTo.put(['newFile','trigger','_Data/'+filebase+'/'+filebase+'_trigger.txt'])
