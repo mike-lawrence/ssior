@@ -43,7 +43,7 @@ qTo
 		sys.exit()
 
 	sendTriggers = False
-	while not done:
+	while True:
 		if sendTriggers:
 			if not checkForNextZeroTime:
 				if d.getAIN(0)>1: #photosensor surpasses criterion
