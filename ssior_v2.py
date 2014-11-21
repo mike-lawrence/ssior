@@ -29,8 +29,6 @@ if __name__ == '__main__':
 	saccadeSoundFile = '_Stimuli/stop.wav'
 	blinkSoundFile = '_Stimuli/stop.wav'
 	calibrationDotSizeInDegrees = 1
-	calibrationMirrorDisplayPosition = [0,0]
-	calibrationMirrorDownsize = 2
 
 	responseModality = 'trigger' # 'key' or 'trigger'
 	triggerLeftAxis = 2
@@ -196,8 +194,9 @@ if __name__ == '__main__':
 		eyelinkChild = fileForker.childClass(childFile='eyelinkChild.py')
 		eyelinkChild.initDict['windowSize'] = eyelinkWindowSize
 		eyelinkChild.initDict['windowPosition'] = eyelinkWindowPosition
-		# eyelinkChild.initDict['stimDisplayRes'] = stimDisplayRes
-		eyelinkChild.initDict['stimDisplayRes'] = [offsetSize*2,offsetSize]
+		eyelinkChild.initDict['calibrationDisplayPosition'] = [ stimDisplayPosition[0] + stimDisplayRes[0]/2 - offsetSize , stimDisplayPosition[1] + stimDisplayRes[1]/2 - offsetSize/2 ]
+		eyelinkChild.initDict['calibrationDisplayRes'] = [offsetSize*2,offsetSize]
+		eyelinkChild.initDict['calibrationDotSize'] = calibrationDotSize
 		eyelinkChild.initDict['eyelinkIP'] = eyelinkIP
 		eyelinkChild.initDict['edfFileName'] = edfFileName
 		eyelinkChild.initDict['edfPath'] = edfPath
@@ -216,8 +215,8 @@ if __name__ == '__main__':
 	# Initialize the stimDisplay
 	########
 	time.sleep(5)
-	class stimDisplayClass():
-		def __init__():
+	class stimDisplayClass:
+		def __init__(self):
 			sdl2.SDL_Init(sdl2.SDL_INIT_VIDEO)
 		def show(self,stimDisplayRes,stimDisplayPosition):
 			self.Window = sdl2.ext.Window("Experiment", size=stimDisplayRes,position=stimDisplayPosition,flags=sdl2.SDL_WINDOW_OPENGL|sdl2.SDL_WINDOW_SHOWN| sdl2.SDL_WINDOW_FULLSCREEN_DESKTOP |sdl2.SDL_RENDERER_ACCELERATED | sdl2.SDL_RENDERER_PRESENTVSYNC)
@@ -356,7 +355,7 @@ if __name__ == '__main__':
 
 
 	def drawFeedback(feedbackText,feedbackColor):
-		feedbackArray = text2numpy(feedbackText,myFont,fg=feedbackColor,bg=[0,0,0,0])
+		feedbackArray = text2numpy(feedbackText,feedbackFont,fg=feedbackColor,bg=[0,0,0,0])
 		blitNumpy(feedbackArray,stimDisplayRes[0]/2,stimDisplayRes[1]/2,xCentered=True,yCentered=True)
 
 	def drawBoxes(brightSide):
@@ -981,7 +980,7 @@ if __name__ == '__main__':
 			dataToWrite = '\t'.join(map(str,[ subInfoForFile , messageViewingTime , block , trialNum , brightSide , fastSide , cueSide , targetSide , targetIdentity , fixationDuration , rt , notDouble , preTargetResponse , feedbackResponse ]))
 			writerChild.qTo.put(['write','data',dataToWrite])
 			if doEyelink:
-				if response=='p:'
+				if response=='p':
 					stimDisplay.hide()
 					eyelinkChild.qTo.put('doCalibration')
 					done = False
@@ -991,6 +990,7 @@ if __name__ == '__main__':
 							if message=='calibrationComplete':
 								done = True
 					stimDisplay.show()
+					eyelinkChild.qTo.put(['doSounds',True])
 		print 'on break'
 
 

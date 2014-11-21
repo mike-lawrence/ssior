@@ -3,8 +3,8 @@ qTo
 , qFrom
 , windowSize = [200,200]
 , windowPosition = [0,0]
-, stimDisplayRes = [1920,1080]
-, stimDisplayPosition = [1920,0]
+, calibrationDisplayRes = [1920,1080]
+, calibrationDisplayPosition = [1920,0]
 , calibrationDotSize = 10
 , eyelinkIP = '100.1.1.1'
 , edfFileName = 'temp.edf'
@@ -21,6 +21,7 @@ qTo
 	import shutil
 	import subprocess
 	import time
+	import os
 	try:
 		import appnope
 		appnope.nope()
@@ -69,8 +70,12 @@ qTo
 			eyelink.closeDataFile()
 			eyelink.receiveDataFile('temp.edf','temp.edf')
 			eyelink.close()
-			shutil.move('temp.edf', edfPath)
-			subprocess.call('./edf2asc '+edfPath)
+			if os.path.isfile('temp.edf'):
+				print 'temp.edf exists'
+				shutil.move('temp.edf', edfPath)
+				if os.path.isfile(edfPath):
+					print edfPath+' exists'
+					subprocess.call('./edf2asc '+edfPath)
 		sys.exit()
 
 
@@ -80,8 +85,8 @@ qTo
 	eyelink.sendCommand('sample_rate 250')
 	eyelink.setLinkEventFilter("SACCADE,BLINK")
 	eyelink.openDataFile(edfFileName)
-	eyelink.sendCommand("screen_pixel_coords =  0 0 %d %d" %(stimDisplayRes[0],stimDisplayRes[1]))
-	eyelink.sendMessage("DISPLAY_COORDS  0 0 %d %d" %(stimDisplayRes[0],stimDisplayRes[1]))
+	eyelink.sendCommand("screen_pixel_coords =  0 0 %d %d" %(calibrationDisplayRes[0],calibrationDisplayRes[1]))
+	eyelink.sendMessage("DISPLAY_COORDS  0 0 %d %d" %(calibrationDisplayRes[0],calibrationDisplayRes[1]))
 	eyelink.sendCommand("saccade_velocity_threshold = 60")
 	eyelink.sendCommand("saccade_acceleration_threshold = 19500")
 
@@ -106,7 +111,6 @@ qTo
 			sdl2.ext.fill(self.windowSurf.contents,sdl2.pixels.SDL_Color(r=255, g=255, b=255, a=255))
 			sdl2.SDL_PumpEvents()
 		def setup_cal_display(self):
-			print [self.windowSize,self.windowPosition]
 			self.window = sdl2.ext.Window("Calibration",size=self.windowSize,position=self.windowPosition,flags=sdl2.SDL_WINDOW_SHOWN)#|sdl2.SDL_WINDOW_BORDERLESS)
 			self.windowID = sdl2.SDL_GetWindowID(self.window.window)
 			self.windowSurf = sdl2.SDL_GetWindowSurface(self.window.window)
@@ -129,7 +133,7 @@ qTo
 			sdl2.SDL_PumpEvents()
 			return None
 
-	customDisplay = EyeLinkCoreGraphicsPySDL2(targetSize=calibrationDotSize,windowSize=stimDisplayRes,windowPosition=stimDisplayPosition)
+	customDisplay = EyeLinkCoreGraphicsPySDL2(targetSize=calibrationDotSize,windowSize=calibrationDisplayRes,windowPosition=calibrationDisplayPosition)
 	pylink.openGraphicsEx(customDisplay)
 
 	doSounds = False
@@ -152,22 +156,21 @@ qTo
 			elif message[0]=='accept_trigger':
 				eyelink.accept_trigger()
 			elif message=='doCalibration':
+				doSounds = False
 				if eyelink.isRecording():
 					eyelink.stopRecording()
 				eyelink.doTrackerSetup()
 				qFrom.put('calibrationComplete')
 				eyelink.startRecording(1,1,1,1) #this retuns immediately takes 10-30ms to actually kick in on the tracker
-		if eyelink.isRecording():
+		if eyelink.isRecording()==0:
 			eyeData = eyelink.getNextData()
 			if doSounds:
 				if (eyeData==pylink.STARTSACC) or (eyeData==pylink.STARTBLINK):
 					eyeEvent = eyelink.getFloatData()
 					if isinstance(eyeEvent,pylink.StartSaccadeEvent):
-						# print 'Saccade started'
 						if (not saccadeSound.stillPlaying()) and (not blinkSound.stillPlaying()):
 							saccadeSound.play()
 					elif isinstance(eyeEvent,pylink.StartBlinkEvent):
-						# print 'Blink started'
 						if (not saccadeSound.stillPlaying()) and (not blinkSound.stillPlaying()):
 							blinkSound.play()
 
