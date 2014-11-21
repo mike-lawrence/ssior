@@ -19,8 +19,6 @@ if __name__ == '__main__':
 	doLabjack = True
 	labjackWindowSize = (200,200)
 	labjackWindowPosition = (500,0)
-	labjackResolution = 0 #0 is highest precision
-	labjackScanFrequency = 2500 #Hz
 
 	doEyelink = True
 	eyelinkWindowSize = (200,200)
@@ -189,8 +187,6 @@ if __name__ == '__main__':
 		labjackChild = fileForker.childClass(childFile='labjackChild.py')
 		labjackChild.initDict['windowSize'] = labjackWindowSize
 		labjackChild.initDict['windowPosition'] = labjackWindowPosition
-		labjackChild.initDict['Resolution'] = labjackResolution
-		labjackChild.initDict['ScanFrequency'] = labjackScanFrequency
 		labjackChild.start()
 
 	########

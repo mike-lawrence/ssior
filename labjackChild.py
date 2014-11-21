@@ -8,8 +8,6 @@ qTo
 , qFrom
 , windowSize = [200,200]
 , windowPosition = [0,0]
-, Resolution = 0
-, ScanFrequency = 2500
 ):
 	import sdl2
 	import sdl2.ext
@@ -32,45 +30,34 @@ qTo
 		sdl2.SDL_PumpEvents() #to show the windows
 
 	import u3
-	import numpy as np
 
 	d = u3.U3()
 	d.configU3()
 	d.getCalibrationData()
 	d.configAnalog(u3.FIO0)
-	d.streamConfig(NumChannels=1,PChannels=[0],NChannels=[31],Resolution=Resolution,ScanFrequency=ScanFrequency)
-	d.streamStart()
-	lastSampleTime = time.time()
-	interScanInterval = 1.0/ScanFrequency
 	checkForNextZeroTime = False
 	checkForTrialNextZeroTime = False
 
 	def exitSafely():
-		d.streamStop()
 		d.close()
 		sys.exit()
 
 	sendTriggers = False
-	for content in d.streamData():
+	while not done:
 		if sendTriggers:
+			if not checkForNextZeroTime:
+				if d.getAIN(0)>1: #photosensor surpasses criterion
+					d.getFeedback(u3.BitStateWrite(IONumber=8,State=1))
+					nextZeroTime = time.time()+.010 #wait 10ms before setting the state back to zero, giving the amp time to pick it up
+					checkForNextZeroTime = True
+			else:
+				if time.time()>=nextZeroTime: #time to turn the bit back off
+					d.getFeedback(u3.BitStateWrite(IONumber=8,State=0))
+					checkForNextZeroTime = False
 			if checkForTrialNextZeroTime:
 				if time.time()>=trialNextZeroTime:
 					d.getFeedback(u3.BitStateWrite(IONumber=9,State=0))
 					checkForTrialNextZeroTime = False
-			if checkForNextZeroTime:
-				if time.time()>=nextZeroTime:
-					d.getFeedback(u3.BitStateWrite(IONumber=8,State=0))
-					checkForNextZeroTime = False
-		if content is not None:
-			data = content['AIN0']
-			times = [lastSampleTime + t*interScanInterval for t in range(len(data))]
-			lastSampleTime = times[-1] + interScanInterval
-			if sendTriggers:
-				if not checkForNextZeroTime:
-					if np.any(np.array(data)>1):#light exceeds criterion
-						d.getFeedback(u3.BitStateWrite(IONumber=8,State=1))
-						nextZeroTime = time.time()+.5
-						checkForNextZeroTime = True
 		if not qTo.empty():
 			message = qTo.get()
 			if message=='quit':
@@ -84,7 +71,7 @@ qTo
 			elif message=='trialStart':
 				sendTriggers = True
 				d.getFeedback(u3.BitStateWrite(IONumber=9,State=1))
-				trialNextZeroTime = time.time()+.5
+				trialNextZeroTime = time.time()+.010 #wait 10ms before setting the state back to zero, giving the amp time to pick it up
 				checkForTrialNextZeroTime = True
 		sdl2.SDL_PumpEvents()
 		for event in sdl2.ext.get_events():
