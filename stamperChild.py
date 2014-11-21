@@ -59,7 +59,8 @@ qTo
 			if event.type==sdl2.SDL_WINDOWEVENT:
 				if event.window.windowID == windowID:
 					if (event.window.event==sdl2.SDL_WINDOWEVENT_CLOSE):
-						exitSafely()
+						qFrom.put({'type':'key','time':event.window.timestamp*timeFreq,'value':'escape'})
+						sys.exit()
 					elif event.window.event==sdl2.SDL_WINDOWEVENT_FOCUS_LOST:
 						lostFocus = True
 					elif event.window.event==sdl2.SDL_WINDOWEVENT_FOCUS_GAINED:
