@@ -990,7 +990,6 @@ if __name__ == '__main__':
 							if message=='calibrationComplete':
 								done = True
 					stimDisplay.show()
-					eyelinkChild.qTo.put(['doSounds',True])
 		print 'on break'
 
 
