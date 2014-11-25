@@ -16,7 +16,7 @@ if __name__ == '__main__':
 	stamperWindowColor = [255,255,255]
 	stamperDoBorder = True
 
-	doLabjack = True
+	doLabjack = False
 	labjackWindowSize = (200,200)
 	labjackWindowPosition = (500,0)
 
@@ -1039,7 +1039,7 @@ if __name__ == '__main__':
 	messageViewingTime = showMessage('Practice is complete.\nPress any trigger to begin the experiment.')
 
 	for i in range(numberOfBlocks):
-		block = str(i+1)
+		block = i+1
 		runBlock()
 		if block<(numberOfBlocks):
 			messageViewingTime = showMessage('Take a break!\nYou\'re about '+str(block)+'/'+str(numberOfBlocks)+' done.\nWhen you are ready, press any trigger to continue the experiment.')
