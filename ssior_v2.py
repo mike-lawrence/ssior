@@ -46,7 +46,7 @@ if __name__ == '__main__':
 	slowCycleHalfFrames = 3 #half the cycle length; 3 frames @ 60Hz = 10Hz
 	fastCycleHalfFrames = 4 #half the cycle length; 4 frames @ 60Hz = 7.5Hz
 
-	fixationDurationList = [24,48,72,96,120] #multiples of 24 (400ms)
+	fixationDurationList = [24*3,24*4,24*5,24*6] #multiples of 24 (400ms)
 	cueDuration = 5 #83.3ms, not a multiple of either half frame rate
 	cueCuebackSOA = 24 #400ms (nice fourier window for 7.5/10/15Hz stimuli)
 	cuebackDuration = 5 #83.3ms, not a multiple of either half frame rate
