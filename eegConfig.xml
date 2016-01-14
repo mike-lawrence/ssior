@@ -5,7 +5,7 @@
       <channels>
         <channel version="2">
           <input py:pytype="int">1</input>
-          <enable py:pytype="bool">false</enable>
+          <enable py:pytype="bool">true</enable>
           <name py:pytype="str">Ch1</name>
           <group py:pytype="int">0</group>
           <lowpass py:pytype="float">0.0</lowpass>
@@ -15,7 +15,7 @@
         </channel>
         <channel version="2">
           <input py:pytype="int">2</input>
-          <enable py:pytype="bool">false</enable>
+          <enable py:pytype="bool">true</enable>
           <name py:pytype="str">Ch2</name>
           <group py:pytype="int">0</group>
           <lowpass py:pytype="float">0.0</lowpass>
@@ -25,7 +25,7 @@
         </channel>
         <channel version="2">
           <input py:pytype="int">3</input>
-          <enable py:pytype="bool">false</enable>
+          <enable py:pytype="bool">true</enable>
           <name py:pytype="str">Ch3</name>
           <group py:pytype="int">0</group>
           <lowpass py:pytype="float">0.0</lowpass>
@@ -35,7 +35,7 @@
         </channel>
         <channel version="2">
           <input py:pytype="int">4</input>
-          <enable py:pytype="bool">false</enable>
+          <enable py:pytype="bool">true</enable>
           <name py:pytype="str">Ch4</name>
           <group py:pytype="int">0</group>
           <lowpass py:pytype="float">0.0</lowpass>
@@ -45,7 +45,7 @@
         </channel>
         <channel version="2">
           <input py:pytype="int">5</input>
-          <enable py:pytype="bool">false</enable>
+          <enable py:pytype="bool">true</enable>
           <name py:pytype="str">Ch5</name>
           <group py:pytype="int">0</group>
           <lowpass py:pytype="float">0.0</lowpass>
@@ -55,7 +55,7 @@
         </channel>
         <channel version="2">
           <input py:pytype="int">6</input>
-          <enable py:pytype="bool">false</enable>
+          <enable py:pytype="bool">true</enable>
           <name py:pytype="str">Ch6</name>
           <group py:pytype="int">0</group>
           <lowpass py:pytype="float">0.0</lowpass>
@@ -65,7 +65,7 @@
         </channel>
         <channel version="2">
           <input py:pytype="int">7</input>
-          <enable py:pytype="bool">false</enable>
+          <enable py:pytype="bool">true</enable>
           <name py:pytype="str">Ch7</name>
           <group py:pytype="int">0</group>
           <lowpass py:pytype="float">0.0</lowpass>
@@ -75,7 +75,7 @@
         </channel>
         <channel version="2">
           <input py:pytype="int">8</input>
-          <enable py:pytype="bool">false</enable>
+          <enable py:pytype="bool">true</enable>
           <name py:pytype="str">Ch8</name>
           <group py:pytype="int">0</group>
           <lowpass py:pytype="float">0.0</lowpass>
@@ -85,7 +85,7 @@
         </channel>
         <channel version="2">
           <input py:pytype="int">9</input>
-          <enable py:pytype="bool">false</enable>
+          <enable py:pytype="bool">true</enable>
           <name py:pytype="str">Ch9</name>
           <group py:pytype="int">0</group>
           <lowpass py:pytype="float">0.0</lowpass>
@@ -101,7 +101,7 @@
           <lowpass py:pytype="float">0.0</lowpass>
           <highpass py:pytype="float">0.0</highpass>
           <notchfilter py:pytype="bool">false</notchfilter>
-          <reference py:pytype="bool">false</reference>
+          <reference py:pytype="bool">true</reference>
         </channel>
         <channel version="2">
           <input py:pytype="int">11</input>
@@ -111,7 +111,7 @@
           <lowpass py:pytype="float">0.0</lowpass>
           <highpass py:pytype="float">0.0</highpass>
           <notchfilter py:pytype="bool">false</notchfilter>
-          <reference py:pytype="bool">false</reference>
+          <reference py:pytype="bool">true</reference>
         </channel>
         <channel version="2">
           <input py:pytype="int">12</input>
@@ -165,13 +165,13 @@
         </channel>
         <channel version="2">
           <input py:pytype="int">17</input>
-          <enable py:pytype="bool">true</enable>
+          <enable py:pytype="bool">false</enable>
           <name py:pytype="str">Ch17</name>
           <group py:pytype="int">0</group>
           <lowpass py:pytype="float">0.0</lowpass>
           <highpass py:pytype="float">0.0</highpass>
           <notchfilter py:pytype="bool">false</notchfilter>
-          <reference py:pytype="bool">true</reference>
+          <reference py:pytype="bool">false</reference>
         </channel>
         <channel version="2">
           <input py:pytype="int">18</input>
@@ -215,13 +215,13 @@
         </channel>
         <channel version="2">
           <input py:pytype="int">22</input>
-          <enable py:pytype="bool">true</enable>
+          <enable py:pytype="bool">false</enable>
           <name py:pytype="str">Ch22</name>
           <group py:pytype="int">0</group>
           <lowpass py:pytype="float">0.0</lowpass>
           <highpass py:pytype="float">0.0</highpass>
           <notchfilter py:pytype="bool">false</notchfilter>
-          <reference py:pytype="bool">true</reference>
+          <reference py:pytype="bool">false</reference>
         </channel>
         <channel version="2">
           <input py:pytype="int">23</input>
@@ -255,7 +255,7 @@
         </channel>
         <channel version="2">
           <input py:pytype="int">26</input>
-          <enable py:pytype="bool">true</enable>
+          <enable py:pytype="bool">false</enable>
           <name py:pytype="str">Ch26</name>
           <group py:pytype="int">0</group>
           <lowpass py:pytype="float">0.0</lowpass>
@@ -285,7 +285,7 @@
         </channel>
         <channel version="2">
           <input py:pytype="int">29</input>
-          <enable py:pytype="bool">true</enable>
+          <enable py:pytype="bool">false</enable>
           <name py:pytype="str">Ch29</name>
           <group py:pytype="int">0</group>
           <lowpass py:pytype="float">0.0</lowpass>
@@ -295,7 +295,7 @@
         </channel>
         <channel version="2">
           <input py:pytype="int">30</input>
-          <enable py:pytype="bool">true</enable>
+          <enable py:pytype="bool">false</enable>
           <name py:pytype="str">Ch30</name>
           <group py:pytype="int">0</group>
           <lowpass py:pytype="float">0.0</lowpass>
@@ -565,7 +565,7 @@
         </channel>
         <channel version="2">
           <input py:pytype="int">57</input>
-          <enable py:pytype="bool">true</enable>
+          <enable py:pytype="bool">false</enable>
           <name py:pytype="str">Ch57</name>
           <group py:pytype="int">0</group>
           <lowpass py:pytype="float">0.0</lowpass>
@@ -575,7 +575,7 @@
         </channel>
         <channel version="2">
           <input py:pytype="int">58</input>
-          <enable py:pytype="bool">true</enable>
+          <enable py:pytype="bool">false</enable>
           <name py:pytype="str">Ch58</name>
           <group py:pytype="int">0</group>
           <lowpass py:pytype="float">0.0</lowpass>
@@ -605,7 +605,7 @@
         </channel>
         <channel version="2">
           <input py:pytype="int">61</input>
-          <enable py:pytype="bool">true</enable>
+          <enable py:pytype="bool">false</enable>
           <name py:pytype="str">Ch61</name>
           <group py:pytype="int">0</group>
           <lowpass py:pytype="float">0.0</lowpass>
@@ -615,7 +615,7 @@
         </channel>
         <channel version="2">
           <input py:pytype="int">62</input>
-          <enable py:pytype="bool">true</enable>
+          <enable py:pytype="bool">false</enable>
           <name py:pytype="str">Ch62</name>
           <group py:pytype="int">0</group>
           <lowpass py:pytype="float">0.0</lowpass>
@@ -625,7 +625,7 @@
         </channel>
         <channel version="2">
           <input py:pytype="int">63</input>
-          <enable py:pytype="bool">true</enable>
+          <enable py:pytype="bool">false</enable>
           <name py:pytype="str">Ch63</name>
           <group py:pytype="int">0</group>
           <lowpass py:pytype="float">0.0</lowpass>

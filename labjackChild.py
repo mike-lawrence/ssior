@@ -46,7 +46,9 @@ qTo
 	while True:
 		if sendTriggers:
 			if not checkForNextZeroTime:
-				if d.getAIN(0)>1: #photosensor surpasses criterion
+				temp = d.getAIN(0)
+				# print temp
+				if temp>.5: #photosensor surpasses criterion
 					d.getFeedback(u3.BitStateWrite(IONumber=8,State=1))
 					nextZeroTime = time.time()+.010 #wait 10ms before setting the state back to zero, giving the amp time to pick it up
 					checkForNextZeroTime = True

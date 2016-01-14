@@ -75,7 +75,7 @@ qTo
 				shutil.move('temp.edf', edfPath)
 				if os.path.isfile(edfPath):
 					print edfPath+' exists'
-					subprocess.call('./edf2asc '+edfPath)
+					# subprocess.call('./edf2asc '+edfPath)
 		sys.exit()
 
 
@@ -87,8 +87,8 @@ qTo
 	eyelink.openDataFile(edfFileName)
 	eyelink.sendCommand("screen_pixel_coords =  0 0 %d %d" %(calibrationDisplayRes[0],calibrationDisplayRes[1]))
 	eyelink.sendMessage("DISPLAY_COORDS  0 0 %d %d" %(calibrationDisplayRes[0],calibrationDisplayRes[1]))
-	eyelink.sendCommand("saccade_velocity_threshold = 60")
-	eyelink.sendCommand("saccade_acceleration_threshold = 19500")
+	# eyelink.sendCommand("saccade_velocity_threshold = 60")
+	# eyelink.sendCommand("saccade_acceleration_threshold = 19500")
 
 	class EyeLinkCoreGraphicsPySDL2(pylink.EyeLinkCustomDisplay):
 		def __init__(self,targetSize,windowSize,windowPosition):
@@ -167,9 +167,12 @@ qTo
 			if doSounds:
 				if (eyeData==pylink.STARTSACC) or (eyeData==pylink.STARTBLINK):
 					eyeEvent = eyelink.getFloatData()
-					if isinstance(eyeEvent,pylink.StartSaccadeEvent):
-						if (not saccadeSound.stillPlaying()) and (not blinkSound.stillPlaying()):
-							saccadeSound.play()
+					if isinstance(eyeEvent,pylink.EndSaccadeEvent):
+						gaze = eyeEvent.getEndGaze()
+						distanceFromFixation = numpy.linalg.norm(numpy.array(gaze)-numpy.array(calibrationDisplayRes)/2)
+						if distanceFromFixation>calibrationDotSize:
+							if (not saccadeSound.stillPlaying()) and (not blinkSound.stillPlaying()):
+								saccadeSound.play()
 					elif isinstance(eyeEvent,pylink.StartBlinkEvent):
 						if (not saccadeSound.stillPlaying()) and (not blinkSound.stillPlaying()):
 							blinkSound.play()

@@ -16,7 +16,7 @@ if __name__ == '__main__':
 	stamperWindowColor = [255,255,255]
 	stamperDoBorder = True
 
-	doLabjack = False
+	doLabjack = True
 	labjackWindowSize = (200,200)
 	labjackWindowPosition = (500,0)
 
@@ -359,21 +359,22 @@ if __name__ == '__main__':
 		blitNumpy(feedbackArray,stimDisplayRes[0]/2,stimDisplayRes[1]/2,xCentered=True,yCentered=True)
 
 	def drawBoxes(brightSide):
-		if brightSide=='left':
-			leftColor = 1
-		else:
-			leftColor = 0
+		# if brightSide=='left':
+		# 	leftColor = 1
+		# else:
+		# 	leftColor = 0
+		leftColor = 0
 		gl.glColor3f(leftColor,leftColor,leftColor)
 		gl.glBegin(gl.GL_POLYGON)
 		gl.glVertex2f(0,0)
 		gl.glVertex2f(0,stimDisplayRes[1])
-		gl.glVertex2f(stimDisplayRes[0]/2,stimDisplayRes[1])
-		gl.glVertex2f(stimDisplayRes[0]/2,0)
-		gl.glEnd()
-		gl.glColor3f(1-leftColor,1-leftColor,1-leftColor)
-		gl.glBegin(gl.GL_POLYGON)
-		gl.glVertex2f(stimDisplayRes[0]/2,0)
-		gl.glVertex2f(stimDisplayRes[0]/2,stimDisplayRes[1])
+		# gl.glVertex2f(stimDisplayRes[0]/2,stimDisplayRes[1])
+		# gl.glVertex2f(stimDisplayRes[0]/2,0)
+		# gl.glEnd()
+		# gl.glColor3f(1-leftColor,1-leftColor,1-leftColor)
+		# gl.glBegin(gl.GL_POLYGON)
+		# gl.glVertex2f(stimDisplayRes[0]/2,0)
+		# gl.glVertex2f(stimDisplayRes[0]/2,stimDisplayRes[1])
 		gl.glVertex2f(stimDisplayRes[0],stimDisplayRes[1])
 		gl.glVertex2f(stimDisplayRes[0],0)
 		gl.glEnd()
@@ -450,18 +451,29 @@ if __name__ == '__main__':
 
 	
 	def setPhotoTrigger(on=False):
+		gl.glColor3f(0,0,0)
+		gl.glBegin(gl.GL_QUAD_STRIP)
+		gl.glVertex2f( 0 , stimDisplayRes[0]/54*3 )
+		gl.glVertex2f( stimDisplayRes[0]/54*3 , stimDisplayRes[0]/54*3 )
+		gl.glVertex2f( 0 , 0 )
+		gl.glVertex2f( stimDisplayRes[0]/54*3 , 0 )
+		gl.glVertex2f( 0 , 0 )
+		gl.glEnd()
 		if on:
 			gl.glColor3f(1,1,1)
-		else:
+			gl.glBegin(gl.GL_QUAD_STRIP)
+			# gl.glVertex2f( stimDisplayRes[0]/2 - stimDisplayRes[0]/40 , stimDisplayRes[1] )
+			# gl.glVertex2f( stimDisplayRes[0]/2 + stimDisplayRes[0]/40 , stimDisplayRes[1] )
+			# gl.glVertex2f( stimDisplayRes[0]/2 - stimDisplayRes[0]/40 , stimDisplayRes[1] - stimDisplayRes[1]/20 )
+			# gl.glVertex2f( stimDisplayRes[0]/2 + stimDisplayRes[0]/40 , stimDisplayRes[1] - stimDisplayRes[1]/20 )
+			# gl.glVertex2f( stimDisplayRes[0]/2 - stimDisplayRes[0]/40 , stimDisplayRes[1] )
+			gl.glVertex2f( stimDisplayRes[0]/54 , stimDisplayRes[0]/54*3 )
+			gl.glVertex2f( stimDisplayRes[0]/54*3 , stimDisplayRes[0]/54*3 )
+			gl.glVertex2f( stimDisplayRes[0]/54 , stimDisplayRes[0]/54 )
+			gl.glVertex2f( stimDisplayRes[0]/54*3 , stimDisplayRes[0]/54 )
+			gl.glVertex2f( stimDisplayRes[0]/54 , stimDisplayRes[0]/54 )
+			gl.glEnd()
 			gl.glColor3f(0,0,0)
-		gl.glBegin(gl.GL_QUAD_STRIP)
-		gl.glVertex2f( stimDisplayRes[0]/2 - stimDisplayRes[0]/40 , stimDisplayRes[1] )
-		gl.glVertex2f( stimDisplayRes[0]/2 + stimDisplayRes[0]/40 , stimDisplayRes[1] )
-		gl.glVertex2f( stimDisplayRes[0]/2 - stimDisplayRes[0]/40 , stimDisplayRes[1] - stimDisplayRes[1]/20 )
-		gl.glVertex2f( stimDisplayRes[0]/2 + stimDisplayRes[0]/40 , stimDisplayRes[1] - stimDisplayRes[1]/20 )
-		gl.glVertex2f( stimDisplayRes[0]/2 - stimDisplayRes[0]/40 , stimDisplayRes[1] )
-		gl.glEnd()
-		gl.glColor3f(0,0,0)
 
 
 	########
@@ -951,7 +963,8 @@ if __name__ == '__main__':
 					feedbackColor = [0,255,0,255]
 					print 'nogo'
 			#show feedback
-			gl.glClearColor(.5,.5,.5,1)
+			gl.glClearColor(0,0,0,1)
+			# gl.glClearColor(.5,.5,.5,1)
 			gl.glClear(gl.GL_COLOR_BUFFER_BIT)
 			drawFeedback(feedbackText,feedbackColor)
 			setPhotoTrigger()	
