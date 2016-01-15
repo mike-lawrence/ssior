@@ -8,7 +8,7 @@ qTo
 , calibrationDisplaySize = [1920,1080]
 , calibrationDotSize = 10
 , eyelinkIp = '100.1.1.1'
-, edfFileName = 'temp2.edf'
+, edfFileName = 'temp.edf'
 , edfPath = './_Data/temp.edf'
 , saccadeSoundFile = '_Stimuli/stop.wav'
 , blinkSoundFile = '_Stimuli/stop.wav'
@@ -75,10 +75,10 @@ qTo
 				eyelink.stopRecording()
 			eyelink.setOfflineMode()
 			eyelink.closeDataFile()
-			eyelink.receiveDataFile(edfFileName,'temp2.edf')
+			eyelink.receiveDataFile(edfFileName,'temp.edf')
 			eyelink.close()
-			if os.path.isfile('temp2.edf'):
-				shutil.move('temp2.edf', edfPath)
+			if os.path.isfile('temp.edf'):
+				shutil.move('temp.edf', edfPath)
 				# if os.path.isfile(edfPath):
 				# 	subprocess.call('./edf2asc -y ./'+edfPath,shell=True)
 		sys.exit() #process gets hung here if called when showing images from eyelink

@@ -40,7 +40,7 @@ qTo
 
 	sdl2.SDL_Init(sdl2.SDL_INIT_JOYSTICK) #uncomment if you want joystick input
 	sdl2.SDL_JoystickOpen(0) #uncomment if you want joystick input
-	lostFocus = False
+	lostFocus = True
 	lostColors = [red,black,red,white]
 	lastRefreshTime = time.time()
 	while True:
@@ -55,6 +55,8 @@ qTo
 			message = qTo.get()
 			if message=='quit':
 				sys.exit()
+			elif message=='raise':
+				sdl2.SDL_RaiseWindow(window.window)
 		for event in sdl2.ext.get_events():
 			if event.type==sdl2.SDL_WINDOWEVENT:
 				if event.window.windowID == windowID:
@@ -74,6 +76,7 @@ qTo
 					message['type'] = 'key'
 					message['time'] = event.key.timestamp*timeFreq
 					message['value'] = sdl2.SDL_GetKeyName(event.key.keysym.sym).lower()
+					message['keysym'] = event.key.keysym
 					qFrom.put(message)
 				elif event.type == sdl2.SDL_JOYAXISMOTION:
 					message['type'] = 'axis'
