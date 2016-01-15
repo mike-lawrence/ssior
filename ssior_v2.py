@@ -35,7 +35,6 @@ if __name__ == '__main__':
 	triggerRightAxis = 5
 	triggerCriterionValue = -(2**16/4) #16 bit precision on the triggers, split above/below 0
 
-	brightSideList = ['left','right']
 	fastSideList = ['left','right']
 	cueSideList = ['left','right']
 	targetSideList = ['left','right']
@@ -43,10 +42,10 @@ if __name__ == '__main__':
 
 	#times are specified in frames @ 60Hz
 
-	slowCycleHalfFrames = 3 #half the cycle length; 3 frames @ 60Hz = 10Hz
-	fastCycleHalfFrames = 4 #half the cycle length; 4 frames @ 60Hz = 7.5Hz
+	slowCycleHalfFrames = 2 #half the cycle length
+	fastCycleHalfFrames = 2 #half the cycle length
 
-	fixationDurationList = [24*3,24*4,24*5,24*6] #multiples of 24 (400ms)
+	fixationDurationList = range(60,120,2) 
 	cueDuration = 5 #83.3ms, not a multiple of either half frame rate
 	cueCuebackSOA = 24 #400ms (nice fourier window for 7.5/10/15Hz stimuli)
 	cuebackDuration = 5 #83.3ms, not a multiple of either half frame rate
@@ -358,43 +357,6 @@ if __name__ == '__main__':
 		feedbackArray = text2numpy(feedbackText,feedbackFont,fg=feedbackColor,bg=[0,0,0,0])
 		blitNumpy(feedbackArray,stimDisplayRes[0]/2,stimDisplayRes[1]/2,xCentered=True,yCentered=True)
 
-	def drawBoxes(brightSide):
-		# if brightSide=='left':
-		# 	leftColor = 1
-		# else:
-		# 	leftColor = 0
-		leftColor = 0
-		gl.glColor3f(leftColor,leftColor,leftColor)
-		gl.glBegin(gl.GL_POLYGON)
-		gl.glVertex2f(0,0)
-		gl.glVertex2f(0,stimDisplayRes[1])
-		# gl.glVertex2f(stimDisplayRes[0]/2,stimDisplayRes[1])
-		# gl.glVertex2f(stimDisplayRes[0]/2,0)
-		# gl.glEnd()
-		# gl.glColor3f(1-leftColor,1-leftColor,1-leftColor)
-		# gl.glBegin(gl.GL_POLYGON)
-		# gl.glVertex2f(stimDisplayRes[0]/2,0)
-		# gl.glVertex2f(stimDisplayRes[0]/2,stimDisplayRes[1])
-		gl.glVertex2f(stimDisplayRes[0],stimDisplayRes[1])
-		gl.glVertex2f(stimDisplayRes[0],0)
-		gl.glEnd()
-
-
-	# def drawFixationStim(x,y,radius):
-	# 	thisDegree = 0
-	# 	for i in range(12):
-	# 		thisDegree = i*30
-	# 		if i%2==1:
-	# 			gl.glColor3f(1,1,1)
-	# 		else:
-	# 			gl.glColor3f(0,0,0)
-	# 		gl.glBegin(gl.GL_POLYGON)
-	# 		gl.glVertex2f(x,y)
-	# 		for j in range(30):
-	# 			thisDegree = thisDegree+1
-	# 			gl.glVertex2f( x + math.sin(thisDegree*math.pi/180)*radius , y + math.cos(thisDegree*math.pi/180)*radius )
-	# 		gl.glEnd()
-
 
 	def drawDot(size,xOffset=0):
 		gl.glColor3f(.5,.5,.5)
@@ -600,26 +562,22 @@ if __name__ == '__main__':
 			sex = getInput('Sex (m or f): ')
 			age = getInput('Age (2-digit number): ')
 			handedness = getInput('Handedness (r or l): ')
-			password = getInput('Please enter a password (ex. B00): ')
 		else:
 			sex = 'test'
 			age = 'test'
 			handedness = 'test'
-			password = 'test'
-		password = hashlib.sha512(password).hexdigest()
-		subInfo = [ sid , year , month , day , hour , minute , sex , age , handedness , password ]
+		subInfo = [ sid , year , month , day , hour , minute , sex , age , handedness ]
 		return subInfo
 
 
 	#define a function that generates a randomized list of trial-by-trial stimulus information representing a factorial combination of the independent variables.
 	def getTrials():
 		trials=[]
-		for brightSide in brightSideList:
-			for fastSide in fastSideList:
-				for cueSide in cueSideList:
-					for targetSide in targetSideList:
-						for targetIdentity in targetIdentityList:
-							trials.append([brightSide,fastSide,cueSide,targetSide,targetIdentity])
+		for fastSide in fastSideList:
+			for cueSide in cueSideList:
+				for targetSide in targetSideList:
+					for targetIdentity in targetIdentityList:
+						trials.append([fastSide,cueSide,targetSide,targetIdentity])
 		random.shuffle(trials)
 		return trials
 
@@ -688,7 +646,7 @@ if __name__ == '__main__':
 			trialInfo = trialList.pop(0) #iterates through trial types (ensures equal cell sizes for unbiased analysis)
 
 			#parse the trial info
-			brightSide,fastSide,cueSide,targetSide,targetIdentity = trialInfo
+			fastSide,cueSide,targetSide,targetIdentity = trialInfo
 			
 			#generate fixation duration
 			fixationDuration = random.choice(fixationDurationList)
@@ -715,11 +673,9 @@ if __name__ == '__main__':
 				labjackChild.qTo.put('trialStart')
 
 			#prep and show the buffers
-			drawBoxes(brightSide)
 			drawDot(fixationSize)
 			setPhotoTrigger(on=True)
 			stimDisplay.refresh()
-			drawBoxes(brightSide)
 			drawDot(fixationSize)
 			setPhotoTrigger(on=True)
 			stimDisplay.refresh() #this one should block until it's actually displayed
@@ -788,7 +744,6 @@ if __name__ == '__main__':
 			while not trialDone:
 				frameNum = frameNum + 1
 				frameText = ''
-				drawBoxes(brightSide)
 				drawDot(fixationSize)
 				#check if it's time to deal with the cue
 				if frameNum>=cueOnFrame:
@@ -835,7 +790,7 @@ if __name__ == '__main__':
 									else:
 										trialDone = True
 				#check whether to draw the faster flicker
-				if (frameNum%(fastCycleHalfFrames*2))<fastCycleHalfFrames:
+				if (frameNum%(fastCycleHalfFrames*2))==1:
 					# frameText = frameText + ' fastOn'
 					if fastSide=='left':
 						drawDot(flickerSize,-offsetSize)
@@ -848,7 +803,7 @@ if __name__ == '__main__':
 					if not fastOffMessageSent:
 						sendFastOffMessage = True
 				#check whether to draw the slower flicker
-				if (frameNum%(slowCycleHalfFrames*2))<slowCycleHalfFrames:
+				if (frameNum%(slowCycleHalfFrames*2))==1:
 					# frameText = frameText + ' slowOn'
 					if fastSide!='left':
 						drawDot(flickerSize,-offsetSize)
@@ -990,7 +945,7 @@ if __name__ == '__main__':
 			triggerDataToWriteRight = '\n'.join([trialDescrptor + '\tright\t' + '\t'.join(map(str,i)) for i in triggerData[1]])
 			writerChild.qTo.put(['write','trigger',triggerDataToWriteLeft])
 			writerChild.qTo.put(['write','trigger',triggerDataToWriteRight])
-			dataToWrite = '\t'.join(map(str,[ subInfoForFile , messageViewingTime , block , trialNum , brightSide , fastSide , cueSide , targetSide , targetIdentity , fixationDuration , rt , notDouble , preTargetResponse , feedbackResponse ]))
+			dataToWrite = '\t'.join(map(str,[ subInfoForFile , messageViewingTime , block , trialNum , fastSide , cueSide , targetSide , targetIdentity , fixationDuration , rt , notDouble , preTargetResponse , feedbackResponse ]))
 			writerChild.qTo.put(['write','data',dataToWrite])
 			if doEyelink:
 				if response=='p':
@@ -1013,8 +968,6 @@ if __name__ == '__main__':
 
 	#get subject info
 	subInfo = getSubInfo()
-	password = subInfo[-1]
-	subInfo = subInfo[0:(len(subInfo)-1)]
 
 	if not os.path.exists('_Data'):
 		os.mkdir('_Data')
@@ -1031,8 +984,8 @@ if __name__ == '__main__':
 		eyelinkChild.qTo.put(['edfPath','_Data/'+filebase+'/'+filebase+'_eyelink.edf'])
 
 	writerChild.qTo.put(['newFile','data','_Data/'+filebase+'/'+filebase+'_data.txt'])
-	writerChild.qTo.put(['write','data',password])
-	header ='\t'.join(['id' , 'year' , 'month' , 'day' , 'hour' , 'minute' , 'sex' , 'age'  , 'handedness' , 'messageViewingTime' , 'block' , 'trialNum' , 'brightSide' , 'fastSide' , 'cueSide' , 'targetSide' , 'targetIdentity' , 'fixationDuration', 'rt' , 'notDouble' , 'preTargetResponse' , 'feedbackResponse'])
+	writerChild.qTo.put(['write','data',seed])
+	header ='\t'.join(['id' , 'year' , 'month' , 'day' , 'hour' , 'minute' , 'sex' , 'age'  , 'handedness' , 'messageViewingTime' , 'block' , 'trialNum' , 'fastSide' , 'cueSide' , 'targetSide' , 'targetIdentity' , 'fixationDuration', 'rt' , 'notDouble' , 'preTargetResponse' , 'feedbackResponse'])
 	writerChild.qTo.put(['write','data',header])
 
 	writerChild.qTo.put(['newFile','trigger','_Data/'+filebase+'/'+filebase+'_trigger.txt'])
