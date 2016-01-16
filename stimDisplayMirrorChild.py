@@ -42,7 +42,7 @@ qTo
 				image = Image.fromstring(mode="RGB", size=res, data=buffer)
 				image = image.transpose(Image.ROTATE_270)
 				# start = time.time()
-				# image.thumbnail([res[1]/2,res[0]/2],Image.LANCZOS)
+				image.thumbnail([res[1]/2,res[0]/2],Image.LANCZOS)
 				# print ['resize',time.time()-start]
 				windowArray[:,:,0:3] = image
 				window.refresh()
