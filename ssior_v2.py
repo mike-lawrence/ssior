@@ -1,3 +1,15 @@
+# -*- coding: utf-8 -*-
+
+#todo
+#- add frame-to-frame stats per trial (mean,sd)
+#- make sure webcam can recover using haar cascades
+#- flip webcam image
+#- decide between trial-by-trial (slow, accurate) vs block-by-block (fast,less accurate) calibration check
+#	- if trial-by-trial, use pointers on bumpers to initiate check
+#- have pytracker send data to writer for output
+#- main sends events to writer for inclusion in pytracker output
+
+
 if __name__ == '__main__':
 	########
 	#Important parameters
@@ -16,7 +28,7 @@ if __name__ == '__main__':
 	photoStimSize = [20,20]
 	photoStimPosition = [stimDisplayPosition[0]/2-photoStimSize[0]/2,stimDisplayPosition[1]-photoStimSize[1]/2]
 
-	doEyelink = True
+	doEyelink = False
 	eyelinkWindowPosition = (400,0)#(1920/2+1,400)
 	calibrationDisplaySizeInDegrees = [5,5]
 	calibrationDotSizeInDegrees = 1
@@ -28,36 +40,37 @@ if __name__ == '__main__':
 	triggerRightAxis = 5
 	triggerCriterionValue = -(2**16/4) #16 bit precision on the triggers, split above/below 0
 
-	fastSideList = ['left','right']
+	firstSideList = ['left','right']
 	cueSideList = ['left','right']
 	targetSideList = ['left','right']
-	targetIdentityList = ['square','diamond']
+	# targetIdentityList = ['square','diamond']
+	targetIdentityList = ['square']
 
 	#times are specified in frames @ 60Hz
 
-	slowCycleHalfFrames = 2 #half the cycle length
-	fastCycleHalfFrames = 2 #half the cycle length
+	#If using half frames of 1, make sure flicker-free is turned OFF on OLED
+	#If using half frames of >1, make sure flicker-free is turned ON on OLED
+	secondCycleHalfFrames = 2 #half the cycle length 
+	firstCycleHalfFrames = 2 #half the cycle length
 
-	fixationDurationList = range(60,120,2) #1s-2s, timed to not coincide with either flicker
-	cueDuration = 6 #100ms
-	cueCuebackSoa = 30 #500ms
-	cuebackDuration = 6 #100ms
-	cuebackTargetSoa = 30 #for a total cue-target-Soa of 1s
-	responseTimeout = 60 #1000ms
+	fixationDurationList = range(32*2,32*4,4) #frames
+	cueDuration = 4 #frames
+	cueCuebackSoa = 32 #frames
+	cuebackDuration = 4 #frames
+	cuebackTargetSoa = 32 #frames
+	responseTimeout = 64 #frames
 
-	feedbackDuration = 1.000 #specified in seconds
+	feedbackDuration = 0.500 #specified in seconds
 
 	numberOfBlocks = 10 
-	repsPerBlock = 2
+	repsPerBlock = 10
 
 	instructionSizeInDegrees = 1 
 	feedbackSizeInDegrees = 1
 
 	fixationSizeInDegrees = .1#.25
-	offsetSizeInDegrees = 13
-	targetSizeInDegrees = 3
-	targetThicknessProportion = .8
-	flickerSizeInDegrees = 1
+	offsetSizeInDegrees = 20#5#10
+	flickerSizeInDegrees = 5#2
 
 	textWidth = .9 #specify the proportion of the stimDisplay to use when drawing instructions
 
@@ -120,8 +133,6 @@ if __name__ == '__main__':
 	feedbackSize = int(feedbackSizeInDegrees*PPD)
 	fixationSize = int(fixationSizeInDegrees*PPD)
 	offsetSize = int(offsetSizeInDegrees*PPD)
-	targetSize = int(targetSizeInDegrees*PPD)
-	targetThickness = int(targetSizeInDegrees*PPD*targetThicknessProportion)
 	flickerSize = int(flickerSizeInDegrees*PPD)
 
 	calibrationDisplaySize = [int(calibrationDisplaySizeInDegrees[0]*PPD),int(calibrationDisplaySizeInDegrees[0]*PPD)]
@@ -348,15 +359,15 @@ if __name__ == '__main__':
 		if grey:
 			gl.glColor3f(.25,.25,.25)
 		else:
-			gl.glColor3f(1,1,1)
+			gl.glColor3f(.5,.5,.5)
 		gl.glBegin(gl.GL_POLYGON)
 		for i in range(360):
-			gl.glVertex2f( stimDisplayRes[0]/2+xOffset + math.sin(i*math.pi/180)*size , stimDisplayRes[1]/2 + math.cos(i*math.pi/180)*size)
+			gl.glVertex2f( stimDisplayRes[0]/2+xOffset + math.sin(i*math.pi/180)*size/2 , stimDisplayRes[1]/2 + math.cos(i*math.pi/180)*size/2)
 		gl.glEnd()
 
 
 	def drawRing(xOffset,outer,inner):
-		gl.glColor3f(1,1,1)
+		gl.glColor3f(.5,.5,.5)
 		gl.glBegin(gl.GL_QUAD_STRIP)
 		for i in range(360):
 			gl.glVertex2f(stimDisplayRes[0]/2+xOffset + math.sin(i*math.pi/180)*outer,stimDisplayRes[1]/2 + math.cos(i*math.pi/180)*outer)
@@ -366,42 +377,41 @@ if __name__ == '__main__':
 		gl.glEnd()
 
 
-	def drawSquare(xOffset,outer,inner):
-		gl.glColor3f(1,1,1)
-		gl.glBegin(gl.GL_QUAD_STRIP)
-		gl.glVertex2f( stimDisplayRes[0]/2+xOffset-outer/2 , stimDisplayRes[1]/2-outer/2 )
-		gl.glVertex2f( stimDisplayRes[0]/2+xOffset-inner/2 , stimDisplayRes[1]/2-inner/2 )
-		gl.glVertex2f( stimDisplayRes[0]/2+xOffset+outer/2 , stimDisplayRes[1]/2-outer/2 )
-		gl.glVertex2f( stimDisplayRes[0]/2+xOffset+inner/2 , stimDisplayRes[1]/2-inner/2 )
-		gl.glVertex2f( stimDisplayRes[0]/2+xOffset+outer/2 , stimDisplayRes[1]/2+outer/2 )
-		gl.glVertex2f( stimDisplayRes[0]/2+xOffset+inner/2 , stimDisplayRes[1]/2+inner/2 )
-		gl.glVertex2f( stimDisplayRes[0]/2+xOffset-outer/2 , stimDisplayRes[1]/2+outer/2 )
-		gl.glVertex2f( stimDisplayRes[0]/2+xOffset-inner/2 , stimDisplayRes[1]/2+inner/2 )
-		gl.glVertex2f( stimDisplayRes[0]/2+xOffset-outer/2 , stimDisplayRes[1]/2-outer/2 )
-		gl.glVertex2f( stimDisplayRes[0]/2+xOffset-inner/2 , stimDisplayRes[1]/2-inner/2 )
-		gl.glEnd()
-
-
-	def drawDiamond(xOffset,outer,inner):
-		gl.glColor3f(1,1,1)
-		gl.glBegin(gl.GL_QUAD_STRIP)
-		outer = math.sqrt((outer**2)*2)/2
-		inner = math.sqrt((inner**2)*2)/2
+	def drawSquare(xOffset,size):
+		gl.glColor3f(.5,.5,.5)
+		outer = size
+		xOffset = stimDisplayRes[0]/2+xOffset
 		yOffset = stimDisplayRes[1]/2
-		gl.glVertex2f( stimDisplayRes[0]/2+xOffset-outer , yOffset )
-		gl.glVertex2f( stimDisplayRes[0]/2+xOffset-inner , yOffset )
-		gl.glVertex2f( stimDisplayRes[0]/2+xOffset , yOffset-outer )
-		gl.glVertex2f( stimDisplayRes[0]/2+xOffset , yOffset-inner )
-		gl.glVertex2f( stimDisplayRes[0]/2+xOffset+outer , yOffset )
-		gl.glVertex2f( stimDisplayRes[0]/2+xOffset+inner , yOffset )
-		gl.glVertex2f( stimDisplayRes[0]/2+xOffset , yOffset+outer )
-		gl.glVertex2f( stimDisplayRes[0]/2+xOffset , yOffset+inner )
-		gl.glVertex2f( stimDisplayRes[0]/2+xOffset-outer , yOffset )
-		gl.glVertex2f( stimDisplayRes[0]/2+xOffset-inner , yOffset )
+		gl.glBegin(gl.GL_TRIANGLES)
+		gl.glVertex2f( xOffset-outer/2 , yOffset-outer/2 )
+		gl.glVertex2f( xOffset-outer/2 , yOffset+outer/2 )
+		gl.glVertex2f( xOffset+outer/2 , yOffset+outer/2 )
 		gl.glEnd()
+		gl.glBegin(gl.GL_TRIANGLES)
+		gl.glVertex2f( xOffset-outer/2 , yOffset-outer/2 )
+		gl.glVertex2f( xOffset+outer/2 , yOffset-outer/2 )
+		gl.glVertex2f( xOffset+outer/2 , yOffset+outer/2 )
+		gl.glEnd()
+
+	def drawDiamond(xOffset,size):
+		gl.glColor3f(.5,.5,.5)
+		outer = math.sqrt((size**2)*2)
+		xOffset = stimDisplayRes[0]/2 + xOffset
+		yOffset = stimDisplayRes[1]/2
+		gl.glBegin(gl.GL_TRIANGLES)
+		gl.glVertex2f( xOffset , yOffset-outer/2 )
+		gl.glVertex2f( xOffset-outer/2 , yOffset )
+		gl.glVertex2f( xOffset , yOffset+outer/2 )
+		gl.glEnd()
+		gl.glBegin(gl.GL_TRIANGLES)
+		gl.glVertex2f( xOffset , yOffset-outer/2 )
+		gl.glVertex2f( xOffset+outer/2 , yOffset )
+		gl.glVertex2f( xOffset , yOffset+outer/2 )
+		gl.glEnd()
+
 
 	def drawCalTarget(x=stimDisplayRes[0]/2,y=stimDisplayRes[1]/2):
-		gl.glColor3f(1,1,1)
+		gl.glColor3f(.5,.5,.5)
 		gl.glBegin(gl.GL_POLYGON)
 		for i in range(360):
 			gl.glVertex2f( x + math.sin(i*math.pi/180.0)*(calibrationDotSize/2.0) , y + math.cos(i*math.pi/180.0)*(calibrationDotSize/2.0))
@@ -573,12 +583,12 @@ if __name__ == '__main__':
 	#define a function that generates a randomized list of trial-by-trial stimulus information representing a factorial combination of the independent variables.
 	def getTrials():
 		trials=[]
-		for fastSide in fastSideList:
+		for firstSide in firstSideList:
 			for cueSide in cueSideList:
 				for targetSide in targetSideList:
 					for targetIdentity in targetIdentityList:
 						for i in range(repsPerBlock):
-							trials.append([fastSide,cueSide,targetSide,targetIdentity])
+							trials.append([firstSide,cueSide,targetSide,targetIdentity])
 		random.shuffle(trials)
 		return trials
 
@@ -603,7 +613,7 @@ if __name__ == '__main__':
 			trialNum = trialNum + 1
 			
 			#parse the trial info
-			fastSide,cueSide,targetSide,targetIdentity = trialInfo
+			firstSide,cueSide,targetSide,targetIdentity = trialInfo
 			
 			#generate fixation duration
 			fixationDuration = random.choice(fixationDurationList)
@@ -707,10 +717,9 @@ if __name__ == '__main__':
 
 			#prep and show the buffers
 			drawDot(fixationSize,grey=True)
-			drawPhotoStim()
 			stimDisplay.refresh()
 			drawDot(fixationSize,grey=True)
-			drawPhotoStim()
+			drawPhotoStim() #photoTrigger will be on for 1 frame
 			stimDisplay.refresh() #this one should block until it's actually displayed
 
 			#get the trial start time 
@@ -726,20 +735,20 @@ if __name__ == '__main__':
 			targetOffFrame = targetOnFrame + responseTimeout
 			targetOnTime = trialStartTime + targetOnFrame/60.0 #overwritten later *if* the target appears
 			
-			sendFastOnMessage = False
-			sendFastOffMessage = False
-			sendSlowOnMessage = False
-			sendSlowOffMessage = False
+			sendFirstOnMessage = False
+			sendFirstOffMessage = False
+			sendSecondOnMessage = False
+			sendSecondOffMessage = False
 			sendCueOnMessage = False
 			sendCueOffMessage = False
 			sendCuebackOnMessage = False
 			sendCuebackOffMessage = False
 			sendTargetOnMessage = False
 
-			fastOnMessageSent = False
-			fastOffMessageSent = False
-			slowOnMessageSent = False
-			slowOffMessageSent = False
+			firstOnMessageSent = False
+			firstOffMessageSent = False
+			secondOnMessageSent = False
+			secondOffMessageSent = False
 			cueOnMessageSent = False
 			cueOffMessageSent = False
 			cuebackOnMessageSent = False
@@ -778,10 +787,20 @@ if __name__ == '__main__':
 						if not cueOnMessageSent:
 							sendCueOnMessage = True
 							doPhotoTrigger = True
-						if cueSide=='left':
-							drawRing(-offsetSize,targetSize,targetSize*targetThicknessProportion)
-						else:
-							drawRing(offsetSize,targetSize,targetSize*targetThicknessProportion)
+						if cueSide=='left': #cue should appear on the left
+							if firstSide=='left': #cue side == first side == left
+								if (frameNum%(firstCycleHalfFrames*2))==0:
+									drawDot(flickerSize*2,-offsetSize)
+							else: #cue side == second side == left
+								if (frameNum%(secondCycleHalfFrames*2))==secondCycleHalfFrames:
+									drawDot(flickerSize*2,-offsetSize)
+						else: #cue should appear on the right
+							if firstSide=='right': #cue side == first side == right
+								if (frameNum%(firstCycleHalfFrames*2))==0:
+									drawDot(flickerSize*2,offsetSize)
+							else: #cue side == second side == right
+								if (frameNum%(secondCycleHalfFrames*2))==secondCycleHalfFrames:
+									drawDot(flickerSize*2,offsetSize)
 					else:#frame>=cueOffFrame
 						# frameText = frameText + ' cueOff'
 						if not cueOffMessageSent:
@@ -792,7 +811,7 @@ if __name__ == '__main__':
 								# frameText = frameText + ' cueBackOn'
 								if not cuebackOnMessageSent:
 									sendCuebackOnMessage = True
-								drawDot(fixationSize*2)
+								drawDot(fixationSize*10)
 							else: #frame>=cueBackOffFrame
 								# frameText = frameText + ' cueBackOff'
 								if not cuebackOffMessageSent:
@@ -803,48 +822,65 @@ if __name__ == '__main__':
 										# frameText = frameText + ' targetOn'
 										if not targetOnMessageSent:
 											sendTargetOnMessage = True
-										if targetSide=='left':
-											if targetIdentity=='square':
-												drawSquare(-offsetSize,targetSize,targetSize*targetThicknessProportion)
-											else:
-												drawDiamond(-offsetSize,targetSize,targetSize*targetThicknessProportion)
-										else:
-											if targetIdentity=='square':
-												drawSquare(offsetSize,targetSize,targetSize*targetThicknessProportion)
-											else:
-												drawDiamond(offsetSize,targetSize,targetSize*targetThicknessProportion)
+											doPhotoTrigger = True
+										if targetSide=='left': #target should appear on the left
+											if firstSide=='left': #target side == first side == left
+												if (frameNum%(firstCycleHalfFrames*2))==0:
+													if targetIdentity=='square':
+														drawSquare(-offsetSize,flickerSize)
+													else:
+														drawDiamond(-offsetSize,flickerSize)
+											else: #target side == second side == left
+												if (frameNum%(secondCycleHalfFrames*2))==secondCycleHalfFrames:
+													if targetIdentity=='square':
+														drawSquare(-offsetSize,flickerSize)
+													else:
+														drawDiamond(-offsetSize,flickerSize)
+										else: #target should appear on the right
+											if firstSide=='right': #target side == first side == right
+												if (frameNum%(firstCycleHalfFrames*2))==0:
+													if targetIdentity=='square':
+														drawSquare(offsetSize,flickerSize)
+													else:
+														drawDiamond(offsetSize,flickerSize)
+											else: #target side == second side == right
+												if (frameNum%(secondCycleHalfFrames*2))==secondCycleHalfFrames:
+													if targetIdentity=='square':
+														drawSquare(offsetSize,flickerSize)
+													else:
+														drawDiamond(offsetSize,flickerSize)
 									else:
 										trialDone = True #trial timeout
 				########
-				#check whether to draw the faster flicker
+				#check whether to draw the firster flicker
 				########
-				if (frameNum%(fastCycleHalfFrames*2))==1:
-					# frameText = frameText + ' fastOn'
-					if fastSide=='left':
+				if (frameNum%(firstCycleHalfFrames*2))==0:
+					# frameText = frameText + ' firstOn'
+					if firstSide=='left':
 						drawDot(flickerSize,-offsetSize)
 					else:
 						drawDot(flickerSize,offsetSize)
-					if not fastOnMessageSent:
-						sendFastOnMessage = True
+					if not firstOnMessageSent:
+						sendFirstOnMessage = True
 				else:
-					# frameText = frameText + ' fastOff'
-					if not fastOffMessageSent:
-						sendFastOffMessage = True
+					# frameText = frameText + ' firstOff'
+					if not firstOffMessageSent:
+						sendFirstOffMessage = True
 				########
-				#check whether to draw the slower flicker
+				#check whether to draw the seconder flicker
 				########
-				if (frameNum%(slowCycleHalfFrames*2))==1:
-					# frameText = frameText + ' slowOn'
-					if fastSide!='left':
+				if (frameNum%(secondCycleHalfFrames*2))==secondCycleHalfFrames:
+					# frameText = frameText + ' secondOn'
+					if firstSide!='left':
 						drawDot(flickerSize,-offsetSize)
 					else:
 						drawDot(flickerSize,offsetSize)
-					if not slowOnMessageSent:
-						sendSlowOnMessage = True
+					if not secondOnMessageSent:
+						sendSecondOnMessage = True
 				else:
-					# frameText = frameText + ' slowOff'
-					if not slowOffMessageSent:
-						sendSlowOffMessage = True
+					# frameText = frameText + ' secondOff'
+					if not secondOffMessageSent:
+						sendSecondOffMessage = True
 				########
 				# Manage the photo trigger
 				########
@@ -862,26 +898,26 @@ if __name__ == '__main__':
 				########
 				# Send messages as necessary
 				########
-				if sendFastOnMessage:
-					#queueFromExpToEEG.put([frameTime,'fast on'])
-					sendFastOnMessage = False
-					fastOnMessageSent = True
-					fastOffMessageSent = False
-				if sendFastOffMessage:
-					#queueFromExpToEEG.put([frameTime,'fast off'])
-					sendFastOffMessage = False
-					fastOffMessageSent = True
-					fastOnMessageSent = False
-				if sendSlowOnMessage:
-					#queueFromExpToEEG.put([frameTime,'slow on'])
-					sendSlowOnMessage = False
-					slowOnMessageSent = True
-					slowOffMessageSent = False
-				if sendSlowOffMessage:
-					#queueFromExpToEEG.put([frameTime,'slow off'])
-					sendSlowOffMessage = False
-					slowOffMessageSent = True
-					slowOnMessageSent = False
+				if sendFirstOnMessage:
+					#queueFromExpToEEG.put([frameTime,'first on'])
+					sendFirstOnMessage = False
+					firstOnMessageSent = True
+					firstOffMessageSent = False
+				if sendFirstOffMessage:
+					#queueFromExpToEEG.put([frameTime,'first off'])
+					sendFirstOffMessage = False
+					firstOffMessageSent = True
+					firstOnMessageSent = False
+				if sendSecondOnMessage:
+					#queueFromExpToEEG.put([frameTime,'second on'])
+					sendSecondOnMessage = False
+					secondOnMessageSent = True
+					secondOffMessageSent = False
+				if sendSecondOffMessage:
+					#queueFromExpToEEG.put([frameTime,'second off'])
+					sendSecondOffMessage = False
+					secondOffMessageSent = True
+					secondOnMessageSent = False
 				if sendCueOnMessage:
 					if doEyelink:
 						eyelinkChild.qTo.put(['sendMessage','cueOn\t'+trialDescriptor])
@@ -960,7 +996,7 @@ if __name__ == '__main__':
 								if event['value']<triggerCriterionValue:
 									rightTriggerFellBelowCriterion = True
 									timeRightTriggerFellBelowCriterion = event['time']*1000
-				if leftTriggerFellBelowCriterion & rightTriggerFellBelowCriterion:
+				if leftTriggerFellBelowCriterion or rightTriggerFellBelowCriterion:
 					responseMade = True
 					trialDone = True #end trial on response
 			########
@@ -981,23 +1017,40 @@ if __name__ == '__main__':
 				feedbackColor = [255,0,0,255]
 				# print 'main: too soon'
 			elif responseMade: #response made after target presentation
+				if leftTriggerRoseAboveCriterion and rightTriggerRoseAboveCriterion:
+					response = 'both'
+					rt = 'NA'
+				elif leftTriggerRoseAboveCriterion:
+					response = 'left'
+					rt = timeLeftTriggerFellBelowCriterion - (targetOnTime*1000)
+				else:
+					response = 'right'
+					rt = timeRightTriggerFellBelowCriterion - (targetOnTime*1000)
 				if targetIdentity=='diamond': #not supposed to respond to diamonds
-					feedbackText = 'Oops!'
+					feedbackText = 'X'
 					feedbackColor = [255,0,0,255]
 					# print 'main: false alarm'
 				else:
-					rt = (timeLeftTriggerFellBelowCriterion+timeRightTriggerFellBelowCriterion)/2 - (targetOnTime*1000)
-					feedbackText = str(int(rt/10)) #tenths of seconds
-					feedbackColor = [127,127,127,255]
-					# print 'main: '+feedbackText
-			elif targetIdentity=='square':
-				feedbackText = 'Miss!'
-				feedbackColor = [255,0,0,255]
-				# print 'main: miss'
+					if response=='both':
+						feedbackText = 'X'
+						feedbackColor = [255,0,0,255]
+					else:
+						feedbackText = str(int(rt/100)) #units of 100ms
+						if targetSide==response:
+							feedbackColor = [127,127,127,255]
+						else:
+							feedbackColor = [255,0,0,255]
+						# print 'main: '+feedbackText
 			else:
-				feedbackText = 'Good'
-				feedbackColor = [127,127,127,255]
-			print 'main: block '+str(block)+', trial '+str(trial)+' '+feedback
+				response = 'NA'
+				if targetIdentity=='square':
+					feedbackText = '?'
+					feedbackColor = [255,0,0,255]
+					# print 'main: miss'
+				else:
+					feedbackText = u'✓'
+					feedbackColor = [127,127,127,255]
+			print 'main: block '+str(block)+', trial '+str(trialNum)+' '+feedbackText
 			#show feedback
 			drawFeedback(feedbackText,feedbackColor)
 			drawPhotoStim()	
@@ -1025,7 +1078,7 @@ if __name__ == '__main__':
 			triggerDataToWriteRight = '\n'.join([trialDescriptor + '\tright\t' + '\t'.join(map(str,i)) for i in triggerData['right']])
 			writerChild.qTo.put(['write','trigger',triggerDataToWriteLeft])
 			writerChild.qTo.put(['write','trigger',triggerDataToWriteRight])
-			dataToWrite = '\t'.join(map(str,[ subInfoForFile , messageViewingTime , block , trialNum , fastSide , cueSide , targetSide , targetIdentity , fixationDuration , responseMade , rt , preTargetResponse , saccadeMade , blinkMade ]))
+			dataToWrite = '\t'.join(map(str,[ subInfoForFile , messageViewingTime , block , trialNum , firstSide , cueSide , targetSide , targetIdentity , fixationDuration , responseMade , response , rt , preTargetResponse , saccadeMade , blinkMade ]))
 			writerChild.qTo.put(['write','data',dataToWrite])
 			if recalibrationRequested:
 				doCalibration()
@@ -1059,7 +1112,7 @@ if __name__ == '__main__':
 
 	writerChild.qTo.put(['newFile','data','_Data/'+filebase+'/'+filebase+'_data.txt'])
 	writerChild.qTo.put(['write','data',str(participantRandomSeed)])
-	header ='\t'.join(['id' , 'year' , 'month' , 'day' , 'hour' , 'minute' , 'sex' , 'age'  , 'handedness' , 'messageViewingTime' , 'block' , 'trialNum' , 'fastSide' , 'cueSide' , 'targetSide' , 'targetIdentity' , 'fixationDuration' , 'responseMade' , 'rt' , 'preTargetResponse' , 'saccadeMade' , 'blinkMade'])
+	header ='\t'.join(['id' , 'year' , 'month' , 'day' , 'hour' , 'minute' , 'sex' , 'age'  , 'handedness' , 'messageViewingTime' , 'block' , 'trialNum' , 'firstSide' , 'cueSide' , 'targetSide' , 'targetIdentity' , 'fixationDuration' , 'responseMade' , 'response' , 'rt' , 'preTargetResponse' , 'saccadeMade' , 'blinkMade'])
 	writerChild.qTo.put(['write','data',header])
 
 	writerChild.qTo.put(['newFile','trigger','_Data/'+filebase+'/'+filebase+'_trigger.txt'])

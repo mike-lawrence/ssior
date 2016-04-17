@@ -135,19 +135,19 @@ qTo
 			# 	self.__target_beep__done__.play()
 		def clear_cal_display(self):
 			# # print 'clear_cal_display'
-			qFrom.put('clear_cal_display')
+			qFrom.put('clearCalDisplay')
 		def setup_cal_display(self):
 			# # print 'setup_cal_display'
-			qFrom.put('setup_cal_display')
+			qFrom.put('setupCalDisplay')
 		def exit_cal_display(self): 
 			# # print 'exit_cal_display'
-			qFrom.put('exit_cal_display')
+			qFrom.put('exitCalDisplay')
 		def erase_cal_target(self):
 			# # print 'erase_cal_target'
-			qFrom.put('erase_cal_target')
+			qFrom.put('eraseCalTarget')
 		def draw_cal_target(self, x, y):
 			# # print 'draw_cal_target'
-			qFrom.put(['draw_cal_target',x,y])
+			qFrom.put(['drawCalTarget',x,y])
 		def setup_image_display(self, width, height):
 			# # print 'eyelink: setup_image_display'
 			self.img_size = (width,height)
@@ -187,7 +187,7 @@ qTo
 				self.__img__ = img.copy()
 				self.__draw__ = ImageDraw.Draw(self.__img__)
 				self.draw_cross_hair() #inherited method, calls draw_line and draw_losenge
-				qFrom.put(['image',numpy.array(self.__img__)])
+				qFrom.put(['image',numpy.array(self.__img__.resize([self.__img__.size[0]*4,self.__img__.size[1]*4],Image.BICUBIC))])
 				self.__img__ = None
 				self.__draw__ = None
 				self.imagebuffer = array.array('I')
@@ -215,6 +215,7 @@ qTo
 			y2 = int((float(y2)/float(self.img_size[1]))*imr[1])
 			color = self.getColorFromIndex(colorindex)
 			self.__draw__.line( [(x1,y1),(x2,y2)] , fill=color)
+			return 0
 		def draw_lozenge(self,x,y,width,height,colorindex):
 			# # print 'eyelink: draw_lozenge'
 			color = self.getColorFromIndex(colorindex)
@@ -239,6 +240,7 @@ qTo
 				self.__draw__.arc(clip,180,360,fill=color)
 				clip = (x,y+height-width,x+width,y+height)
 				self.__draw__.arc(clip,360,180,fill=color)
+			return 0
 		def get_mouse_state(self):
 			# pos = pygame.mouse.get_pos()
 			# state = pygame.mouse.get_pressed()
